@@ -1302,11 +1302,11 @@ document.querySelectorAll('a').forEach(link =>
   function toggleMenu() {
     document.getElementById('navMenu').classList.toggle('open');
   }
-
-  const path = window.location.pathname;
-  if (path === '/' || path.includes('index')) {
+<script> 
+  const path = window.location.pathname.toLowerCase();
+  if (path.includes('home')) {
     document.getElementById('home-link')?.classList.add('active');
-  } else if (path.includes('Blog')) {
+  } else if (path.includes('intelblog')) {
     document.getElementById('blog-link')?.classList.add('active');
   }
 </script>
