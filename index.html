@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STVAER</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=League+Gothic&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&amp;display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        /* Importar HK Grotesk (usando una fuente similar disponible en web) */
+        @font-face {
+            font-family: 'HK Grotesk';
+            src: url('https://cdn.jsdelivr.net/npm/@fontsource/public-sans@4.5.0/files/public-sans-latin-400-normal.woff2') format('woff2');
+            font-weight: 400;
+            font-style: normal;
+        }
+        
+        @font-face {
+            font-family: 'HK Grotesk';
+            src: url('https://cdn.jsdelivr.net/npm/@fontsource/public-sans@4.5.0/files/public-sans-latin-700-normal.woff2') format('woff2');
+            font-weight: 700;
+            font-style: normal;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #000000; /* Fondo negro para todo el sitio */
+        }
+        
+        /* Sección 1 - Fondo Negro */
+        .section-1 {
+            background-color: #000000;
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .content {
+            display: flex;
+            gap: 60px;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .icon-container {
+            width: 220px; /* Aumentado 20px (10px a cada lado) */
+            height: 220px; /* Aumentado 20px (10px a cada lado) */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .icon-container:hover {
+            transform: scale(1.05);
+            filter: brightness(1.2);
+        }
+        
+        .icon-svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* Sección 2 - Contenedor Blanco */
+        .section-2 {
+            background-color: #000000;
+            min-height: 100vh;
+            width: 100%;
+            padding: 80px 5%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .section-2-container {
+            display: flex;
+            flex-wrap: wrap;
+            border: 1px solid #000;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 1400px;
+            padding: 40px;
+            background-color: #ffffff;
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+        }
+        
+        .column-left {
+            flex: 1;
+            padding-right: 40px;
+            min-width: 300px;
+            position: relative;
+        }
+        
+        .column-right {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            min-width: 300px;
+        }
+        
+        .big-text {
+            font-family: 'HK Grotesk', 'Public Sans', sans-serif;
+            font-size: 68.5px; /* Aumentado 20px */
+            line-height: 0.94em;
+            letter-spacing: -0.03em;
+            text-align: left;
+            font-weight: 400; /* Normal en lugar de negrita */
+            color: #000;
+            margin-bottom: 30px;
+        }
+        
+        .arrow-container {
+            margin-bottom: 30px;
+            display: inline-block;
+        }
+        
+        .arrow {
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            color: #ff0000; /* Flecha roja */
+        }
+        
+        .arrow:hover {
+            transform: translateX(10px);
+        }
+        
+        .quote-text {
+            font-family: 'Arial Unicode MS', Arial, sans-serif;
+            font-size: 20.9px;
+            line-height: 1em;
+            letter-spacing: -0.039em;
+            text-align: left;
+            margin-bottom: 40px;
+        }
+        
+        .cta-button {
+            background-color: #000;
+            color: #fff;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+            text-decoration: none;
+        }
+        
+        .cta-button:hover {
+            background-color: #333;
+        }
+        
+        /* Sección 3 - Fondo Negro */
+        .section-3 {
+            background-color: #000000;
+            min-height: 100vh;
+            width: 100%;
+            padding: 80px 5%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .section-title {
+            font-family: 'League Gothic', sans-serif;
+            font-size: 80px;
+            color: #fff;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .section-subtitle {
+            font-family: 'Arial Unicode MS', Arial, sans-serif;
+            font-size: 16px;
+            color: #999999;
+            margin-bottom: 60px;
+            text-align: center;
+        }
+        
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .country-card {
+            background-color: #000;
+            border: 2px solid #fff;
+            border-radius: 8px;
+            padding: 30px;
+            width: 189px;
+            height: 260px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .country-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.2);
+        }
+        
+        .country-name {
+            font-family: 'Arial Unicode MS', Arial, sans-serif;
+            font-size: 24px;
+            color: #fff;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .country-percentage {
+            font-family: 'Arial Unicode MS', Arial, sans-serif;
+            font-size: 47px; /* Aumentado 5px más (total 15px más que el original) */
+            color: #fff;
+            font-weight: bold;
+        }
+        
+        .percentage-animation {
+            display: inline-block;
+        }
+        
+        /* Sección 4 - Contenedor Blanco */
+        .section-4 {
+            background-color: #000000;
+            min-height: 100vh;
+            width: 100%;
+            padding: 80px 5%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .section-4-container {
+            background-color: #ffffff;
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 1400px;
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Estilos para el menú interactivo en la sección 4 */
+        .category-tab {
+            color: #333333;
+            transition: all 0.3s ease;
+            font-family: 'Nunito', sans-serif;
+            cursor: pointer;
+        }
+        .category-tab.active {
+            background-color: #ff0000;
+            color: white;
+        }
+        .card {
+            perspective: 1000px;
+            height: 150px;
+            cursor: pointer;
+            position: relative;
+            margin-bottom: 2.5rem;
+        }
+        .card-inner {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 0.5rem;
+        }
+        .card-front {
+            background-color: #000;
+            color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            font-family: 'Nunito', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .card-back {
+            background-color: #ff0000;
+            color: white;
+            transform: rotateY(180deg);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            font-family: 'Arial Unicode MS', 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 1rem;
+        }
+        .color-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 6px;
+        }
+        .outline-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid white;
+            background-color: transparent;
+            display: inline-block;
+            margin-right: 6px;
+        }
+
+        .icon-circle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            z-index: 10;
+        }
+        .plus-icon {
+            background-color: #ff0000;
+            color: white;
+        }
+        .check-icon {
+            background-color: transparent;
+            color: white;
+            font-size: 18px;
+        }
+        .category-section {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+        
+        .card-disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+        .card-disabled .card-front {
+            background-color: #666;
+        }
+        .coming-soon-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: rgba(0,0,0,0.7);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        @media (max-width: 1023px) {
+            .category-section {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 767px) {
+            .category-section {
+                grid-template-columns: repeat(1, 1fr);
+            }
+        }
+        
+        /* Pie de página */
+        .footer {
+            background-color: #000000;
+            padding: 40px 5%;
+            position: relative;
+            min-height: 200px;
+        }
+        
+        .footer-content {
+            background-color: #f5f5f5;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+        }
+        
+        .admin-button {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background-color: transparent;
+            border: none;
+            font-size: 24px;
+            color: #ff0000;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .admin-button:hover {
+            transform: scale(1.2);
+        }
+        
+        /* Modal de acceso */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            width: 300px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
+        }
+        
+        .modal-content h3 {
+            margin-bottom: 20px;
+        }
+        
+        .modal-content input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .modal-content button {
+            background-color: #000;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        
+        /* Panel de administración */
+        .admin-panel {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            padding: 40px;
+            overflow: auto;
+        }
+        
+        .admin-panel h2 {
+            margin-bottom: 20px;
+            color: #fff;
+        }
+        
+        .admin-panel textarea {
+            width: 100%;
+            height: 70vh;
+            padding: 15px;
+            border: 1px solid #ddd;
+            font-family: monospace;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+        
+        .admin-panel button {
+            background-color: #fff;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-right: 10px;
+            border-radius: 5px;
+        }
+        
+        @media (max-width: 768px) {
+            .section-2-container, .section-4-container {
+                padding: 20px;
+            }
+            
+            .column-left, .column-right {
+                width: 100%;
+                padding-right: 0;
+                margin-bottom: 40px;
+            }
+            
+            .big-text {
+                font-size: 48px;
+            }
+            
+            .quote-text {
+                font-size: 18px;
+            }
+            
+            .cards-container {
+                gap: 20px;
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .country-card {
+                width: 100%;
+                max-width: 189px;
+            }
+            
+            .country-name {
+                font-size: 20px;
+            }
+            
+            .country-percentage {
+                font-size: 42px;
+            }
+            
+            .section-title {
+                font-size: 60px;
+                margin-bottom: 10px;
+            }
+            
+            .section-subtitle {
+                font-size: 14px;
+                margin-bottom: 40px;
+            }
+            
+            /* Ajuste para que los iconos en la sección 1 se apilen en móvil */
+            .content {
+                flex-direction: column;
+                gap: 30px;
+            }
+            
+            .icon-container {
+                width: 170px; /* Aumentado 20px respecto al tamaño original en móvil */
+                height: 170px; /* Aumentado 20px respecto al tamaño original en móvil */
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .cards-container {
+                grid-template-columns: 1fr;
+                justify-items: center;
+            }
+            
+            .country-card {
+                width: 100%;
+                max-width: 189px;
+            }
+            
+            /* Ajuste para los botones de categoría en móvil */
+            .flex.justify-center.mb-10.border-b.border-gray-300 {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .category-tab {
+                width: 100%;
+                text-align: center;
+                margin-bottom: 5px;
+            }
+        }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.container{width:100%}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px}}@media (min-width: 1536px){.container{max-width:1536px}}.mx-auto{margin-left:auto;margin-right:auto}.mb-10{margin-bottom:2.5rem}.mt-1{margin-top:0.25rem}.mt-2{margin-top:0.5rem}.inline-block{display:inline-block}.flex{display:flex}.hidden{display:none}.max-w-6xl{max-width:72rem}.justify-center{justify-content:center}.rounded-md{border-radius:0.375rem}.border-b{border-bottom-width:1px}.border-gray-300{--tw-border-opacity:1;border-color:rgb(209 213 219 / var(--tw-border-opacity, 1))}.bg-black{--tw-bg-opacity:1;background-color:rgb(0 0 0 / var(--tw-bg-opacity, 1))}.px-4{padding-left:1rem;padding-right:1rem}.px-8{padding-left:2rem;padding-right:2rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-8{padding-top:2rem;padding-bottom:2rem}.text-2xl{font-size:1.5rem;line-height:2rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:bg-gray-800:hover{--tw-bg-opacity:1;background-color:rgb(31 41 55 / var(--tw-bg-opacity, 1))}</style><script bis_use="true" type="text/javascript" charset="utf-8" data-bis-config="[&quot;facebook.com/&quot;,&quot;twitter.com/&quot;,&quot;youtube-nocookie.com/embed/&quot;,&quot;//vk.com/&quot;,&quot;//www.vk.com/&quot;,&quot;linkedin.com/&quot;,&quot;//www.linkedin.com/&quot;,&quot;//instagram.com/&quot;,&quot;//www.instagram.com/&quot;,&quot;//www.google.com/recaptcha/api2/&quot;,&quot;//hangouts.google.com/webchat/&quot;,&quot;//www.google.com/calendar/&quot;,&quot;//www.google.com/maps/embed&quot;,&quot;spotify.com/&quot;,&quot;soundcloud.com/&quot;,&quot;//player.vimeo.com/&quot;,&quot;//disqus.com/&quot;,&quot;//tgwidget.com/&quot;,&quot;//js.driftt.com/&quot;,&quot;friends2follow.com&quot;,&quot;/widget&quot;,&quot;login&quot;,&quot;//video.bigmir.net/&quot;,&quot;blogger.com&quot;,&quot;//smartlock.google.com/&quot;,&quot;//keep.google.com/&quot;,&quot;/web.tolstoycomments.com/&quot;,&quot;moz-extension://&quot;,&quot;chrome-extension://&quot;,&quot;/auth/&quot;,&quot;//analytics.google.com/&quot;,&quot;adclarity.com&quot;,&quot;paddle.com/checkout&quot;,&quot;hcaptcha.com&quot;,&quot;recaptcha.net&quot;,&quot;2captcha.com&quot;,&quot;accounts.google.com&quot;,&quot;www.google.com/shopping/customerreviews&quot;,&quot;buy.tinypass.com&quot;,&quot;gstatic.com&quot;,&quot;secureir.ebaystatic.com&quot;,&quot;docs.google.com&quot;,&quot;contacts.google.com&quot;,&quot;github.com&quot;,&quot;mail.google.com&quot;,&quot;chat.google.com&quot;,&quot;audio.xpleer.com&quot;,&quot;keepa.com&quot;,&quot;static.xx.fbcdn.net&quot;,&quot;sas.selleramp.com&quot;,&quot;1plus1.video&quot;,&quot;console.googletagservices.com&quot;,&quot;//lnkd.demdex.net/&quot;,&quot;//radar.cedexis.com/&quot;,&quot;//li.protechts.net/&quot;,&quot;challenges.cloudflare.com/&quot;,&quot;ogs.google.com&quot;]" src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/executors/traffic.js"></script></head>
+<body __processed_cc9b63db-9017-49a1-a70b-e978ac39851a__="true" data-new-gr-c-s-check-loaded="14.1233.0" data-gr-ext-installed="" bis_status="ok" bis_frame_id="406">
+    <!-- Sección 1 - Fondo Negro -->
+    <section class="section-1">
+        <div class="content">
+            <!-- Icono SVG izquierdo -->
+            <a href="https://muestra.muestra.com/stvaer" class="icon-container">
+                <svg id="uuid-549960ab-dfe5-4079-8982-561a665cb2bd" class="icon-svg" data-name="Capa 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 198.32 264.48">
+                  <defs>
+                    <style>
+                      .uuid-3dc19d35-71c2-4856-96e8-087668d33230 {
+                        fill: #fff;
+                      }
+                
+                      .uuid-242075dd-2669-4021-8688-a43d4d068efc {
+                        fill: none;
+                      }
+                
+                      .uuid-c807638f-adeb-4dba-87ad-ffbc7752e11f {
+                        clip-path: url(#uuid-6c00b703-0f84-4959-862f-806eedc2e81d);
+                      }
+                    </style>
+                    <clipPath id="uuid-6c00b703-0f84-4959-862f-806eedc2e81d">
+                      <rect class="uuid-242075dd-2669-4021-8688-a43d4d068efc" x="0" y="81.6" width="196.68" height="9"></rect>
+                    </clipPath>
+                  </defs>
+                  <g class="uuid-c807638f-adeb-4dba-87ad-ffbc7752e11f">
+                    <path class="uuid-3dc19d35-71c2-4856-96e8-087668d33230" d="M0,81.6h196.69v9H0v-9Z"></path>
+                  </g>
+                  <path class="uuid-3dc19d35-71c2-4856-96e8-087668d33230" d="M3.51,170.32l10.29-68.95h14.98l10.2,68.95h-12.83l-1.27-11.17h-8.01l-1.31,11.17H3.51ZM18.1,148.84h5.56l-2.68-29.37h-.29l-2.58,29.37Z"></path>
+                  <path class="uuid-3dc19d35-71c2-4856-96e8-087668d33230" d="M76.74,170.32h-13.07l-5.91-28.49h-2.54v28.49h-12.88v-68.95h13.9c6.05,0,10.64,1.72,13.78,5.16,3.14,3.43,4.72,8.48,4.72,15.14,0,7.26-1.87,12.54-5.62,15.86l7.61,32.79ZM55.22,112.94v17.32h1.12c3.38,0,5.08-2.86,5.08-8.59s-1.69-8.7-5.08-8.73h-1.12Z"></path>
+                  <path class="uuid-3dc19d35-71c2-4856-96e8-087668d33230" d="M87.41,170.32v-57.38h-9.57v-11.57h32.05v11.57h-9.6v57.38h-12.88Z"></path>
+                  <path class="uuid-3dc19d35-71c2-4856-96e8-087668d33230" d="M128.23,171.29c-5.47,0-9.49-1.91-12.07-5.73-2.58-3.82-3.91-9.68-3.98-17.55h12.05c0,3.19.17,5.67.51,7.45.34,1.77.77,2.93,1.27,3.47.51.53,1.15.8,1.93.8,1.98,0,2.99-2.09,3.03-6.29,0-2.73-.52-5.05-1.56-6.95-1.04-1.91-2.96-4.19-5.76-6.86-4-3.8-6.83-7.43-8.49-10.87-1.66-3.45-2.49-7.55-2.49-12.31,0-5.14,1.28-9.1,3.85-11.89,2.57-2.8,6.22-4.2,10.94-4.2,10.05,0,15.17,6.99,15.36,20.98h-11.95c-.07-6.28-1.14-9.4-3.22-9.37-1.66,0-2.48,1.4-2.48,4.19s.53,4.98,1.58,6.92c1.06,1.93,2.98,4.23,5.78,6.9,4,3.75,6.82,7.34,8.46,10.79,1.65,3.45,2.47,7.58,2.47,12.39,0,5.86-1.3,10.34-3.91,13.47-2.6,3.12-6.37,4.68-11.32,4.68Z"></path>
+                  <path class="uuid-3dc19d35-71c2-4856-96e8-087668d33230" d="M174.66,171.29c-4.87,0-8.66-1.62-11.34-4.87-2.68-3.26-4.02-7.93-4.02-14.02,0-6.99,2.13-13.32,6.39-18.98-3.45-6.92-5.19-12.85-5.2-17.78-.02-4.92,1.2-8.71,3.64-11.34,2.44-2.63,5.89-3.95,10.34-3.95s7.63,1.22,10.1,3.66c2.47,2.43,3.71,5.81,3.71,10.14,0,5.86-3.37,12.28-10.1,19.27l5.81,10.5c.07-1.99.1-5.88.1-11.67h10.05c-.33,11.13-1.36,19.42-3.08,24.89l7.27,13.17h-12.49l-1.07-2c-2.54,1.99-5.91,2.98-10.11,2.98ZM173.59,124.64c2.6-3.38,3.88-6.85,3.85-10.39,0-2.54-.86-3.81-2.58-3.81-1.99,0-2.98,1.33-2.98,4,0,4.2.57,7.6,1.71,10.2ZM176.86,161.24c1.4,0,2.57-.31,3.52-.93l-8.69-15.76c-.46,1.86-.7,4.31-.73,7.37,0,6.22,1.97,9.32,5.91,9.32Z"></path>
+                  <path class="uuid-3dc19d35-71c2-4856-96e8-087668d33230" d="M0,0v73.77h196.81V0H0ZM35.68,62.41c-2.2,2.63-5.38,3.94-9.55,3.94-4.61,0-8.01-1.61-10.19-4.83-2.18-3.22-3.3-8.16-3.36-14.8h10.18c0,2.69.14,4.78.43,6.28.29,1.5.65,2.47,1.07,2.93.43.45.97.67,1.63.67,1.68,0,2.53-1.77,2.56-5.32,0-2.3-.44-4.26-1.33-5.86-.87-1.61-2.49-3.54-4.85-5.8-3.37-3.21-5.77-6.26-7.16-9.18-1.4-2.92-2.1-6.37-2.1-10.38,0-4.34,1.08-7.68,3.25-10.04,2.17-2.36,5.25-3.54,9.23-3.54,8.47,0,12.79,5.9,12.96,17.7h-10.09c-.05-5.3-.96-7.94-2.72-7.9-1.4,0-2.1,1.18-2.1,3.54s.44,4.19,1.34,5.83c.89,1.63,2.52,3.58,4.88,5.83,3.37,3.15,5.76,6.19,7.14,9.1,1.39,2.91,2.08,6.39,2.08,10.45,0,4.94-1.1,8.73-3.3,11.37ZM68.22,17.11h-8.12v48.42h-10.86V17.11h-8.08V7.36h27.06v9.75ZM78.46,65.53l-8.06-58.17h10.95l3.29,37.08h.24l3.29-37.08h10.3l-8.12,58.17h-11.89ZM116.45,65.53l-1.07-9.42h-6.75l-1.11,9.42h-10.17l8.68-58.17h12.64l8.6,58.17h-10.82ZM153.92,17.11h-12.52v12.68h10.82v9.68h-10.82v16.26h12.52v9.8h-23.39V7.36h23.39v9.75ZM175.4,65.53l-4.98-24.05h-2.15v24.05h-10.86V7.36h11.73c5.1,0,8.98,1.45,11.63,4.35,2.65,2.89,3.97,7.15,3.97,12.77,0,6.13-1.58,10.59-4.74,13.39l6.43,27.66h-11.04Z"></path>
+                  <polygon class="uuid-3dc19d35-71c2-4856-96e8-087668d33230" points="114.36 47.41 109.67 47.41 111.84 22.64 112.09 22.64 114.36 47.41"></polygon>
+                  <path class="uuid-3dc19d35-71c2-4856-96e8-087668d33230" d="M173.51,24.47c0,4.84-1.43,7.26-4.28,7.26h-.95v-14.62h.95c2.85.03,4.28,2.49,4.28,7.36Z"></path>
+                  <path class="uuid-3dc19d35-71c2-4856-96e8-087668d33230" d="M21.58,208.21c.63,2.72.94,7.88.94,15.51s-.31,12.79-.92,15.49c-.6,2.7-1.83,4.04-3.66,4.04h-.55v-39.11h.55c1.81,0,3.02,1.36,3.64,4.06Z"></path>
+                  <path class="uuid-3dc19d35-71c2-4856-96e8-087668d33230" d="M1.54,183.03v81.45h196.62v-81.45H1.54ZM30.08,246.14c-2.54,4.7-6.61,7.04-12.23,7.04H6.38v-58.92h11.47c5.64,0,9.73,2.35,12.25,7.05,2.53,4.7,3.8,12.16,3.8,22.4s-1.28,17.72-3.82,22.42ZM60.62,204.14h-12.68v12.85h10.97v9.79h-10.97v16.46h12.68v9.93h-23.69v-58.92h23.69v9.88ZM85.86,250.01c-2.23,2.66-5.45,3.99-9.67,3.99-4.67,0-8.11-1.63-10.32-4.89-2.21-3.26-3.34-8.26-3.4-14.99h10.3c0,2.72.15,4.85.44,6.37.29,1.51.65,2.5,1.08,2.95.43.46.98.68,1.65.68,1.69,0,2.56-1.79,2.58-5.37,0-2.33-.44-4.31-1.33-5.94-.89-1.63-2.53-3.58-4.92-5.87-3.42-3.25-5.84-6.35-7.26-9.28-1.41-2.95-2.12-6.45-2.12-10.51,0-4.4,1.1-7.79,3.29-10.18,2.19-2.39,5.3-3.6,9.34-3.6,8.59,0,12.97,5.98,13.13,17.94h-10.21c-.06-5.36-.98-8.03-2.77-8.01-1.41,0-2.12,1.2-2.12,3.58s.45,4.25,1.35,5.9c.9,1.65,2.56,3.62,4.95,5.9,3.42,3.2,5.82,6.28,7.22,9.22,1.41,2.94,2.11,6.47,2.11,10.58,0,5-1.12,8.84-3.34,11.51ZM102.98,253.18h-11.01v-58.92h11.01v58.92ZM133.99,253.18h-7.55l-1-5.71h-.32c-1.28,4.37-3.8,6.54-7.55,6.54-4.09,0-7.02-2.47-8.78-7.41-1.77-4.94-2.65-12.58-2.65-22.9,0-11.33,1.02-19.22,3.07-23.65,2.04-4.44,5.66-6.66,10.86-6.66,4.09,0,7.16,1.39,9.21,4.16,2.06,2.77,3.34,7.3,3.84,13.61h-10.5c-.11-3.14-.36-5.23-.73-6.27-.38-1.04-.98-1.56-1.82-1.56-1.02,0-1.71,1.34-2.06,4.01-.35,2.67-.52,8.12-.52,16.37,0,6.2.12,10.82.35,13.85.24,3.04.54,4.89.9,5.57.36.67.92,1.01,1.67,1.01,1.69,0,2.54-3.47,2.54-10.42v-4.88h-2.88v-9.79h13.93v34.14ZM164.95,253.18h-9.59l-8.18-32.36h-.17v32.36h-9.67v-58.92h10.25l7.51,29.43h.17v-29.43h9.67v58.92ZM191.16,250.01c-2.23,2.66-5.45,3.99-9.67,3.99-4.67,0-8.11-1.63-10.32-4.89-2.21-3.26-3.34-8.26-3.39-14.99h10.3c0,2.72.15,4.85.44,6.37.29,1.51.65,2.5,1.08,2.95.43.46.98.68,1.65.68,1.69,0,2.55-1.79,2.58-5.37,0-2.33-.45-4.31-1.34-5.94-.89-1.63-2.53-3.58-4.92-5.87-3.42-3.25-5.84-6.35-7.26-9.28-1.42-2.95-2.12-6.45-2.12-10.51,0-4.4,1.09-7.79,3.29-10.18,2.19-2.39,5.3-3.6,9.34-3.6,8.59,0,12.97,5.98,13.13,17.94h-10.2c-.06-5.36-.99-8.03-2.77-8.01-1.41,0-2.12,1.2-2.12,3.58s.45,4.25,1.35,5.9c.91,1.65,2.56,3.62,4.95,5.9,3.41,3.2,5.82,6.28,7.22,9.22,1.41,2.94,2.11,6.47,2.11,10.58,0,5-1.11,8.84-3.33,11.51Z"></path>
+                </svg>
+            </a>
+            
+            <!-- Icono SVG derecho (nuevo) -->
+            <a href="https://muestra.muestra.com/stvaer" class="icon-container">
+                <svg id="uuid-0fb40f37-c929-4eb5-b766-27a38ee7eacc" class="icon-svg" data-name="Capa 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 196.59 265.24">
+                  <defs>
+                    <style>
+                      .uuid-70983448-ec2a-427c-a9ec-b3c8fa98afd5 {
+                        fill: #fff;
+                      }
+                
+                      .uuid-2f49ab8a-3982-434b-970b-c05e06a70447 {
+                        fill: none;
+                      }
+                
+                      .uuid-dba1ebf6-de4c-4036-8dd6-57a69afea084 {
+                        clip-path: url(#uuid-06ebd51b-f7b2-4410-8b8b-7c1be0622430);
+                      }
+                    </style>
+                    <clipPath id="uuid-06ebd51b-f7b2-4410-8b8b-7c1be0622430">
+                      <rect class="uuid-2f49ab8a-3982-434b-970b-c05e06a70447" y="81.52" width="196.43" height="8.99"></rect>
+                    </clipPath>
+                  </defs>
+                  <g class="uuid-dba1ebf6-de4c-4036-8dd6-57a69afea084">
+                    <path class="uuid-70983448-ec2a-427c-a9ec-b3c8fa98afd5" d="M0,81.52h196.48v8.99H0v-8.99Z"></path>
+                  </g>
+                  <path class="uuid-70983448-ec2a-427c-a9ec-b3c8fa98afd5" d="M21.91,178.55c-6.35,0-11.04-2.21-14.05-6.68s-4.52-11.25-4.63-20.41h14c0,3.72.22,6.57.59,8.67.38,2.05.86,3.39,1.45,4.04s1.35.92,2.26.92c2.32,0,3.5-2.42,3.5-7.32,0-3.18-.59-5.87-1.83-8.08s-3.45-4.85-6.68-7.97c-4.63-4.42-7.97-8.67-9.85-12.65-1.94-3.98-2.91-8.78-2.91-14.27s1.51-10.61,4.47-13.84c3.02-3.23,7.22-4.9,12.71-4.9,11.68,0,17.66,8.13,17.88,24.39h-13.89c-.11-7.32-1.35-10.93-3.77-10.88-1.94,0-2.91,1.62-2.91,4.9s.59,5.76,1.83,8.02,3.45,4.95,6.73,8.02c4.68,4.36,7.97,8.51,9.85,12.55,1.88,3.98,2.85,8.83,2.85,14.43s-1.51,12.01-4.52,15.67c-3.02,3.61-7.43,5.44-13.14,5.44l.05-.05Z"></path>
+                  <path class="uuid-70983448-ec2a-427c-a9ec-b3c8fa98afd5" d="M80.82,169.61c-2.8,5.98-7.86,8.94-15.13,8.94s-12.28-2.96-15.02-8.94c-2.75-5.98-4.09-16.75-4.09-32.31s1.4-26.33,4.2-32.31,7.81-8.94,15.08-8.94,12.33,3.02,15.08,8.94c2.75,5.98,4.15,16.75,4.15,32.31s-1.4,26.33-4.2,32.31h-.05ZM65.74,165.09c1.62,0,2.64-1.67,3.07-5.06s.65-10.93,.65-22.72-.22-19.33-.65-22.72-1.4-5.06-2.96-5.06-2.64,1.67-3.12,5.06c-.43,3.39-.65,10.93-.65,22.72s.22,19.33,.65,22.72c.43,3.39,1.4,5.06,2.96,5.06h.05Z"></path>
+                  <path class="uuid-70983448-ec2a-427c-a9ec-b3c8fa98afd5" d="M93.31,177.42v-80.18h14.97v66.66h16.64v13.52h-31.61Z"></path>
+                  <path class="uuid-70983448-ec2a-427c-a9ec-b3c8fa98afd5" d="M169.02,178.55c-5.65,0-10.07-1.88-13.19-5.65s-4.68-9.21-4.68-16.32,2.48-15.51,7.43-22.08c-3.98-8.08-6.03-14.97-6.03-20.68s1.4-10.12,4.25-13.19,6.84-4.58,12.06-4.58,8.88,1.4,11.74,4.25c2.85,2.85,4.31,6.78,4.31,11.79s-3.93,14.27-11.74,22.4l6.73,12.17c.05-2.32.11-6.84.11-13.57h11.68c-.38,12.92-1.56,22.56-3.55,28.97l8.45,15.29h-14.54l-1.24-2.32c-2.96,2.32-6.89,3.45-11.74,3.45l-.05.05ZM167.78,124.33c3.02-3.93,4.52-7.97,4.47-12.12,0-2.96-1.02-4.42-3.02-4.42s-3.45,1.56-3.45,4.63c0,4.9.65,8.83,1.99,11.85v.05ZM171.6,166.87c1.62,0,3.02-.38,4.09-1.08l-10.12-18.31c-.54,2.15-.81,5.01-.86,8.56,0,7.22,2.32,10.82,6.89,10.82Z"></path>
+                  <path class="uuid-70983448-ec2a-427c-a9ec-b3c8fa98afd5" d="M0,0v73.66h196.59V0H0ZM35.59,62.35c-2.21,2.64-5.38,3.93-9.53,3.93s-7.97-1.62-10.18-4.85c-2.15-3.23-3.28-8.13-3.34-14.81h10.18c0,2.69.16,4.79.43,6.25.27,1.51.65,2.48,1.08,2.91s.97.65,1.62.65c1.67,0,2.53-1.78,2.58-5.33,0-2.32-.43-4.25-1.35-5.87-.86-1.62-2.48-3.55-4.85-5.82-3.39-3.23-5.76-6.25-7.16-9.15-1.4-2.91-2.1-6.35-2.1-10.34s1.08-7.65,3.23-10.02,5.22-3.55,9.21-3.55c8.45,0,12.76,5.92,12.92,17.66h-10.07c-.05-5.28-.97-7.92-2.69-7.92-1.4,0-2.1,1.18-2.1,3.55s.43,4.2,1.35,5.82,2.53,3.55,4.9,5.82c3.39,3.12,5.76,6.19,7.11,9.1,1.4,2.91,2.1,6.35,2.1,10.45s-1.08,8.72-3.28,11.36l-.05.16ZM68.11,17.12h-8.13v48.35h-10.88V17.12h-8.08V7.38h27.03v9.75h.05ZM78.34,65.48l-8.08-58.1h10.93l3.28,37.05h.27l3.28-37.05h10.28l-8.13,58.1h-11.9.05ZM116.31,65.48l-1.08-9.42h-6.73l-1.13,9.42h-10.12l8.67-58.1h12.6l8.62,58.1h-10.82,0ZM153.73,17.12h-12.49v12.65h10.82v9.69h-10.82v16.26h12.49v9.8h-23.37V7.38h23.37v9.75ZM175.16,65.48l-4.95-24.01h-2.15v24.01h-10.88V7.38h11.74c5.12,0,8.99,1.45,11.63,4.36,2.64,2.91,3.98,7.16,3.98,12.76s-1.56,10.55-4.74,13.35l6.41,27.62h-11.04,0Z"></path>
+                  <polygon class="uuid-70983448-ec2a-427c-a9ec-b3c8fa98afd5" points="114.21 47.38 109.52 47.38 111.67 22.61 111.94 22.61 114.21 47.38"></polygon>
+                  <path class="uuid-70983448-ec2a-427c-a9ec-b3c8fa98afd5" d="M0,183.88v81.36h196.37v-81.36H0ZM41.3,203.21h-8.88v53.04h-11.9v-53.04h-8.83v-10.72h29.61v10.72ZM70.64,203.21h-13.73v13.89h11.85v10.61h-11.85v17.82h13.73v10.72h-25.63v-63.75h25.63v10.72ZM94.23,256.25l-5.44-26.33h-2.37v26.33h-11.9v-63.75h12.87c5.6,0,9.85,1.62,12.76,4.74,2.91,3.18,4.36,7.86,4.36,14s-1.72,11.58-5.17,14.65l7.05,30.31h-12.12l-.05.05ZM152.06,256.25h-11.47v-48.41h-.16l-6.46,48.41h-7.32l-6.35-48.41h-.16v48.41h-10.45v-63.75h16.21l4.63,34.73h.16l4.58-34.73h16.85v63.75h-.05ZM181.14,252.8c-2.42,2.91-5.92,4.31-10.45,4.31s-8.78-1.78-11.15-5.28c-2.37-3.5-3.61-8.94-3.66-16.21h11.15c0,2.96.16,5.22.48,6.89.32,1.62.7,2.69,1.18,3.23.48.48,1.08.75,1.78.75,1.83,0,2.75-1.94,2.8-5.82,0-2.53-.48-4.68-1.45-6.41-.97-1.78-2.75-3.88-5.33-6.35-3.72-3.5-6.3-6.89-7.86-10.07-1.56-3.18-2.32-7-2.32-11.36s1.18-8.4,3.55-10.98,5.76-3.88,10.12-3.88c9.26,0,14,6.46,14.22,19.38h-11.04c-.05-5.82-1.08-8.67-2.96-8.67-1.56,0-2.32,1.29-2.32,3.88s.48,4.58,1.45,6.41c.97,1.78,2.75,3.93,5.33,6.41,3.72,3.45,6.3,6.78,7.81,9.96s2.26,7,2.26,11.47-1.18,9.53-3.61,12.44v-.11Z"></path>
+                  <path class="uuid-70983448-ec2a-427c-a9ec-b3c8fa98afd5" d="M92.13,211.29c0,5.28-1.56,7.92-4.68,7.92h-1.02v-15.99h1.02c3.12,0,4.68,2.69,4.68,8.08Z"></path>
+                  <path class="uuid-70983448-ec2a-427c-a9ec-b3c8fa98afd5" d="M173.27,24.45c0,4.85-1.45,7.27-4.25,7.27h-.97v-14.59h.97c2.85,0,4.25,2.48,4.25,7.38v-.05Z"></path>
+                </svg>
+            </a>
+        </div>
+    </section>
+    
+    <!-- Sección 2 - Fondo Negro con Contenedor Blanco -->
+    <section class="section-2">
+        <div class="section-2-container">
+            <div class="column-left">
+                <h2 class="big-text">En STVAER, consideramos a la tecnología nuestra mayor aliada!</h2>
+            </div>
+            
+            <div class="column-right">
+                <a href="https://muestra.muestra.com/stvaer" class="arrow-container">
+                    <svg class="arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#ff0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </a>
+                
+                <p class="quote-text">
+                    Nuestros servicios contienen un esquema de agilización que permite encontrar soluciones en el mejor tiempo posible. Para que puedas disfrutar de la vida.
+                </p>
+                
+                <a href="https://muestra.muestra.com/stvaer" class="cta-button">Conocer más</a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Sección 3 - Fondo Negro -->
+    <section class="section-3">
+        <h2 class="section-title">Clientes</h2>
+        <p class="section-subtitle">MUCHAS GRACIAS POR CONFIAR EN NOSOTROS</p>
+        <div class="cards-container">
+            <div class="country-card">
+                <div class="country-name">Nicaragua</div>
+                <div class="country-percentage">+<span class="percentage-animation" data-target="83">83</span>%</div>
+            </div>
+            <div class="country-card">
+                <div class="country-name">United Kingdom</div>
+                <div class="country-percentage">+<span class="percentage-animation" data-target="3">3</span>%</div>
+            </div>
+            <div class="country-card">
+                <div class="country-name">United States</div>
+                <div class="country-percentage">+<span class="percentage-animation" data-target="2">2</span>%</div>
+            </div>
+            <div class="country-card">
+                <div class="country-name">Asia</div>
+                <div class="country-percentage">+<span class="percentage-animation" data-target="4">4</span>%</div>
+            </div>
+            <div class="country-card">
+                <div class="country-name">Europe</div>
+                <div class="country-percentage">+<span class="percentage-animation" data-target="5">5</span>%</div>
+            </div>
+            <div class="country-card">
+                <div class="country-name">México</div>
+                <div class="country-percentage">+<span class="percentage-animation" data-target="3">3</span>%</div>
+            </div>
+        </div>
+    </section>
+  
+    
+    <!-- Sección 4 - Fondo Negro con Contenedor Blanco -->
+    <section class="section-4">
+        <div class="section-4-container">
+            <div class="container mx-auto px-4 py-8 max-w-6xl">
+                <!-- Category Tabs - Centered -->
+                <div class="flex justify-center mb-10 border-b border-gray-300">
+                    <button class="category-tab px-8 py-4 font-medium text-xl" data-category="sol-terms">Sol &amp; Terms</button>
+                    <button class="category-tab px-8 py-4 font-medium text-xl active" data-category="arts-designs">Arts &amp; Designs</button>
+                </div>
+
+                <!-- Cards Container -->
+                <div id="cards-container">
+                    <!-- Sol & Terms Section -->
+                    <div class="category-section hidden" id="sol-terms">
+                        <!-- Card 1 -->
+                        <div class="card" data-category="sol-terms">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <div class="icon-circle plus-icon">+</div>
+                                    <h3 class="text-2xl font-bold text-white">Asesoría Jurídica</h3>
+                                </div>
+                                <div class="card-back">
+                                    <div class="icon-circle check-icon">✓</div>
+                                    <div>
+                                        <h3 class="text-xl font-bold text-white">Asesoría Jurídica</h3>
+                                        <p class="text-white mt-1">Áreas de especialidad: Tecnología, Contractual, Administrativo y Tributario.</p>
+                                        <div class="mt-2">
+                                            <span class="color-dot" style="background-color: white;"></span>
+                                            <span class="text-sm text-white">Servicio por cotización</span>
+                                        </div>
+                                    </div>
+                                    <div class="btn-container mt-2">
+                                        <a href="https://stvaer.com/sol-and-terms" target="_blank" class="bg-black text-white px-4 py-2 rounded-md font-medium hover:bg-gray-800 transition inline-block">Conocer más</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 2 -->
+                        <div class="card" data-category="sol-terms">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <div class="icon-circle plus-icon">+</div>
+                                    <h3 class="text-2xl font-bold text-white">Licencias y Certificaciones</h3>
+                                </div>
+                                <div class="card-back">
+                                    <div class="icon-circle check-icon">✓</div>
+                                    <div>
+                                        <h3 class="text-xl font-bold text-white">Licencias y Certificaciones</h3>
+                                        <p class="text-white mt-1">Servicios legales y trámites, regionales o nacionales.</p>
+                                        <div class="mt-2">
+                                            <span class="color-dot" style="background-color: white;"></span>
+                                            <span class="text-sm text-white">Servicio por cotización</span>
+                                        </div>
+                                    </div>
+                                    <div class="btn-container mt-2">
+                                        <a href="https://stvaer.com/sol-and-terms" target="_blank" class="bg-black text-white px-4 py-2 rounded-md font-medium hover:bg-gray-800 transition inline-block">Conocer más</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 3 -->
+                        <div class="card" data-category="sol-terms">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <div class="icon-circle plus-icon">+</div>
+                                    <h3 class="text-2xl font-bold text-white">Homologación</h3>
+                                </div>
+                                <div class="card-back">
+                                    <div class="icon-circle check-icon">✓</div>
+                                    <div>
+                                        <h3 class="text-xl font-bold text-white">Homologación</h3>
+                                        <p class="text-white mt-1">Certificación de equipos tecnologicos para la demostración de conformidad, fcc.</p>
+                                        <div class="mt-2">
+                                            <span class="color-dot" style="background-color: white;"></span>
+                                            <span class="text-sm text-white">Servicio por cotización</span>
+                                        </div>
+                                    </div>
+                                    <div class="btn-container mt-2">
+                                        <a href="https://stvaer.com/sol-and-terms" target="_blank" class="bg-black text-white px-4 py-2 rounded-md font-medium hover:bg-gray-800 transition inline-block">Conocer más</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 4 - Registro de Marcas -->
+                        <div class="card" data-category="sol-terms">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <div class="icon-circle plus-icon">+</div>
+                                    <h3 class="text-2xl font-bold text-white">Registro de Marcas</h3>
+                                </div>
+                                <div class="card-back">
+                                    <div class="icon-circle check-icon">✓</div>
+                                    <div>
+                                        <h3 class="text-xl font-bold text-white">Registro de Marcas</h3>
+                                        <p class="text-white mt-1">Protección legal de marcas comerciales, logos y propiedad intelectual.</p>
+                                        <div class="mt-2">
+                                            <span class="color-dot" style="background-color: white;"></span>
+                                            <span class="text-sm text-white">Servicio por cotización</span>
+                                        </div>
+                                    </div>
+                                    <div class="btn-container mt-2">
+                                        <a href="https://stvaer.com/sol-and-terms" target="_blank" class="bg-black text-white px-4 py-2 rounded-md font-medium hover:bg-gray-800 transition inline-block">Conocer más</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Card 5 - Contratos -->
+                        <div class="card" data-category="sol-terms">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <div class="icon-circle plus-icon">+</div>
+                                    <h3 class="text-2xl font-bold text-white">Contratos</h3>
+                                </div>
+                                <div class="card-back">
+                                    <div class="icon-circle check-icon">✓</div>
+                                    <div>
+                                        <h3 class="text-xl font-bold text-white">Contratos</h3>
+                                        <p class="text-white mt-1">Elaboración y revisión de contratos comerciales, laborales y civiles.</p>
+                                        <div class="mt-2">
+                                            <span class="color-dot" style="background-color: white;"></span>
+                                            <span class="text-sm text-white">Servicio por cotización</span>
+                                        </div>
+                                    </div>
+                                    <div class="btn-container mt-2">
+                                        <a href="https://stvaer.com/sol-and-terms" target="_blank" class="bg-black text-white px-4 py-2 rounded-md font-medium hover:bg-gray-800 transition inline-block">Conocer más</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Card 6 - Constitución de Empresas -->
+                        <div class="card" data-category="sol-terms">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <div class="icon-circle plus-icon">+</div>
+                                    <h3 class="text-2xl font-bold text-white">Constitución de Empresas</h3>
+                                </div>
+                                <div class="card-back">
+                                    <div class="icon-circle check-icon">✓</div>
+                                    <div>
+                                        <h3 class="text-xl font-bold text-white">Constitución de Empresas</h3>
+                                        <p class="text-white mt-1">Asesoría y trámites para la creación legal de empresas y sociedades.</p>
+                                        <div class="mt-2">
+                                            <span class="color-dot" style="background-color: white;"></span>
+                                            <span class="text-sm text-white">Servicio por cotización</span>
+                                        </div>
+                                    </div>
+                                    <div class="btn-container mt-2">
+                                        <a href="https://stvaer.com/sol-and-terms" target="_blank" class="bg-black text-white px-4 py-2 rounded-md font-medium hover:bg-gray-800 transition inline-block">Conocer más</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Arts & Designs Section -->
+                    <div class="category-section" id="arts-designs">
+                        <!-- Card 1 -->
+                        <div class="card" data-category="arts-designs">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <div class="icon-circle plus-icon">+</div>
+                                    <h3 class="text-2xl font-bold text-white">Asesoría Comercial</h3>
+                                </div>
+                                <div class="card-back">
+                                    <div class="icon-circle check-icon">✓</div>
+                                    <div>
+                                        <h3 class="text-xl font-bold text-white">Asesoría Comercial</h3>
+                                        <p class="text-white mt-1">Estrategias de negocio y desarrollo comercial para empresas.</p>
+                                        <div class="mt-2">
+                                            <span class="color-dot" style="background-color: white;"></span>
+                                            <span class="text-sm text-white">Servicio por cotización</span>
+                                        </div>
+                                    </div>
+                                    <div class="btn-container mt-2">
+                                        <a href="https://stvaer.com/arts-and-designs" target="_blank" class="bg-black text-white px-4 py-2 rounded-md font-medium hover:bg-gray-800 transition inline-block">Conocer más</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 2 -->
+                        <div class="card" data-category="arts-designs">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <div class="icon-circle plus-icon">+</div>
+                                    <h3 class="text-2xl font-bold text-white">Marketing Digital</h3>
+                                </div>
+                                <div class="card-back">
+                                    <div class="icon-circle check-icon">✓</div>
+                                    <div>
+                                        <h3 class="text-xl font-bold text-white">Marketing Digital</h3>
+                                        <p class="text-white mt-1">Estrategias de posicionamiento y promoción en medios digitales.</p>
+                                        <div class="mt-2">
+                                            <span class="outline-dot"></span>
+                                            <span class="text-sm text-white">Servicio en base a planes</span>
+                                        </div>
+                                    </div>
+                                    <div class="btn-container mt-2">
+                                        <a href="https://stvaer.com/arts-and-designs" target="_blank" class="bg-black text-white px-4 py-2 rounded-md font-medium hover:bg-gray-800 transition inline-block">Conocer más</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 3 -->
+                        <div class="card" data-category="arts-designs">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <div class="icon-circle plus-icon">+</div>
+                                    <h3 class="text-2xl font-bold text-white">Diseño Web</h3>
+                                </div>
+                                <div class="card-back">
+                                    <div class="icon-circle check-icon">✓</div>
+                                    <div>
+                                        <h3 class="text-xl font-bold text-white">Diseño Web</h3>
+                                        <p class="text-white mt-1">Creación y desarrollo de sitios web profesionales y responsivos.</p>
+                                        <div class="mt-2">
+                                            <span class="color-dot" style="background-color: white;"></span>
+                                            <span class="text-sm text-white">Servicio por cotización</span>
+                                        </div>
+                                    </div>
+                                    <div class="btn-container mt-2">
+                                        <a href="https://stvaer.com/arts-and-designs" target="_blank" class="bg-black text-white px-4 py-2 rounded-md font-medium hover:bg-gray-800 transition inline-block">Conocer más</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 4 -->
+                        <div class="card" data-category="arts-designs">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <div class="icon-circle plus-icon">+</div>
+                                    <h3 class="text-2xl font-bold text-white">Identidad Corporativa</h3>
+                                </div>
+                                <div class="card-back">
+                                    <div class="icon-circle check-icon">✓</div>
+                                    <div>
+                                        <h3 class="text-xl font-bold text-white">Identidad Corporativa</h3>
+                                        <p class="text-white mt-1">Desarrollo de imagen de marca y elementos visuales corporativos.</p>
+                                        <div class="mt-2">
+                                            <span class="color-dot" style="background-color: white;"></span>
+                                            <span class="text-sm text-white">Servicio por cotización</span>
+                                        </div>
+                                    </div>
+                                    <div class="btn-container mt-2">
+                                        <a href="https://stvaer.com/arts-and-designs" target="_blank" class="bg-black text-white px-4 py-2 rounded-md font-medium hover:bg-gray-800 transition inline-block">Conocer más</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 5 - Gestión de proyectos -->
+                        <div class="card" data-category="arts-designs">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <div class="icon-circle plus-icon">+</div>
+                                    <h3 class="text-2xl font-bold text-white">Gestión de proyectos</h3>
+                                </div>
+                                <div class="card-back">
+                                    <div class="icon-circle check-icon">✓</div>
+                                    <div>
+                                        <h3 class="text-xl font-bold text-white">Gestión de proyectos</h3>
+                                        <p class="text-white mt-1">Planificación, ejecución y seguimiento de proyectos de marketing.</p>
+                                        <div class="mt-2">
+                                            <span class="color-dot" style="background-color: white;"></span>
+                                            <span class="text-sm text-white">Servicio por cotización</span>
+                                        </div>
+                                    </div>
+                                    <div class="btn-container mt-2">
+                                        <a href="https://stvaer.com/arts-and-designs" target="_blank" class="bg-black text-white px-4 py-2 rounded-md font-medium hover:bg-gray-800 transition inline-block">Conocer más</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Card 6 - Polaris (Bloqueada) -->
+                        <div class="card card-disabled" data-category="arts-designs">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <div class="coming-soon-badge">Próximamente</div>
+                                    <h3 class="text-2xl font-bold text-white">Polaris</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+<!-- Pie de página -->
+    <footer class="footer">
+        <div class="footer-content">
+            <!-- Contenido del pie de página (por completar) -->
+            <p>© 2023 STVAER. Todos los derechos reservados.</p>
+        </div>
+        
+        <!-- Botón de administración -->
+        <button id="adminBtn" class="admin-button">⁋</button>
+    </footer>
+    
+    <!-- Modal de acceso -->
+    <div id="accessModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3>Panel de Administración</h3>
+            <input type="password" id="accessPassword" placeholder="Ingrese la clave">
+            <button id="submitAccess">Acceder</button>
+        </div>
+    </div>
+    
+    <!-- Panel de administración -->
+    <div id="adminPanel" class="admin-panel" style="display: none;">
+        <h2>Panel de Administración</h2>
+        <textarea id="htmlCode" readonly=""></textarea>
+        <button id="copyCode">Copiar Código</button>
+        <button id="closePanel">Cerrar</button>
+    </div>
+    
+    <script>
+        // Elementos DOM
+        const adminBtn = document.getElementById('adminBtn');
+        const accessModal = document.getElementById('accessModal');
+        const submitAccess = document.getElementById('submitAccess');
+        const accessPassword = document.getElementById('accessPassword');
+        const adminPanel = document.getElementById('adminPanel');
+        const htmlCode = document.getElementById('htmlCode');
+        const copyCode = document.getElementById('copyCode');
+        const closePanel = document.getElementById('closePanel');
+        
+        // Contraseña de acceso
+        const correctPassword = "stvaer2023";
+        
+        // Mostrar modal de acceso
+        adminBtn.addEventListener('click', () => {
+            accessModal.style.display = 'flex';
+        });
+        
+        // Verificar contraseña
+        submitAccess.addEventListener('click', () => {
+            if (accessPassword.value === correctPassword) {
+                accessModal.style.display = 'none';
+                adminPanel.style.display = 'block';
+                
+                // Obtener el código HTML completo
+                const docType = '<!DOCTYPE html>\n';
+                const htmlContent = document.documentElement.outerHTML;
+                htmlCode.value = docType + htmlContent;
+            } else {
+                alert('Contraseña incorrecta');
+            }
+        });
+        
+        // Copiar código al portapapeles
+        copyCode.addEventListener('click', () => {
+            htmlCode.select();
+            document.execCommand('copy');
+            alert('Código copiado al portapapeles');
+        });
+        
+        // Cerrar panel de administración
+        closePanel.addEventListener('click', () => {
+            adminPanel.style.display = 'none';
+            accessPassword.value = '';
+        });
+        
+        // Cerrar modal si se hace clic fuera
+        window.addEventListener('click', (e) => {
+            if (e.target === accessModal) {
+                accessModal.style.display = 'none';
+            }
+        });
+        
+        // Animación de números girando
+        function animateNumbers() {
+            const percentageElements = document.querySelectorAll('.percentage-animation');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const element = entry.target;
+                        const target = parseInt(element.getAttribute('data-target'));
+                        
+                        // Función para generar números aleatorios
+                        const randomizeNumbers = () => {
+                            const numbers = [];
+                            percentageElements.forEach(el => {
+                                const randomNum = Math.floor(Math.random() * 100);
+                                el.textContent = randomNum;
+                                numbers.push(randomNum);
+                            });
+                            return numbers;
+                        };
+                        
+                        // Iniciar animación
+                        let iterations = 0;
+                        const maxIterations = 20;
+                        const interval = setInterval(() => {
+                            randomizeNumbers();
+                            iterations++;
+                            
+                            if (iterations >= maxIterations) {
+                                clearInterval(interval);
+                                
+                                // Establecer valores finales
+                                percentageElements.forEach(el => {
+                                    el.textContent = el.getAttribute('data-target');
+                                });
+                            }
+                        }, 100);
+                        
+                        observer.unobserve(element);
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            percentageElements.forEach(element => {
+                observer.observe(element);
+            });
+        }
+        
+        // Iniciar animación cuando se carga la página
+        document.addEventListener('DOMContentLoaded', animateNumbers);
+    </script>
+      <script>
+        // DOM elements
+        const categoryTabs = document.querySelectorAll('.category-tab');
+        const categorySections = document.querySelectorAll('.category-section');
+        const cards = document.querySelectorAll('.card:not(.card-disabled)');
+ 
+        // Switch between menu categories
+        categoryTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                categoryTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                categorySections.forEach(s => s.classList.add('hidden'));
+                document.getElementById(tab.dataset.category).classList.remove('hidden');
+                cards.forEach(c => c.classList.remove('flipped'));
+            });
+        });
+ 
+        // Handle card click - only one card flipped at a time
+        cards.forEach(card => {
+            card.addEventListener('click', () => {
+                const wasFlipped = card.classList.contains('flipped');
+                cards.forEach(c => c.classList.remove('flipped'));
+                if (!wasFlipped) card.classList.add('flipped');
+            });
+        });
+ 
+        // Prevent link clicks from flipping cards
+        document.querySelectorAll('a').forEach(link =>
+           link.addEventListener('click', e => e.stopPropagation())
+        );
+    </script>
+// DOM elements
+const categoryTabs    = document.querySelectorAll('.category-tab');
+const categorySections= document.querySelectorAll('.category-section');
+const cards           = document.querySelectorAll('.card:not(.card-disabled)');
+
+// Switch between menu categories
+categoryTabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    categoryTabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    categorySections.forEach(s => s.classList.add('hidden'));
+    document.getElementById(tab.dataset.category).classList.remove('hidden');
+    cards.forEach(c => c.classList.remove('flipped'));
+  });
+});
+
+// Handle card click – only one card flipped at a time
+cards.forEach(card => {
+  card.addEventListener('click', () => {
+    const wasFlipped = card.classList.contains('flipped');
+    cards.forEach(c => c.classList.remove('flipped'));
+    if (!wasFlipped) card.classList.add('flipped');
+  });
+});
+
+// Prevent link clicks from flipping cards
+document.querySelectorAll('a').forEach(link =>
+  link.addEventListener('click', e => e.stopPropagation())
+);
+
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93856e0157357bfa',t:'MTc0NTk5OTIzMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: none; visibility: hidden;"></iframe>
+</body></html>
+
+
+
+                let iterations = 0;
+                const maxIterations = 20;
+                const interval = setInterval(() => {
+                    randomizeNumbers();
+                    iterations++;
+                    
+                    if (iterations >= maxIterations) {
+                        clearInterval(interval);
+                        
+                        // Establecer valores<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9390a338d77c337d',t:'MTc0NjExNjc1NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration></html>
