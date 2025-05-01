@@ -350,6 +350,14 @@
             font-weight: bold;
             z-index: 10;
         }
+                    /* ← AÑADE ESTO PARA iOS SAFARI: fuerza capa 3D separada */
+            transform: translateZ(1px);
+            -webkit-transform: translateZ(1px);
+        }
+        /* NUEVO: empuja el círculo hacia el espectador en 3D */
+            transform: translateZ(1px);
+            -webkit-transform: translateZ(1px);
+        }
         .plus-icon {
             background-color: #ff0000;
             color: white;
