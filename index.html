@@ -422,15 +422,21 @@
         }
         
         .admin-button {
-            position: absolute;
+            position: fixed;
             bottom: 20px;
             right: 20px;
             background-color: transparent;
-            border: none;
-            font-size: 24px;
             color: #ff0000;
+            border: 2px solid #ff0000;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 24px;
             cursor: pointer;
-            transition: transform 0.3s ease;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .admin-button:hover {
@@ -530,22 +536,14 @@
         }
         
         .admin-panel button {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: transparent;
-            color: #ff0000;
-            border: 2px solid #ff0000;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            font-size: 24px;
+            background-color: #fff;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
             cursor: pointer;
-            z-index: 100;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+            margin-right: 10px;
+            border-radius: 5px;
+         }
         
         @media (max-width: 768px) {
             .section-2-container, .section-4-container {
