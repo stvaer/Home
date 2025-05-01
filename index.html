@@ -1299,12 +1299,14 @@ document.querySelectorAll('a').forEach(link =>
 );
 
 <script>
+  // Manejo de botón hamburguesa
   function toggleMenu() {
-    document.getElementById('navMenu').classList.toggle('open');
+    document.getElementById('navMenu')?.classList.toggle('open');
   }
-<script> 
+
+  // Detección de ruta activa
   const path = window.location.pathname.toLowerCase();
-  if (path.includes('home')) {
+  if (path.includes('intelhome')) {
     document.getElementById('home-link')?.classList.add('active');
   } else if (path.includes('intelblog')) {
     document.getElementById('blog-link')?.classList.add('active');
