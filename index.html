@@ -282,14 +282,17 @@
             margin-bottom: 2.5rem;
         }
         .card-inner {
-            position: absolute;
+            position: relative;
             width: 100%;
             height: 100%;
-            transition: transform 0.6s;
             transform-style: preserve-3d;
+            -webkit-transform-style: preserve-3d;
+            transition: transform 0.6s;
+            -webkit-transition: -webkit-transform 0.6s;
         }
         .card.flipped .card-inner {
             transform: rotateY(180deg);
+            -webkit-transform: rotateY(180deg);
         }
 
         .card-front,
@@ -341,7 +344,6 @@
             display: inline-block;
             margin-right: 6px;
         }
-
         .icon-circle {
             position: absolute;
             top: 10px;
@@ -355,23 +357,21 @@
             font-weight: bold;
             z-index: 10;
         }
+        .icon-circle.plus-icon,
+        .icon-circle.check-icon {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
 
-            .icon-circle.plus-icon,
-.icon-circle.check-icon {
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
+        /* Mostrar solo el “+” cuando la tarjeta NO está volteada */
+        .card:not(.flipped) > .icon-circle.plus-icon {
+            opacity: 1;
+        }
 
-/* Mostrar solo el “+” cuando la tarjeta NO está volteada */
-.card:not(.flipped) > .icon-circle.plus-icon {
-  opacity: 1;
-}
-
-/* Mostrar solo el “✓” cuando la tarjeta SÍ está volteada */
-.card.flipped > .icon-circle.check-icon {
-  opacity: 1;
-}
-        
+        /* Mostrar solo el “✓” cuando la tarjeta SÍ está volteada */
+       .card.flipped > .icon-circle.check-icon {
+            opacity: 1;
+        } 
         .plus-icon {
             background-color: red;
             color: white;
