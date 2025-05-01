@@ -353,23 +353,20 @@
         }
 
             .icon-circle.plus-icon,
-    .icon-circle.check-icon {
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
+.icon-circle.check-icon {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
 
-    /* Muestra el “+” en estado normal */
-    .card > .icon-circle.plus-icon {
-      opacity: 1;
-    }
+/* Mostrar solo el “+” cuando la tarjeta NO está volteada */
+.card:not(.flipped) > .icon-circle.plus-icon {
+  opacity: 1;
+}
 
-    /* Al hacer flip (.flipped), oculta “+” y muestra “✓” */
-    .card.flipped > .icon-circle.plus-icon {
-      opacity: 0;
-    }
-    .card.flipped > .icon-circle.check-icon {
-      opacity: 1;
-    }
+/* Mostrar solo el “✓” cuando la tarjeta SÍ está volteada */
+.card.flipped > .icon-circle.check-icon {
+  opacity: 1;
+}
         
         .plus-icon {
             background-color: red;
