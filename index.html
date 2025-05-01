@@ -437,6 +437,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+        
+        .admin-button:hover {
+            transform: scale(1.2);
+        }
         
         /* Modal de acceso */
         .modal {
@@ -1320,37 +1325,7 @@ html, body {
            link.addEventListener('click', e => e.stopPropagation())
         );
     </script>
-// DOM elements
-const categoryTabs    = document.querySelectorAll('.category-tab');
-const categorySections= document.querySelectorAll('.category-section');
-const cards           = document.querySelectorAll('.card:not(.card-disabled)');
-
-// Switch between menu categories
-categoryTabs.forEach(tab => {
-  tab.addEventListener('click', () => {
-    categoryTabs.forEach(t => t.classList.remove('active'));
-    tab.classList.add('active');
-    categorySections.forEach(s => s.classList.add('hidden'));
-    document.getElementById(tab.dataset.category).classList.remove('hidden');
-    cards.forEach(c => c.classList.remove('flipped'));
-  });
-});
-
-// Handle card click – only one card flipped at a time
-cards.forEach(card => {
-  card.addEventListener('click', () => {
-    const wasFlipped = card.classList.contains('flipped');
-    cards.forEach(c => c.classList.remove('flipped'));
-    if (!wasFlipped) card.classList.add('flipped');
-  });
-});
-
-// Prevent link clicks from flipping cards
-document.querySelectorAll('a').forEach(link =>
-  link.addEventListener('click', e => e.stopPropagation())
-);
-
-<script>
+        <script>
   // Manejo de botón hamburguesa
   function toggleMenu() {
     document.getElementById('navMenu')?.classList.toggle('open');
