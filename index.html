@@ -480,6 +480,18 @@
             cursor: pointer;
             border-radius: 5px;
         }
+       
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: transparent;
+            border: none;
+            font-size: 1.5rem;
+            color: white;
+            cursor: pointer;
+            z-index: 1000;
+         }
         
         /* Panel de administración */
         .admin-panel {
@@ -715,6 +727,7 @@ html, body {
     </div>
   </div>
 </nav>
+    
     <!-- Sección 1 - Fondo Negro -->
     <section class="section-1">
         <div class="content">
@@ -1156,6 +1169,7 @@ html, body {
     <!-- Modal de acceso -->
     <div id="accessModal" class="modal" style="display: none;">
         <div class="modal-content">
+            <button class="close-btn" onclick="closeLoginModal()">×</button>
             <h3>Panel de Administración</h3>
             <input type="password" id="accessPassword" placeholder="Ingrese la clave">
             <button id="submitAccess">Acceder</button>
