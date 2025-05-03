@@ -137,7 +137,26 @@
             margin: 0 8px;
             transition: all 0.3s ease;
         }
-        
+	    
+	/* Contenedor de los íconos sociales */
+	.social-buttons {
+   	    display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        /* Ajustes para pantallas pequeñas */
+        @media (max-width: 600px) {
+    	.social-icon {
+            width: 32px;
+            height: 32px;
+            font-size: 14px;
+            margin: 0 6px;
+ 	   }
+	}  
+	    
         .social-icon:hover {
             background-color: #ff0000;
             transform: translateY(-3px);
