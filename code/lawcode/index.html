@@ -1,1 +1,1384 @@
 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Escrituras Públicas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f0f4f8;
+            overflow-x: hidden;
+        }
+        .preview-document {
+            font-family: 'Times New Roman', Times, serif;
+            line-height: 1.6;
+            text-align: justify;
+        }
+        .grid-background {
+            background-image: linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+                             linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .blur-backdrop {
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+        textarea, input, select {
+            font-size: 16px !important;
+        }
+        .modal-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+        }
+        .modal-content {
+            max-height: 90vh;
+            width: 95%;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .modal-body {
+            flex: 1;
+            overflow-y: auto;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE and Edge */
+        }
+        .modal-body::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
+        @media (max-width: 640px) {
+            .modal-content {
+                width: 95%;
+            }
+        }
+        /* Hide scrollbar for all scrollable elements */
+        .scrollable-content {
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE and Edge */
+            overflow-y: auto;
+        }
+        .scrollable-content::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
+        /* SVG hover effect */
+        .svg-container {
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 0 0px rgba(255, 255, 255, 0.5));
+        }
+        .svg-container:hover {
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.8));
+        }
+        .svg-icon {
+            transition: all 0.3s ease;
+        }
+        .svg-container:hover .svg-icon {
+            stroke-width: 2;
+        }
+        /* Tab styles */
+        .tab-active {
+            background-color: #4338ca;
+            color: white;
+            border-bottom: 3px solid #4f46e5;
+        }
+        .tab-inactive {
+            background-color: #6366f1;
+            color: #e0e7ff;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Background with Grid and SVG -->
+    <div class="min-h-screen bg-blue-600 grid-background flex items-center justify-center">
+        <div class="svg-container p-8 cursor-pointer" id="openAppBtn">
+            <?xml version="1.0" encoding="UTF-8"?><svg id="uuid-f17401d1-46b4-414f-bc41-4fa8519c7943" xmlns="http://www.w3.org/2000/svg" width="4.22cm" height="5.69cm" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 119.7 161.35"><defs><style>.uuid-4c1dc23f-2469-4900-b7b7-701670e543f3{fill:#fff;}.uuid-00c1952b-0f8b-44ec-b064-8684a6c7e39a{fill:none;}.uuid-aa6844ba-33f8-48ce-ae36-171a59135db3{clip-path:url(#uuid-4df32bc2-6f84-4c90-a002-a8b28fd7b940);}</style><clipPath id="uuid-4df32bc2-6f84-4c90-a002-a8b28fd7b940"><rect class="uuid-00c1952b-0f8b-44ec-b064-8684a6c7e39a" y="49.52" width="119.7" height="5.58"/></clipPath></defs><g id="uuid-9da173b1-8ac7-4537-a57a-47209e86632c"><g class="uuid-aa6844ba-33f8-48ce-ae36-171a59135db3"><path class="uuid-4c1dc23f-2469-4900-b7b7-701670e543f3" d="M0,49.52h119.7v5.58H0v-5.58Z"/></g></g><g id="uuid-540457d7-354e-4079-ad50-0c6a9dffb392"><path class="uuid-4c1dc23f-2469-4900-b7b7-701670e543f3" d="M46.57,97.52l-18.69-8.92v-5.23l18.69-8.94v6.7l-10.53,4.86,10.53,4.83v6.7Z"/></g><g id="uuid-2aea1a52-6b75-4cb8-8a2b-b30b700f0864"><path class="uuid-4c1dc23f-2469-4900-b7b7-701670e543f3" d="M51.27,106.59l12.02-47.55h7.02l-11.98,47.55h-7.06Z"/></g><g id="uuid-20c86be4-15e3-4488-9236-2857e4e0ca52"><path class="uuid-4c1dc23f-2469-4900-b7b7-701670e543f3" d="M75.1,97.52v-6.7l10.53-4.83-10.53-4.86v-6.7l18.69,8.94v5.23l-18.69,8.91Z"/></g><path class="uuid-4c1dc23f-2469-4900-b7b7-701670e543f3" d="M0,0v44.93h119.7V0H0ZM17.65,39.04c-1.47,1.76-3.6,2.65-6.4,2.65-3.09,0-5.36-1.08-6.82-3.24-1.46-2.16-2.21-5.46-2.25-9.91h6.81c0,1.8.1,3.2.29,4.2.19,1,.43,1.66.72,1.96.29.3.65.46,1.09.46,1.12,0,1.69-1.19,1.71-3.56,0-1.54-.3-2.85-.88-3.93-.59-1.08-1.68-2.38-3.26-3.88-2.26-2.15-3.86-4.2-4.79-6.15-.94-1.94-1.41-4.26-1.41-6.95,0-2.9.73-5.15,2.18-6.73,1.45-1.58,3.51-2.37,6.17-2.37,5.68,0,8.58,3.95,8.69,11.86h-6.76c-.04-3.55-.65-5.31-1.82-5.29-.94,0-1.4.79-1.4,2.37s.3,2.81.9,3.9c.59,1.1,1.68,2.39,3.27,3.9,2.27,2.12,3.86,4.15,4.79,6.1.93,1.95,1.39,4.29,1.39,7.01,0,3.31-.74,5.84-2.21,7.61ZM39.36,8.85h-5.58v32.14h-7.21V8.85h-5.25V2.3h18.04v6.56ZM46.02,40.99L40.7,2.62h7.21l2.18,24.6h.16l2.18-24.6h6.78l-5.36,38.37h-7.84ZM71.21,40.99l-.71-6.23h-4.46l-.73,6.23h-6.78l5.78-38.7h8.41l5.72,38.7h-7.22ZM96.09,8.85h-8.2v8.53h7.21v6.23h-7.21v10.82h8.2v6.56h-15.41V2.3h15.41v6.56ZM110.36,40.99l-3.33-16.07h-1.43v16.07h-7.21V2.3h7.79c3.39,0,5.97.96,7.73,2.89,1.76,1.93,2.64,4.76,2.64,8.5,0,4.07-1.05,7.04-3.14,8.9l4.26,18.41h-7.3Z"/><path class="uuid-00c1952b-0f8b-44ec-b064-8684a6c7e39a" d="M18.47,24.42c.93,1.95,1.39,4.29,1.39,7.01,0,3.31-.74,5.84-2.21,7.61-1.47,1.76-3.6,2.65-6.4,2.65-3.09,0-5.36-1.08-6.82-3.24-1.46-2.16-2.21-5.46-2.25-9.91h6.81c0,1.8.1,3.2.29,4.2.19,1,.43,1.66.72,1.96.29.3.65.46,1.09.46,1.12,0,1.69-1.19,1.71-3.56,0-1.54-.3-2.85-.88-3.93-.59-1.08-1.68-2.38-3.26-3.88-2.26-2.15-3.86-4.2-4.79-6.15-.94-1.94-1.41-4.26-1.41-6.95,0-2.9.73-5.15,2.18-6.73,1.45-1.58,3.51-2.37,6.17-2.37,5.68,0,8.58,3.95,8.69,11.86h-6.76c-.04-3.55-.65-5.31-1.82-5.29-.94,0-1.4.79-1.4,2.37s.3,2.81.9,3.9c.59,1.1,1.68,2.39,3.27,3.9,2.27,2.12,3.86,4.15,4.79,6.1Z"/><polygon class="uuid-00c1952b-0f8b-44ec-b064-8684a6c7e39a" points="21.32 2.3 39.36 2.3 39.36 8.85 33.78 8.85 33.78 40.99 26.57 40.99 26.57 8.85 21.32 8.85 21.32 2.3"/><polygon class="uuid-00c1952b-0f8b-44ec-b064-8684a6c7e39a" points="59.22 2.62 53.87 40.99 46.02 40.99 40.7 2.62 47.91 2.62 50.1 27.22 50.26 27.22 52.44 2.62 59.22 2.62"/><polygon class="uuid-4c1dc23f-2469-4900-b7b7-701670e543f3" points="69.83 28.86 66.72 28.86 68.16 12.46 68.33 12.46 69.83 28.86"/><path class="uuid-00c1952b-0f8b-44ec-b064-8684a6c7e39a" d="M72.72,2.3h-8.41l-5.78,38.7h6.78l.73-6.23h4.46l.71,6.23h7.22l-5.72-38.7ZM66.72,28.86l1.44-16.4h.16l1.5,16.4h-3.11Z"/><polygon class="uuid-00c1952b-0f8b-44ec-b064-8684a6c7e39a" points="80.68 2.3 96.09 2.3 96.09 8.85 87.89 8.85 87.89 17.38 95.11 17.38 95.11 23.61 87.89 23.61 87.89 34.44 96.09 34.44 96.09 40.99 80.68 40.99 80.68 2.3"/><path class="uuid-4c1dc23f-2469-4900-b7b7-701670e543f3" d="M109.12,13.82c0,3.25-.96,4.88-2.88,4.88h-.64v-9.84h.64c1.92.02,2.88,1.67,2.88,4.96Z"/><path class="uuid-00c1952b-0f8b-44ec-b064-8684a6c7e39a" d="M113.4,22.59c2.09-1.86,3.14-4.83,3.14-8.9,0-3.74-.88-6.57-2.64-8.5-1.76-1.93-4.34-2.89-7.73-2.89h-7.79v38.7h7.21v-16.07h1.43l3.33,16.07h7.3l-4.26-18.41ZM106.24,18.69h-.64v-9.84h.64c1.92.02,2.88,1.67,2.88,4.96s-.96,4.88-2.88,4.88Z"/><path class="uuid-4c1dc23f-2469-4900-b7b7-701670e543f3" d="M0,111.83v49.52h119.7v-49.52H0ZM17.54,157.45c-.9.86-1.97,1.3-3.24,1.3-1.33,0-2.43-.43-3.31-1.3-.88-.87-1.31-1.96-1.31-3.27s.44-2.42,1.32-3.3c.89-.89,1.99-1.33,3.31-1.33s2.4.45,3.27,1.33c.87.89,1.3,1.99,1.3,3.3s-.45,2.41-1.34,3.27ZM36.87,154.65c-1.47,2.6-3.84,3.9-7.12,3.9-3.71,0-6.29-1.59-7.73-4.78-1.44-3.19-2.16-8.85-2.16-16.99s.71-13.82,2.14-17.01c1.43-3.2,4.01-4.8,7.75-4.8,3.15,0,5.47,1.18,6.94,3.54,1.47,2.36,2.31,6.25,2.51,11.69h-7.74c-.04-3.24-.19-5.39-.43-6.47-.25-1.08-.68-1.62-1.28-1.62-.7,0-1.16.95-1.39,2.85-.23,1.9-.34,5.84-.34,11.81s.11,9.91.34,11.82.69,2.86,1.38,2.86,1.16-.65,1.41-1.93.37-3.9.37-7.83h7.73c-.12,6.06-.92,10.38-2.39,12.98ZM59.58,154c-1.49,3.17-4.17,4.75-8.05,4.75s-6.54-1.58-8-4.75c-1.46-3.17-2.18-8.89-2.18-17.17s.74-14.01,2.22-17.19c1.48-3.18,4.16-4.77,8.03-4.77s6.55,1.59,8.02,4.77c1.47,3.18,2.2,8.91,2.2,17.19s-.74,14.01-2.23,17.17ZM81.75,152.98c-1.84,3.4-4.79,5.09-8.85,5.09h-8.3v-42.63h8.3c4.08,0,7.04,1.7,8.87,5.1,1.83,3.4,2.75,8.81,2.75,16.22s-.92,12.82-2.77,16.22ZM104.29,122.65h-9.18v9.18h7.87v7.21h-7.87v11.81h9.18v7.21h-17.05v-42.63h17.05v7.21Z"/><path class="uuid-4c1dc23f-2469-4900-b7b7-701670e543f3" d="M53.51,136.82c0,6.27-.11,10.3-.33,12.09-.22,1.79-.76,2.69-1.63,2.69s-1.35-.9-1.58-2.69c-.23-1.79-.35-5.82-.35-12.09s.11-10.3.35-12.09c.23-1.79.78-2.69,1.65-2.69s1.34.9,1.56,2.69c.22,1.79.33,5.82.33,12.09Z"/><path class="uuid-00c1952b-0f8b-44ec-b064-8684a6c7e39a" d="M17.59,150.88c.87.89,1.3,1.99,1.3,3.3s-.45,2.41-1.34,3.27c-.9.86-1.97,1.3-3.24,1.3-1.33,0-2.43-.43-3.31-1.3-.88-.87-1.31-1.96-1.31-3.27s.44-2.42,1.32-3.3c.89-.89,1.99-1.33,3.31-1.33s2.4.45,3.27,1.33Z"/><path class="uuid-4c1dc23f-2469-4900-b7b7-701670e543f3" d="M76.18,136.77c0,5.5-.22,9.22-.67,11.17-.44,1.94-1.32,2.92-2.64,2.92h-.39v-28.2h.39c1.3,0,2.18.98,2.63,2.93.45,1.96.68,5.69.68,11.19Z"/><path class="uuid-00c1952b-0f8b-44ec-b064-8684a6c7e39a" d="M81.77,120.54c-1.83-3.4-4.78-5.1-8.87-5.1h-8.3v42.63h8.3c4.06,0,7.01-1.7,8.85-5.09,1.84-3.4,2.77-8.81,2.77-16.22s-.91-12.82-2.75-16.22ZM75.51,147.94c-.44,1.94-1.32,2.92-2.64,2.92h-.39v-28.2h.39c1.3,0,2.18.98,2.63,2.93.45,1.96.68,5.69.68,11.19s-.22,9.22-.67,11.17Z"/><polygon class="uuid-00c1952b-0f8b-44ec-b064-8684a6c7e39a" points="95.11 122.65 95.11 131.84 102.98 131.84 102.98 139.05 95.11 139.05 95.11 150.86 104.29 150.86 104.29 158.07 87.24 158.07 87.24 115.44 104.29 115.44 104.29 122.65 95.11 122.65"/>
+		</svg>
+
+        </div>
+    </div>
+
+    <!-- Password Modal -->
+    <div id="passwordModal" class="modal-container bg-gray-900 bg-opacity-50 hidden">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <button id="closePasswordModal" class="text-gray-500 hover:text-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="mb-4">
+                <input type="password" id="password" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            <div class="flex justify-end">
+                <button id="submitPassword" class="px-4 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
+                    Acceder
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application Modal -->
+    <div id="appModal" class="modal-container hidden">
+        <div class="modal-content bg-blue-900 bg-opacity-80 blur-backdrop rounded-lg shadow-2xl">
+            <header class="bg-indigo-700 text-white p-4 shadow-lg sticky top-0 z-10">
+                <div class="container mx-auto flex justify-between items-center">
+                    <div>
+                        <h1 class="text-2xl font-bold">Generador de Escrituras Públicas</h1>
+                        <p class="text-indigo-200">Sistema de generación de documentos legales</p>
+                    </div>
+                    <button id="closeAppModal" class="text-white hover:text-indigo-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Tabs Navigation -->
+            <div class="bg-indigo-600 text-white">
+                <div class="container mx-auto flex">
+                    <button class="tab-button tab-active px-6 py-3 font-medium transition-colors" data-tab="formulario">
+                        Formulario
+                    </button>
+                    <button class="tab-button tab-inactive px-6 py-3 font-medium transition-colors" data-tab="baseDatos">
+                        Base de Datos
+                    </button>
+                    <button class="tab-button tab-inactive px-6 py-3 font-medium transition-colors" data-tab="exportarHTML">
+                        Exportar HTML
+                    </button>
+                </div>
+            </div>
+
+            <div class="modal-body">
+                <main class="container mx-auto p-4 md:p-6">
+                    <!-- Tab Content: Formulario -->
+                    <div id="formulario" class="tab-content active">
+                        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+                            <h2 class="text-xl font-semibold text-indigo-800 mb-4">Formulario de Datos</h2>
+                            
+                            <form id="documentForm" class="space-y-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <!-- Datos del documento -->
+                                    <div class="space-y-4">
+                                        <h3 class="text-lg font-medium text-indigo-600 border-b border-indigo-200 pb-2">Datos del Documento</h3>
+                                        
+                                        <div>
+                                            <label for="numeroEscritura" class="block text-sm font-medium text-gray-700 mb-1">Número de Escritura</label>
+                                            <input type="number" id="numeroEscritura" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" required>
+                                        </div>
+                                        
+                                        <div>
+                                            <label for="objetoDocumento" class="block text-sm font-medium text-gray-700 mb-1">Objeto del Documento</label>
+                                            <input type="text" id="objetoDocumento" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" required>
+                                        </div>
+                                        
+                                        <div>
+                                            <label for="ciudad" class="block text-sm font-medium text-gray-700 mb-1">Ciudad</label>
+                                            <input type="text" id="ciudad" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" required>
+                                        </div>
+
+                                        <div class="grid grid-cols-2 gap-4">
+                                            <div>
+                                                <label for="hora" class="block text-sm font-medium text-gray-700 mb-1">Hora (formato 24h)</label>
+                                                <input type="time" id="hora" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" required>
+                                            </div>
+                                            <div>
+                                                <label for="momentoDia" class="block text-sm font-medium text-gray-700 mb-1">Momento del día</label>
+                                                <select id="momentoDia" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" required>
+                                                    <option value="">Seleccione...</option>
+                                                    <option value="mañana">Mañana</option>
+                                                    <option value="tarde">Tarde</option>
+                                                    <option value="noche">Noche</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="grid grid-cols-3 gap-4">
+                                            <div>
+                                                <label for="dia" class="block text-sm font-medium text-gray-700 mb-1">Día</label>
+                                                <input type="number" id="dia" min="1" max="31" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" required>
+                                            </div>
+                                            <div>
+                                                <label for="mes" class="block text-sm font-medium text-gray-700 mb-1">Mes</label>
+                                                <select id="mes" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" required>
+                                                    <option value="">Seleccione...</option>
+                                                    <option value="ENERO">ENERO</option>
+                                                    <option value="FEBRERO">FEBRERO</option>
+                                                    <option value="MARZO">MARZO</option>
+                                                    <option value="ABRIL">ABRIL</option>
+                                                    <option value="MAYO">MAYO</option>
+                                                    <option value="JUNIO">JUNIO</option>
+                                                    <option value="JULIO">JULIO</option>
+                                                    <option value="AGOSTO">AGOSTO</option>
+                                                    <option value="SEPTIEMBRE">SEPTIEMBRE</option>
+                                                    <option value="OCTUBRE">OCTUBRE</option>
+                                                    <option value="NOVIEMBRE">NOVIEMBRE</option>
+                                                    <option value="DICIEMBRE">DICIEMBRE</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label for="anio" class="block text-sm font-medium text-gray-700 mb-1">Año</label>
+                                                <input type="number" id="anio" min="2000" max="2100" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Datos del abogado -->
+                                    <div class="space-y-4">
+                                        <h3 class="text-lg font-medium text-indigo-600 border-b border-indigo-200 pb-2">Datos del Abogado</h3>
+                                        
+                                        <div>
+                                            <label for="nombreAbogado" class="block text-sm font-medium text-gray-700 mb-1">Nombre del Abogado</label>
+                                            <input type="text" id="nombreAbogado" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" required>
+                                        </div>
+                                        
+                                        <div>
+                                            <label for="generalesAbogado" class="block text-sm font-medium text-gray-700 mb-1">Generales del Abogado</label>
+                                            <textarea id="generalesAbogado" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" required></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Datos del compareciente -->
+                                <div class="space-y-4 border-t border-gray-200 pt-6">
+                                    <h3 class="text-lg font-medium text-indigo-600 border-b border-indigo-200 pb-2">Datos del Compareciente</h3>
+                                    
+                                    <div class="flex flex-wrap gap-4 items-end">
+                                        <div class="flex-grow">
+                                            <label for="nombreComparecienteSelect" class="block text-sm font-medium text-gray-700 mb-1">Seleccionar Compareciente</label>
+                                            <select id="nombreComparecienteSelect" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                                                <option value="">Seleccione un compareciente...</option>
+                                                <!-- Se llenará dinámicamente desde la base de datos -->
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <button type="button" id="cargarComparecienteBtn" class="px-4 py-2 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors">
+                                                Cargar Datos
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <label for="tratamiento" class="block text-sm font-medium text-gray-700 mb-1">Tratamiento</label>
+                                        <select id="tratamiento" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" required>
+                                            <option value="">Seleccione...</option>
+                                            <option value="La Señora">La Señora</option>
+                                            <option value="El Señor">El Señor</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div>
+                                        <label for="nombreCompareciente" class="block text-sm font-medium text-gray-700 mb-1">Nombre del Compareciente</label>
+                                        <input type="text" id="nombreCompareciente" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" required>
+                                    </div>
+                                    
+                                    <div>
+                                        <label for="generalesCompareciente" class="block text-sm font-medium text-gray-700 mb-1">Generales del Compareciente</label>
+                                        <textarea id="generalesCompareciente" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" required></textarea>
+                                    </div>
+                                    
+                                    <div>
+                                        <label for="tipoPersona" class="block text-sm font-medium text-gray-700 mb-1">Tipo de Persona</label>
+                                        <select id="tipoPersona" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" required>
+                                            <option value="">Seleccione...</option>
+                                            <option value="natural">Persona Natural</option>
+                                            <option value="juridica">Persona Jurídica</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <!-- Campos para persona jurídica (inicialmente ocultos) -->
+                                    <div id="camposPersonaJuridica" class="space-y-4 hidden">
+                                        <div>
+                                            <label for="nombreEmpresa" class="block text-sm font-medium text-gray-700 mb-1">Nombre de la Empresa</label>
+                                            <input type="text" id="nombreEmpresa" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                                        </div>
+                                        
+                                        <div>
+                                            <label for="generalesEmpresa" class="block text-sm font-medium text-gray-700 mb-1">Generales de la Empresa</label>
+                                            <textarea id="generalesEmpresa" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label for="contenidoEscritura" class="block text-sm font-medium text-gray-700 mb-1">Contenido de la Escritura</label>
+                                        <textarea id="contenidoEscritura" rows="5" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" required></textarea>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex justify-center pt-4">
+                                    <button type="button" id="previewBtn" class="px-6 py-3 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors">
+                                        Vista Previa del Documento
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <!-- Vista previa del documento -->
+                        <div id="previewSection" class="bg-white rounded-lg shadow-lg p-6 mb-8 hidden">
+                            <div class="flex justify-between items-center mb-4">
+                                <h2 class="text-xl font-semibold text-indigo-800">Vista Previa del Documento</h2>
+                                <button id="closePreview" class="text-gray-500 hover:text-gray-700">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                            
+                            <div class="preview-document bg-gray-50 p-4 md:p-8 border border-gray-200 rounded-md scrollable-content max-h-[60vh]">
+                                <div id="documentoGenerado"></div>
+                            </div>
+                            
+                            <div class="flex flex-wrap justify-center mt-6 gap-4">
+                                <button id="editarBtn" class="px-6 py-2 bg-gray-600 text-white font-medium rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors">
+                                    Editar Datos
+                                </button>
+                                <button id="generarBtn" class="px-6 py-2 bg-green-600 text-white font-medium rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors">
+                                    Generar Documento Final
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Documento final -->
+                        <div id="documentoFinalSection" class="bg-white rounded-lg shadow-lg p-6 hidden">
+                            <div class="flex flex-wrap justify-between items-center mb-4">
+                                <h2 class="text-xl font-semibold text-green-800">Documento Generado Exitosamente</h2>
+                                <button id="nuevaEscritura" class="mt-2 sm:mt-0 px-4 py-2 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors">
+                                    Nueva Escritura
+                                </button>
+                            </div>
+                            
+                            <div class="preview-document bg-white p-4 md:p-8 border border-gray-200 rounded-md scrollable-content max-h-[60vh]">
+                                <div id="documentoFinal"></div>
+                            </div>
+                            
+                            <div class="flex flex-wrap justify-center mt-6 gap-4">
+                                <button id="copiarBtn" class="px-6 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
+                                    Copiar Texto
+                                </button>
+                                <button id="imprimirBtn" class="px-6 py-2 bg-green-600 text-white font-medium rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors">
+                                    Imprimir Documento
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Campos para Testimonio -->
+                        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+                            <h2 class="text-xl font-semibold text-indigo-800 mb-4">Datos del Testimonio</h2>
+                            
+                            <form id="testimonioForm" class="space-y-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <!-- Datos del protocolo -->
+                                    <div class="space-y-4">
+                                        <h3 class="text-lg font-medium text-indigo-600 border-b border-indigo-200 pb-2">Datos del Protocolo</h3>
+                                        
+                                        <div class="grid grid-cols-2 gap-4">
+                                            <div>
+                                                <label for="folioInicio" class="block text-sm font-medium text-gray-700 mb-1">Folio Inicio (Número)</label>
+                                                <input type="number" id="folioInicio" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                                            </div>
+                                            <div>
+                                                <label for="caraInicio" class="block text-sm font-medium text-gray-700 mb-1">Cara</label>
+                                                <select id="caraInicio" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                                                    <option value="frente">Frente</option>
+                                                    <option value="reverso">Reverso</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="grid grid-cols-2 gap-4">
+                                            <div>
+                                                <label for="folioFin" class="block text-sm font-medium text-gray-700 mb-1">Folio Fin (Número)</label>
+                                                <input type="number" id="folioFin" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                                            </div>
+                                            <div>
+                                                <label for="caraFin" class="block text-sm font-medium text-gray-700 mb-1">Cara</label>
+                                                <select id="caraFin" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                                                    <option value="frente">Frente</option>
+                                                    <option value="reverso">Reverso</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        
+                                        <div>
+                                            <label for="numeroProtocolo" class="block text-sm font-medium text-gray-700 mb-1">Número de Protocolo</label>
+                                            <input type="number" id="numeroProtocolo" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                                        </div>
+                                        
+                                        <div>
+                                            <label for="numeroFolios" class="block text-sm font-medium text-gray-700 mb-1">Número de Folios/Hojas</label>
+                                            <input type="number" id="numeroFolios" min="1" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Datos del testimonio -->
+                                    <div class="space-y-4">
+                                        <h3 class="text-lg font-medium text-indigo-600 border-b border-indigo-200 pb-2">Datos del Testimonio</h3>
+                                        
+                                        <div class="grid grid-cols-2 gap-4">
+                                            <div>
+                                                <label for="horaTestimonio" class="block text-sm font-medium text-gray-700 mb-1">Hora Testimonio (formato 24h)</label>
+                                                <input type="time" id="horaTestimonio" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                                            </div>
+                                            <div>
+                                                <label for="momentoDiaTestimonio" class="block text-sm font-medium text-gray-700 mb-1">Momento del día</label>
+                                                <select id="momentoDiaTestimonio" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                                                    <option value="">Seleccione...</option>
+                                                    <option value="mañana">Mañana</option>
+                                                    <option value="tarde">Tarde</option>
+                                                    <option value="noche">Noche</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="grid grid-cols-3 gap-4">
+                                            <div>
+                                                <label for="diaTestimonio" class="block text-sm font-medium text-gray-700 mb-1">Día</label>
+                                                <input type="number" id="diaTestimonio" min="1" max="31" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                                            </div>
+                                            <div>
+                                                <label for="mesTestimonio" class="block text-sm font-medium text-gray-700 mb-1">Mes</label>
+                                                <select id="mesTestimonio" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                                                    <option value="">Seleccione...</option>
+                                                    <option value="ENERO">ENERO</option>
+                                                    <option value="FEBRERO">FEBRERO</option>
+                                                    <option value="MARZO">MARZO</option>
+                                                    <option value="ABRIL">ABRIL</option>
+                                                    <option value="MAYO">MAYO</option>
+                                                    <option value="JUNIO">JUNIO</option>
+                                                    <option value="JULIO">JULIO</option>
+                                                    <option value="AGOSTO">AGOSTO</option>
+                                                    <option value="SEPTIEMBRE">SEPTIEMBRE</option>
+                                                    <option value="OCTUBRE">OCTUBRE</option>
+                                                    <option value="NOVIEMBRE">NOVIEMBRE</option>
+                                                    <option value="DICIEMBRE">DICIEMBRE</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label for="anioTestimonio" class="block text-sm font-medium text-gray-700 mb-1">Año</label>
+                                                <input type="number" id="anioTestimonio" min="2000" max="2100" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                                            </div>
+                                        </div>
+                                        
+                                        <div>
+                                            <label for="nombresFirmas" class="block text-sm font-medium text-gray-700 mb-1">Firmas</label>
+                                            <input type="text" id="nombresFirmas" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                                        </div>
+
+                                        <div>
+                                            <label for="nombreAbogadoTestimonio" class="block text-sm font-medium text-gray-700 mb-1">Nombre del Abogado</label>
+                                            <input type="text" id="nombreAbogadoTestimonio" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                                        </div>
+    
+                                        <div>
+                                            <label for="carnetAbogado" class="block text-sm font-medium text-gray-700 mb-1">Carnet del Abogado</label>
+                                            <input type="text" id="carnetAbogado" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex justify-center pt-4">
+                                    <button type="button" id="previewTestimonioBtn" class="px-6 py-3 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors">
+                                        Vista Previa del Testimonio
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <!-- Vista previa del testimonio -->
+                        <div id="previewTestimonioSection" class="bg-white rounded-lg shadow-lg p-6 mb-8 hidden">
+                            <div class="flex justify-between items-center mb-4">
+                                <h2 class="text-xl font-semibold text-indigo-800">Vista Previa del Testimonio</h2>
+                                <button id="closePreviewTestimonio" class="text-gray-500 hover:text-gray-700">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                            
+                            <div class="preview-document bg-gray-50 p-4 md:p-8 border border-gray-200 rounded-md scrollable-content max-h-[60vh]">
+                                <div id="testimonioGenerado"></div>
+                            </div>
+                            
+                            <div class="flex flex-wrap justify-center mt-6 gap-4">
+                                <button id="editarTestimonioBtn" class="px-6 py-2 bg-gray-600 text-white font-medium rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors">
+                                    Editar Datos
+                                </button>
+                                <button id="generarTestimonioBtn" class="px-6 py-2 bg-green-600 text-white font-medium rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors">
+                                    Generar Testimonio Final
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Testimonio final -->
+                        <div id="testimonioFinalSection" class="bg-white rounded-lg shadow-lg p-6 hidden">
+                            <div class="flex flex-wrap justify-between items-center mb-4">
+                                <h2 class="text-xl font-semibold text-green-800">Testimonio Generado Exitosamente</h2>
+                                <button id="nuevoTestimonio" class="mt-2 sm:mt-0 px-4 py-2 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors">
+                                    Nuevo Testimonio
+                                </button>
+                            </div>
+                            
+                            <div class="preview-document bg-white p-4 md:p-8 border border-gray-200 rounded-md scrollable-content max-h-[60vh]">
+                                <div id="testimonioFinal"></div>
+                            </div>
+                            
+                            <div class="flex flex-wrap justify-center mt-6 gap-4">
+                                <button id="copiarTestimonioBtn" class="px-6 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
+                                    Copiar Texto
+                                </button>
+                                <button id="imprimirTestimonioBtn" class="px-6 py-2 bg-green-600 text-white font-medium rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors">
+                                    Imprimir Testimonio
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tab Content: Base de Datos -->
+                    <div id="baseDatos" class="tab-content">
+                        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+                            <h2 class="text-xl font-semibold text-indigo-800 mb-4">Base de Datos de Comparecientes</h2>
+                            
+                            <form id="comparecienteForm" class="space-y-6 mb-8">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div class="space-y-4">
+                                        <div>
+                                            <label for="dbTratamiento" class="block text-sm font-medium text-gray-700 mb-1">Tratamiento</label>
+                                            <select id="dbTratamiento" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" required>
+                                                <option value="">Seleccione...</option>
+                                                <option value="La Señora">La Señora</option>
+                                                <option value="El Señor">El Señor</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div>
+                                            <label for="dbNombreCompareciente" class="block text-sm font-medium text-gray-700 mb-1">Nombre del Compareciente</label>
+                                            <input type="text" id="dbNombreCompareciente" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" required>
+                                        </div>
+                                        
+                                        <div>
+                                            <label for="dbGeneralesCompareciente" class="block text-sm font-medium text-gray-700 mb-1">Generales del Compareciente</label>
+                                            <textarea id="dbGeneralesCompareciente" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" required></textarea>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="space-y-4">
+                                        <div>
+                                            <label for="dbTipoPersona" class="block text-sm font-medium text-gray-700 mb-1">Tipo de Persona</label>
+                                            <select id="dbTipoPersona" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" required>
+                                                <option value="">Seleccione...</option>
+                                                <option value="natural">Persona Natural</option>
+                                                <option value="juridica">Persona Jurídica</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <!-- Campos para persona jurídica (inicialmente ocultos) -->
+                                        <div id="dbCamposPersonaJuridica" class="space-y-4 hidden">
+                                            <div>
+                                                <label for="dbNombreEmpresa" class="block text-sm font-medium text-gray-700 mb-1">Nombre de la Empresa</label>
+                                                <input type="text" id="dbNombreEmpresa" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                                            </div>
+                                            
+                                            <div>
+                                                <label for="dbGeneralesEmpresa" class="block text-sm font-medium text-gray-700 mb-1">Generales de la Empresa</label>
+                                                <textarea id="dbGeneralesEmpresa" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+                                            </div>
+                                        </div>
+                                        
+                                        <input type="hidden" id="dbComparecienteId">
+                                        
+                                        <div class="flex justify-end gap-2 pt-4">
+                                            <button type="button" id="limpiarFormBtn" class="px-4 py-2 bg-gray-500 text-white font-medium rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 transition-colors">
+                                                Limpiar
+                                            </button>
+                                            <button type="submit" id="guardarComparecienteBtn" class="px-4 py-2 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors">
+                                                Guardar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full bg-white border border-gray-200">
+                                    <thead>
+                                        <tr>
+                                            <th class="py-2 px-4 border-b border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Tratamiento</th>
+                                            <th class="py-2 px-4 border-b border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Nombre</th>
+                                            <th class="py-2 px-4 border-b border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Tipo</th>
+                                            <th class="py-2 px-4 border-b border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="comparecientesTableBody">
+                                        <!-- Se llenará dinámicamente -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tab Content: Exportar HTML -->
+                    <div id="exportarHTML" class="tab-content">
+                        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+                            <h2 class="text-xl font-semibold text-indigo-800 mb-4">Exportar Código HTML</h2>
+                            
+                            <p class="mb-4 text-gray-700">Esta función permite exportar el código HTML completo de la aplicación, incluyendo todas las modificaciones y datos actuales de la base de datos.</p>
+                            
+                            <div class="flex justify-center mb-6">
+                                <button id="generarHTMLBtn" class="px-6 py-3 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors">
+                                    Generar Código HTML
+                                </button>
+                            </div>
+                            
+                            <div id="htmlCodeContainer" class="hidden">
+                                <div class="flex justify-between items-center mb-2">
+                                    <h3 class="text-lg font-medium text-indigo-600">Código HTML Generado</h3>
+                                    <button id="copiarHTMLBtn" class="px-4 py-1 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
+                                        Copiar Código
+                                    </button>
+                                </div>
+                                
+                                <div class="bg-gray-800 rounded-md p-4 overflow-hidden">
+                                    <pre id="htmlCode" class="text-gray-200 text-sm scrollable-content max-h-[60vh] whitespace-pre-wrap"></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+            
+            <footer class="bg-indigo-800 text-white p-4">
+                <div class="container mx-auto text-center">
+                    <p>© 2023 Generador de Escrituras Públicas</p>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        // Base de datos de comparecientes
+        let comparecientes = [
+            {
+                id: 1,
+                tratamiento: "La Señora",
+                nombreCompareciente: "MAURA POZO",
+                generalesCompareciente: "mayor de edad, soltera, abogada, con cédula de identidad número 001-010180-0032P, del domicilio de Managua",
+                tipoPersona: "juridica",
+                nombreEmpresa: "PSMT NIC S.A.",
+                generalesEmpresa: "sociedad anónima constituida conforme las leyes de la República de Nicaragua, con RUC J0310000123456"
+            },
+            {
+                id: 2,
+                tratamiento: "El Señor",
+                nombreCompareciente: "JUAN PÉREZ",
+                generalesCompareciente: "mayor de edad, casado, ingeniero, con cédula de identidad número 001-050585-0045K, del domicilio de León",
+                tipoPersona: "natural",
+                nombreEmpresa: "",
+                generalesEmpresa: ""
+            }
+        ];
+
+        // Password configuration
+        const correctPassword = "escritura123"; // Change this to your desired password
+        
+        // Modal control
+        document.getElementById('openAppBtn').addEventListener('click', function() {
+            document.getElementById('passwordModal').classList.remove('hidden');
+        });
+        
+        document.getElementById('closePasswordModal').addEventListener('click', function() {
+            document.getElementById('passwordModal').classList.add('hidden');
+        });
+        
+        document.getElementById('closeAppModal').addEventListener('click', function() {
+            document.getElementById('appModal').classList.add('hidden');
+        });
+        
+        // Password validation
+        document.getElementById('submitPassword').addEventListener('click', function() {
+            const password = document.getElementById('password').value;
+            if (password === correctPassword) {
+                document.getElementById('passwordModal').classList.add('hidden');
+                document.getElementById('appModal').classList.remove('hidden');
+                document.getElementById('password').value = '';
+                cargarComparecientesEnSelect();
+                actualizarTablaComparecientes();
+            } else {
+                alert('Contraseña incorrecta. Por favor intente nuevamente.');
+            }
+        });
+        
+        // Allow Enter key to submit password
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('submitPassword').click();
+            }
+        });
+
+        // Tab navigation
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all tabs
+                document.querySelectorAll('.tab-button').forEach(btn => {
+                    btn.classList.remove('tab-active');
+                    btn.classList.add('tab-inactive');
+                });
+                
+                // Add active class to clicked tab
+                this.classList.remove('tab-inactive');
+                this.classList.add('tab-active');
+                
+                // Hide all tab contents
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                // Show the selected tab content
+                const tabId = this.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // Función para convertir número a letras
+        function numeroALetras(numero) {
+            const unidades = ['', 'UNO', 'DOS', 'TRES', 'CUATRO', 'CINCO', 'SEIS', 'SIETE', 'OCHO', 'NUEVE'];
+            const decenas = ['', 'DIEZ', 'VEINTE', 'TREINTA', 'CUARENTA', 'CINCUENTA', 'SESENTA', 'SETENTA', 'OCHENTA', 'NOVENTA'];
+            const especiales = ['DIEZ', 'ONCE', 'DOCE', 'TRECE', 'CATORCE', 'QUINCE', 'DIECISÉIS', 'DIECISIETE', 'DIECIOCHO', 'DIECINUEVE'];
+            const centenas = ['', 'CIENTO', 'DOSCIENTOS', 'TRESCIENTOS', 'CUATROCIENTOS', 'QUINIENTOS', 'SEISCIENTOS', 'SETECIENTOS', 'OCHOCIENTOS', 'NOVECIENTOS'];
+            
+            if (numero === 0) return 'CERO';
+            if (numero < 10) return unidades[numero];
+            if (numero < 20) return especiales[numero - 10];
+            if (numero < 100) {
+                const unidad = numero % 10;
+                const decena = Math.floor(numero / 10);
+                return unidad === 0 ? decenas[decena] : `${decenas[decena]} Y ${unidades[unidad]}`;
+            }
+            if (numero === 100) return 'CIEN';
+            if (numero < 1000) {
+                const centena = Math.floor(numero / 100);
+                const resto = numero % 100;
+                return resto === 0 ? centenas[centena] : `${centenas[centena]} ${numeroALetras(resto)}`;
+            }
+            if (numero < 2000) {
+                const resto = numero % 1000;
+                return resto === 0 ? 'MIL' : `MIL ${numeroALetras(resto)}`;
+            }
+            if (numero < 1000000) {
+                const miles = Math.floor(numero / 1000);
+                const resto = numero % 1000;
+                return resto === 0 ? `${numeroALetras(miles)} MIL` : `${numeroALetras(miles)} MIL ${numeroALetras(resto)}`;
+            }
+            return 'NÚMERO FUERA DE RANGO';
+        }
+
+        // Función para convertir hora a letras
+        function horaALetras(horaStr) {
+            const [horas, minutos] = horaStr.split(':').map(Number);
+            
+            let resultado = '';
+            
+            // Convertir horas
+            if (horas === 0) {
+                resultado = 'CERO';
+            } else if (horas === 1) {
+                resultado = 'UNA';
+            } else {
+                resultado = numeroALetras(horas);
+            }
+            
+            // Agregar minutos
+            if (minutos > 0) {
+                resultado += ' Y ' + numeroALetras(minutos);
+            }
+            
+            return resultado;
+        }
+
+        // Mostrar/ocultar campos según el tipo de persona
+        document.getElementById('tipoPersona').addEventListener('change', function() {
+            const camposPersonaJuridica = document.getElementById('camposPersonaJuridica');
+            if (this.value === 'juridica') {
+                camposPersonaJuridica.classList.remove('hidden');
+                document.getElementById('nombreEmpresa').required = true;
+                document.getElementById('generalesEmpresa').required = true;
+            } else {
+                camposPersonaJuridica.classList.add('hidden');
+                document.getElementById('nombreEmpresa').required = false;
+                document.getElementById('generalesEmpresa').required = false;
+            }
+        });
+
+        // Mostrar/ocultar campos según el tipo de persona en la base de datos
+        document.getElementById('dbTipoPersona').addEventListener('change', function() {
+            const camposPersonaJuridica = document.getElementById('dbCamposPersonaJuridica');
+            if (this.value === 'juridica') {
+                camposPersonaJuridica.classList.remove('hidden');
+                document.getElementById('dbNombreEmpresa').required = true;
+                document.getElementById('dbGeneralesEmpresa').required = true;
+            } else {
+                camposPersonaJuridica.classList.add('hidden');
+                document.getElementById('dbNombreEmpresa').required = false;
+                document.getElementById('dbGeneralesEmpresa').required = false;
+            }
+        });
+
+        // Función para generar el documento
+        function generarDocumento() {
+            const numeroEscritura = document.getElementById('numeroEscritura').value;
+            const objetoDocumento = document.getElementById('objetoDocumento').value;
+            const ciudad = document.getElementById('ciudad').value;
+            const hora = document.getElementById('hora').value;
+            const momentoDia = document.getElementById('momentoDia').value;
+            const dia = document.getElementById('dia').value;
+            const mes = document.getElementById('mes').value;
+            const anio = document.getElementById('anio').value;
+            const nombreAbogado = document.getElementById('nombreAbogado').value;
+            const generalesAbogado = document.getElementById('generalesAbogado').value;
+            const tratamiento = document.getElementById('tratamiento').value;
+            const nombreCompareciente = document.getElementById('nombreCompareciente').value;
+            const generalesCompareciente = document.getElementById('generalesCompareciente').value;
+            const tipoPersona = document.getElementById('tipoPersona').value;
+            const contenidoEscritura = document.getElementById('contenidoEscritura').value;
+            
+            // Validar campos requeridos
+            if (!numeroEscritura || !objetoDocumento || !ciudad || !hora || !momentoDia || !dia || !mes || !anio || 
+                !nombreAbogado || !generalesAbogado || !tratamiento || !nombreCompareciente || !generalesCompareciente || 
+                !tipoPersona || !contenidoEscritura) {
+                alert('Por favor complete todos los campos requeridos.');
+                return false;
+            }
+            
+            // Validar campos adicionales para persona jurídica
+            if (tipoPersona === 'juridica') {
+                const nombreEmpresa = document.getElementById('nombreEmpresa').value;
+                const generalesEmpresa = document.getElementById('generalesEmpresa').value;
+                if (!nombreEmpresa || !generalesEmpresa) {
+                    alert('Por favor complete los datos de la empresa.');
+                    return false;
+                }
+            }
+            
+            // Generar el contenido del documento
+            let contenidoDocumento = `
+                <h1 class="text-center font-bold text-xl mb-6">ESCRITURA PÚBLICA NÚMERO ${numeroALetras(parseInt(numeroEscritura))} (${numeroEscritura}); ${objetoDocumento}.-</h1>
+                
+                <p>En la ciudad de ${ciudad}, República de Nicaragua, a las ${horaALetras(hora)} de la ${momentoDia} del día ${numeroALetras(parseInt(dia))} de ${mes} del año ${numeroALetras(parseInt(anio))}.- ANTE MÍ: "${nombreAbogado}", ${generalesAbogado}.</p>
+                
+                <p class="mt-4">Comparece: ${tratamiento} "${nombreCompareciente}", ${generalesCompareciente}, `;
+            
+            if (tipoPersona === 'natural') {
+                contenidoDocumento += `Doy fe de conocer a quien comparece y de haber tenido a la vista los documentos legales y que a mi juicio tiene la capacidad legal y civil necesaria para obligarse y contratar en especial para la celebración de este acto, en el que procede en nombre propio, representación e intereses. Comparece y dice:</p>
+                
+                <p class="mt-4">${contenidoEscritura}</p>
+                
+                <p class="mt-4">`;
+                
+                if (tratamiento === "La Señora") {
+                    contenidoDocumento += `Así se expresó la compareciente en los caracteres con que actúa, bien instruida por mí el Notario, acerca del objeto, valor y transcendencias legales de este acto, de las cláusulas generales que aseguran su validez, el de las especiales que contienen, las que envuelven renuncias y estipulaciones explícitas e implícitas y las que en concreto haya hecho. Y Leída que fue por mí, el Notario íntegramente esta escritura a los comparecientes en los caracteres con que actúan quienes la encuentran conforme, la aprueban, ratifican y firman conmigo el Notario, que doy fe de todo lo relacionado.-`;
+                } else {
+                    contenidoDocumento += `Así se expresó el compareciente en los caracteres con que actúa, bien instruido por mí el Notario, acerca del objeto, valor y transcendencias legales de este acto, de las cláusulas generales que aseguran su validez, el de las especiales que contienen, las que envuelven renuncias y estipulaciones explícitas e implícitas y las que en concreto haya hecho. Y Leída que fue por mí, el Notario íntegramente esta escritura a los comparecientes en los caracteres con que actúan quienes la encuentran conforme, la aprueban, ratifican y firman conmigo el Notario, que doy fe de todo lo relacionado.-`;
+                }
+                
+            } else {
+                const nombreEmpresa = document.getElementById('nombreEmpresa').value;
+                const generalesEmpresa = document.getElementById('generalesEmpresa').value;
+                contenidoDocumento += `Quien actúa en nombre y representación de "${nombreEmpresa}", ${generalesEmpresa}. Doy fe de conocer a quien comparece y de haber tenido a la vista los documentos anteriormente relacionados, y en representación de ${nombreEmpresa}, comparece y dice:</p>
+                
+                <p class="mt-4">${contenidoEscritura}</p>
+                
+                <p class="mt-4">`;
+                
+                if (tratamiento === "La Señora") {
+                    contenidoDocumento += `Así se expresó la compareciente en los caracteres con que actúa, bien instruida por mí el Notario, acerca del objeto, valor y transcendencias legales de este acto, de las cláusulas generales que aseguran su validez, el de las especiales que contienen, las que envuelven renuncias y estipulaciones explícitas e implícitas y las que en concreto haya hecho. Y Leída que fue por mí, el Notario íntegramente esta escritura a los comparecientes en los caracteres con que actúan quienes la encuentran conforme, la aprueban, ratifican y firman conmigo el Notario, que doy fe de todo lo relacionado.-`;
+                } else {
+                    contenidoDocumento += `Así se expresó el compareciente en los caracteres con que actúa, bien instruido por mí el Notario, acerca del objeto, valor y transcendencias legales de este acto, de las cláusulas generales que aseguran su validez, el de las especiales que contienen, las que envuelven renuncias y estipulaciones explícitas e implícitas y las que en concreto haya hecho. Y Leída que fue por mí, el Notario íntegramente esta escritura a los comparecientes en los caracteres con que actúan quienes la encuentran conforme, la aprueban, ratifican y firman conmigo el Notario, que doy fe de todo lo relacionado.-`;
+                }
+            }
+            
+            contenidoDocumento += `</p>`;
+            
+            return contenidoDocumento;
+        }
+
+        // Función para generar el testimonio
+        function generarTestimonio() {
+            // Primero generamos el documento base
+            const contenidoDocumento = generarDocumento();
+            if (!contenidoDocumento) return false;
+            
+            // Obtenemos los datos del testimonio
+
+            const nombresFirmas = document.getElementById('nombresFirmas').value;
+            const folioInicio = document.getElementById('folioInicio').value;
+            const caraInicio = document.getElementById('caraInicio').value;
+            const folioFin = document.getElementById('folioFin').value;
+            const caraFin = document.getElementById('caraFin').value;
+            const numeroProtocolo = document.getElementById('numeroProtocolo').value;
+            const numeroFolios = document.getElementById('numeroFolios').value;
+            const horaTestimonio = document.getElementById('horaTestimonio').value;
+            const momentoDiaTestimonio = document.getElementById('momentoDiaTestimonio').value;
+            const diaTestimonio = document.getElementById('diaTestimonio').value;
+            const mesTestimonio = document.getElementById('mesTestimonio').value;
+            const anioTestimonio = document.getElementById('anioTestimonio').value;
+            const nombreAbogadoTestimonio = document.getElementById('nombreAbogadoTestimonio').value;
+            const carnetAbogado = document.getElementById('carnetAbogado').value;
+            const ciudad = document.getElementById('ciudad').value;
+            
+            // Validar campos requeridos
+            if (!nombresFirmas ||!folioInicio || !caraInicio || !folioFin || !caraFin || !numeroProtocolo || !numeroFolios || 
+                !horaTestimonio || !momentoDiaTestimonio || !diaTestimonio || !mesTestimonio || !anioTestimonio || 
+                !nombreAbogadoTestimonio || !carnetAbogado) {
+                alert('Por favor complete todos los campos del testimonio.');
+                return false;
+            }
+            
+            // Obtener datos del compareciente
+            const nombreCompareciente = document.getElementById('nombreCompareciente').value;
+            const tipoPersona = document.getElementById('tipoPersona').value;
+            let nombreEmpresa = "";
+            
+            if (tipoPersona === 'juridica') {
+                nombreEmpresa = document.getElementById('nombreEmpresa').value;
+            }
+            
+            // Generar el párrafo del testimonio
+            let parrafoTestimonio = `<p class="mt-4">${nombresFirmas} PASO ANTE MÍ: Del ${caraInicio} del folio ${numeroALetras(parseInt(folioInicio))} (${folioInicio}) al ${caraFin} del folio ${numeroALetras(parseInt(folioFin))} (${folioFin}), de mi protocolo número ${numeroALetras(parseInt(numeroProtocolo))} (${numeroProtocolo}) que llevo en el presente año. Libro este primer testimonio a favor de ${nombreCompareciente}`;
+            
+            if (tipoPersona === 'juridica') {
+                parrafoTestimonio += ` en Representación Legal de ${nombreEmpresa}`;
+            }
+            
+            parrafoTestimonio += `, en ${numeroALetras(parseInt(numeroFolios))} (${numeroFolios}) hoja${parseInt(numeroFolios) > 1 ? 's' : ''} útil${parseInt(numeroFolios) > 1 ? 'es' : ''} de papel sellado de ley, que rubrico, firmo y sello, en la ciudad de ${ciudad}, República de Nicaragua, a las ${horaALetras(horaTestimonio)} de la ${momentoDiaTestimonio} del día ${numeroALetras(parseInt(diaTestimonio))} de ${mesTestimonio} del año ${numeroALetras(parseInt(anioTestimonio))}.</p>`;
+            
+            // Agregar firma del abogado
+            parrafoTestimonio += `<p class="mt-8 text-center">${nombreAbogadoTestimonio}<br>Abogado y Notario Público<br>Carnet ${carnetAbogado}</p>`;
+            
+            // Combinar el documento original con el testimonio
+            return contenidoDocumento + parrafoTestimonio;
+        }
+
+        // Mostrar vista previa
+        document.getElementById('previewBtn').addEventListener('click', function() {
+            const contenidoDocumento = generarDocumento();
+            if (contenidoDocumento) {
+                document.getElementById('documentoGenerado').innerHTML = contenidoDocumento;
+                document.getElementById('previewSection').classList.remove('hidden');
+                document.getElementById('documentoFinalSection').classList.add('hidden');
+                document.getElementById('previewSection').scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+
+        // Cerrar vista previa
+        document.getElementById('closePreview').addEventListener('click', function() {
+            document.getElementById('previewSection').classList.add('hidden');
+        });
+
+        // Editar datos
+        document.getElementById('editarBtn').addEventListener('click', function() {
+            document.getElementById('previewSection').classList.add('hidden');
+            document.getElementById('documentForm').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // Generar documento final
+        document.getElementById('generarBtn').addEventListener('click', function() {
+            const contenidoDocumento = generarDocumento();
+            if (contenidoDocumento) {
+                document.getElementById('documentoFinal').innerHTML = contenidoDocumento;
+                document.getElementById('previewSection').classList.add('hidden');
+                document.getElementById('documentoFinalSection').classList.remove('hidden');
+                document.getElementById('documentoFinalSection').scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+
+        // Nueva escritura
+        document.getElementById('nuevaEscritura').addEventListener('click', function() {
+            document.getElementById('documentForm').reset();
+            document.getElementById('camposPersonaJuridica').classList.add('hidden');
+            document.getElementById('documentoFinalSection').classList.add('hidden');
+            document.getElementById('documentForm').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // Copiar texto
+        document.getElementById('copiarBtn').addEventListener('click', function() {
+            const contenido = document.getElementById('documentoFinal').innerText;
+            navigator.clipboard.writeText(contenido).then(function() {
+                alert('Texto copiado al portapapeles');
+            }, function(err) {
+                alert('Error al copiar el texto: ' + err);
+            });
+        });
+
+        // Imprimir documento
+        document.getElementById('imprimirBtn').addEventListener('click', function() {
+            const contenido = document.getElementById('documentoFinal').innerHTML;
+            const ventanaImpresion = window.open('', '_blank');
+            ventanaImpresion.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Escritura Pública</title>
+                    <style>
+                        body {
+                            font-family: 'Times New Roman', Times, serif;
+                            line-height: 1.6;
+                            margin: 2cm;
+                            text-align: justify;
+                        }
+                        h1 {
+                            text-align: center;
+                            font-size: 16pt;
+                            margin-bottom: 24pt;
+                        }
+                        p {
+                            margin-bottom: 12pt;
+                            font-size: 12pt;
+                        }
+                        @media print {
+                            body {
+                                margin: 2cm;
+                            }
+                        }
+                    </style>
+                </head>
+                <body>
+                    ${contenido}
+                </body>
+                </html>
+            `);
+            ventanaImpresion.document.close();
+            setTimeout(() => {
+                ventanaImpresion.print();
+            }, 500);
+        });
+
+        // Mostrar vista previa del testimonio
+        document.getElementById('previewTestimonioBtn').addEventListener('click', function() {
+            const contenidoTestimonio = generarTestimonio();
+            if (contenidoTestimonio) {
+                document.getElementById('testimonioGenerado').innerHTML = contenidoTestimonio;
+                document.getElementById('previewTestimonioSection').classList.remove('hidden');
+                document.getElementById('testimonioFinalSection').classList.add('hidden');
+                document.getElementById('previewTestimonioSection').scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+
+        // Cerrar vista previa del testimonio
+        document.getElementById('closePreviewTestimonio').addEventListener('click', function() {
+            document.getElementById('previewTestimonioSection').classList.add('hidden');
+        });
+
+        // Editar datos del testimonio
+        document.getElementById('editarTestimonioBtn').addEventListener('click', function() {
+            document.getElementById('previewTestimonioSection').classList.add('hidden');
+            document.getElementById('testimonioForm').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // Generar testimonio final
+        document.getElementById('generarTestimonioBtn').addEventListener('click', function() {
+            const contenidoTestimonio = generarTestimonio();
+            if (contenidoTestimonio) {
+                document.getElementById('testimonioFinal').innerHTML = contenidoTestimonio;
+                document.getElementById('previewTestimonioSection').classList.add('hidden');
+                document.getElementById('testimonioFinalSection').classList.remove('hidden');
+                document.getElementById('testimonioFinalSection').scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+
+        // Nuevo testimonio
+        document.getElementById('nuevoTestimonio').addEventListener('click', function() {
+            document.getElementById('testimonioForm').reset();
+            document.getElementById('testimonioFinalSection').classList.add('hidden');
+            document.getElementById('testimonioForm').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // Copiar testimonio
+        document.getElementById('copiarTestimonioBtn').addEventListener('click', function() {
+            const contenido = document.getElementById('testimonioFinal').innerText;
+            navigator.clipboard.writeText(contenido).then(function() {
+                alert('Testimonio copiado al portapapeles');
+            }, function(err) {
+                alert('Error al copiar el testimonio: ' + err);
+            });
+        });
+
+        // Imprimir testimonio
+        document.getElementById('imprimirTestimonioBtn').addEventListener('click', function() {
+            const contenido = document.getElementById('testimonioFinal').innerHTML;
+            const ventanaImpresion = window.open('', '_blank');
+            ventanaImpresion.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Testimonio de Escritura Pública</title>
+                    <style>
+                        body {
+                            font-family: 'Times New Roman', Times, serif;
+                            line-height: 1.6;
+                            margin: 2cm;
+                            text-align: justify;
+                        }
+                        h1 {
+                            text-align: center;
+                            font-size: 16pt;
+                            margin-bottom: 24pt;
+                        }
+                        p {
+                            margin-bottom: 12pt;
+                            font-size: 12pt;
+                        }
+                        @media print {
+                            body {
+                                margin: 2cm;
+                            }
+                        }
+                    </style>
+                </head>
+                <body>
+                    ${contenido}
+                </body>
+                </html>
+            `);
+            ventanaImpresion.document.close();
+            setTimeout(() => {
+                ventanaImpresion.print();
+            }, 500);
+        });
+
+ // Funciones para la base de datos de comparecientes
+        function cargarComparecientesEnSelect() {
+            const select = document.getElementById('nombreComparecienteSelect');
+            select.innerHTML = '<option value="">Seleccione un compareciente...</option>';
+            
+            comparecientes.forEach(compareciente => {
+                const option = document.createElement('option');
+                option.value = compareciente.id;
+                option.textContent = `${compareciente.tratamiento} ${compareciente.nombreCompareciente}`;
+                select.appendChild(option);
+            });
+        }
+
+        function actualizarTablaComparecientes() {
+            const tbody = document.getElementById('comparecientesTableBody');
+            tbody.innerHTML = '';
+            
+            comparecientes.forEach(compareciente => {
+                const tr = document.createElement('tr');
+                
+                const tdTratamiento = document.createElement('td');
+                tdTratamiento.className = 'py-2 px-4 border-b border-gray-200';
+                tdTratamiento.textContent = compareciente.tratamiento;
+                
+                const tdNombre = document.createElement('td');
+                tdNombre.className = 'py-2 px-4 border-b border-gray-200';
+                tdNombre.textContent = compareciente.nombreCompareciente;
+                
+                const tdTipo = document.createElement('td');
+                tdTipo.className = 'py-2 px-4 border-b border-gray-200';
+                tdTipo.textContent = compareciente.tipoPersona === 'natural' ? 'Persona Natural' : 'Persona Jurídica';
+                
+                const tdAcciones = document.createElement('td');
+                tdAcciones.className = 'py-2 px-4 border-b border-gray-200';
+                
+                const btnEditar = document.createElement('button');
+                btnEditar.className = 'mr-2 px-3 py-1 bg-blue-600 text-white text-xs font-medium rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors';
+                btnEditar.textContent = 'Editar';
+                btnEditar.addEventListener('click', () => editarCompareciente(compareciente.id));
+                
+                const btnEliminar = document.createElement('button');
+                btnEliminar.className = 'px-3 py-1 bg-red-600 text-white text-xs font-medium rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors';
+                btnEliminar.textContent = 'Eliminar';
+                btnEliminar.addEventListener('click', () => eliminarCompareciente(compareciente.id));
+                
+                tdAcciones.appendChild(btnEditar);
+                tdAcciones.appendChild(btnEliminar);
+                
+                tr.appendChild(tdTratamiento);
+                tr.appendChild(tdNombre);
+                tr.appendChild(tdTipo);
+                tr.appendChild(tdAcciones);
+                
+                tbody.appendChild(tr);
+            });
+        }
+
+        function limpiarFormularioCompareciente() {
+            document.getElementById('dbComparecienteId').value = '';
+            document.getElementById('dbTratamiento').value = '';
+            document.getElementById('dbNombreCompareciente').value = '';
+            document.getElementById('dbGeneralesCompareciente').value = '';
+            document.getElementById('dbTipoPersona').value = '';
+            document.getElementById('dbNombreEmpresa').value = '';
+            document.getElementById('dbGeneralesEmpresa').value = '';
+            document.getElementById('dbCamposPersonaJuridica').classList.add('hidden');
+            document.getElementById('guardarComparecienteBtn').textContent = 'Guardar';
+        }
+
+        function editarCompareciente(id) {
+            const compareciente = comparecientes.find(c => c.id === id);
+            if (compareciente) {
+                document.getElementById('dbComparecienteId').value = compareciente.id;
+                document.getElementById('dbTratamiento').value = compareciente.tratamiento;
+                document.getElementById('dbNombreCompareciente').value = compareciente.nombreCompareciente;
+                document.getElementById('dbGeneralesCompareciente').value = compareciente.generalesCompareciente;
+                document.getElementById('dbTipoPersona').value = compareciente.tipoPersona;
+                
+                if (compareciente.tipoPersona === 'juridica') {
+                    document.getElementById('dbCamposPersonaJuridica').classList.remove('hidden');
+                    document.getElementById('dbNombreEmpresa').value = compareciente.nombreEmpresa;
+                    document.getElementById('dbGeneralesEmpresa').value = compareciente.generalesEmpresa;
+                } else {
+                    document.getElementById('dbCamposPersonaJuridica').classList.add('hidden');
+                }
+                
+                document.getElementById('guardarComparecienteBtn').textContent = 'Actualizar';
+                
+                // Scroll to form
+                document.getElementById('comparecienteForm').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function eliminarCompareciente(id) {
+            if (confirm('¿Está seguro de que desea eliminar este compareciente?')) {
+                comparecientes = comparecientes.filter(c => c.id !== id);
+                actualizarTablaComparecientes();
+                cargarComparecientesEnSelect();
+            }
+        }
+
+        // Event listeners para la base de datos
+        document.getElementById('comparecienteForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const id = document.getElementById('dbComparecienteId').value;
+            const tratamiento = document.getElementById('dbTratamiento').value;
+            const nombreCompareciente = document.getElementById('dbNombreCompareciente').value;
+            const generalesCompareciente = document.getElementById('dbGeneralesCompareciente').value;
+            const tipoPersona = document.getElementById('dbTipoPersona').value;
+            
+            // Validar campos requeridos
+            if (!tratamiento || !nombreCompareciente || !generalesCompareciente || !tipoPersona) {
+                alert('Por favor complete todos los campos requeridos.');
+                return;
+            }
+            
+            let nombreEmpresa = '';
+            let generalesEmpresa = '';
+            
+            if (tipoPersona === 'juridica') {
+                nombreEmpresa = document.getElementById('dbNombreEmpresa').value;
+                generalesEmpresa = document.getElementById('dbGeneralesEmpresa').value;
+                
+                if (!nombreEmpresa || !generalesEmpresa) {
+                    alert('Por favor complete los datos de la empresa.');
+                    return;
+                }
+            }
+            
+            if (id) {
+                // Actualizar compareciente existente
+                const index = comparecientes.findIndex(c => c.id === parseInt(id));
+                if (index !== -1) {
+                    comparecientes[index] = {
+                        id: parseInt(id),
+                        tratamiento,
+                        nombreCompareciente,
+                        generalesCompareciente,
+                        tipoPersona,
+                        nombreEmpresa,
+                        generalesEmpresa
+                    };
+                }
+            } else {
+                // Crear nuevo compareciente
+                const nuevoId = comparecientes.length > 0 ? Math.max(...comparecientes.map(c => c.id)) + 1 : 1;
+                comparecientes.push({
+                    id: nuevoId,
+                    tratamiento,
+                    nombreCompareciente,
+                    generalesCompareciente,
+                    tipoPersona,
+                    nombreEmpresa,
+                    generalesEmpresa
+                });
+            }
+            
+            actualizarTablaComparecientes();
+            cargarComparecientesEnSelect();
+            limpiarFormularioCompareciente();
+        });
+
+        document.getElementById('limpiarFormBtn').addEventListener('click', limpiarFormularioCompareciente);
+
+        // Cargar datos de compareciente en el formulario principal
+        document.getElementById('cargarComparecienteBtn').addEventListener('click', function() {
+            const comparecienteId = document.getElementById('nombreComparecienteSelect').value;
+            if (!comparecienteId) {
+                alert('Por favor seleccione un compareciente.');
+                return;
+            }
+            
+            const compareciente = comparecientes.find(c => c.id === parseInt(comparecienteId));
+            if (compareciente) {
+                document.getElementById('tratamiento').value = compareciente.tratamiento;
+                document.getElementById('nombreCompareciente').value = compareciente.nombreCompareciente;
+                document.getElementById('generalesCompareciente').value = compareciente.generalesCompareciente;
+                document.getElementById('tipoPersona').value = compareciente.tipoPersona;
+                
+                if (compareciente.tipoPersona === 'juridica') {
+                    document.getElementById('camposPersonaJuridica').classList.remove('hidden');
+                    document.getElementById('nombreEmpresa').value = compareciente.nombreEmpresa;
+                    document.getElementById('generalesEmpresa').value = compareciente.generalesEmpresa;
+                } else {
+                    document.getElementById('camposPersonaJuridica').classList.add('hidden');
+                }
+            }
+        });
+
+        // Exportar HTML
+        document.getElementById('generarHTMLBtn').addEventListener('click', function() {
+            // Obtener el HTML completo de la página
+            const htmlCompleto = document.documentElement.outerHTML;
+            
+            // Reemplazar el array de comparecientes con el actual
+            const htmlModificado = htmlCompleto.replace(
+                /let comparecientes = \[[\s\S]*?\];/,
+                `let comparecientes = ${JSON.stringify(comparecientes, null, 4)};`
+            );
+            
+            // Mostrar el código HTML
+            document.getElementById('htmlCode').textContent = htmlModificado;
+            document.getElementById('htmlCodeContainer').classList.remove('hidden');
+        });
+
+        // Copiar código HTML
+        document.getElementById('copiarHTMLBtn').addEventListener('click', function() {
+            const contenido = document.getElementById('htmlCode').textContent;
+            navigator.clipboard.writeText(contenido).then(function() {
+                alert('Código HTML copiado al portapapeles');
+            }, function(err) {
+                alert('Error al copiar el código: ' + err);
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93b259d1b1af41a7',t:'MTc0NjQ3MDI2NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();
+</script>
+</body></html>
