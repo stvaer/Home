@@ -1,1 +1,1107 @@
+<!DOCTYPE html>
+    <html lang="es"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Code</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000;
+            color: #fff;
+            overflow: hidden;
+        }
+        
+        .terminal-window {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 12px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .terminal-button {
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            transition: all 0.3s;
+            letter-spacing: 1px;
+            border-radius: 8px;
+        }
+        
+        .terminal-button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+        
+        .cancel-button {
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            color: #ff0000;
+        }
+        
+        .cancel-button:hover {
+            background-color: rgba(255, 0, 0, 0.1);
+        }
+        
+        .close-button {
+            color: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s;
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            font-size: 24px;
+            z-index: 10;
+        }
+        
+        .close-button:hover {
+            color: #ff0000;
+        }
+        
+        .svg-container {
+            cursor: pointer;
+            transition: all 0.5s;
+        }
+        
+        .svg-container:hover {
+            transform: scale(1.05);
+            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.5));
+        }
+        
+        .digit-input {
+            width: 40px;
+            height: 50px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            color: #000;
+            font-size: 16px;
+            font-weight: 500;
+            text-align: center;
+            transition: all 0.2s;
+            cursor: pointer;
+            -webkit-text-security: disc; /* Para Safari */
+        }
+        
+        .digit-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+        }
+        
+        .digit-input.filled {
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+        
+        .text-area {
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            resize: none;
+            font-family: 'Inter', sans-serif;
+            border-radius: 8px;
+	    font-size: 16px; /* 👈 necesario para evitar zoom */
+        }
+        
+        .text-area:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+        
+        .grid-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .grid-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
+            transition: all 0.5s ease;
+        }
+        
+        .grid-spotlight {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: radial-gradient(
+                circle 100px at var(--x) var(--y),
+                transparent 0%,
+                transparent 20%,
+                rgba(0, 0, 0, 0.95) 40%,
+                rgba(0, 0, 0, 0.98) 60%
+            );
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            mix-blend-mode: multiply;
+        }
+        
+        .grid-highlight {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: radial-gradient(
+                circle 150px at var(--x) var(--y),
+                rgba(255, 255, 255, 0.1) 0%,
+                rgba(255, 255, 255, 0.05) 30%,
+                transparent 70%
+            );
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        
+        .modal-overlay {
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+        
+        .modal-content {
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+        
+        .modal-visible .modal-content {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.8; }
+            50% { opacity: 1; }
+            100% { opacity: 0.8; }
+        }
+        
+        .simple-square {
+            animation: pulse 4s infinite;
+        }
+        
+        /* Estilos para cuando el modal está activo */
+        body.modal-active .grid-lines {
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 1;
+        }
+        
+        body.modal-active .grid-spotlight {
+            opacity: 0;
+        }
+        
+        .welcome-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 73px;
+            font-weight: 700;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            color: #ffffff;
+        }
+        
+        @media (max-width: 768px) {
+            .welcome-title {
+                font-size: 42px;
+            }
+        }
+        
+        .icon-button {
+            width: 40px;
+            height: 60px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+        
+        .icon-button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+        }
+        
+        .text-field-label {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 16px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 8px;
+        }
+        
+        .action-button {
+            background-color: rgba(255, 0, 0, 0.3);
+            border: 1px solid rgba(255, 0, 0, 0.5);
+            color: #ffffff;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+            padding: 12px 24px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            -webkit-appearance: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .action-button:hover {
+            background-color: rgba(255, 0, 0, 0.5);
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
+        }
+        
+        .action-button:disabled {
+            background-color: rgba(100, 100, 100, 0.3);
+            border-color: rgba(100, 100, 100, 0.5);
+            color: rgba(255, 255, 255, 0.5);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        
+        /* Estilo específico para Safari en iOS */
+        @supports (-webkit-touch-callout: none) {
+            .action-button {
+                cursor: pointer;
+                -webkit-appearance: none;
+                appearance: none;
+            }
+            
+            .action-button:active {
+                background-color: rgba(255, 0, 0, 0.5);
+            }
+        }
+        
+        .result-area {
+            background-color: rgba(20, 20, 20, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #00ff00;
+            resize: none;
+            font-family: 'Inter', sans-serif;
+            border-radius: 8px;
+        }
+        
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            background-color: rgba(0, 255, 0, 0.2);
+            border: 1px solid rgba(0, 255, 0, 0.5);
+            color: #00ff00;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 500;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s, transform 0.3s;
+        }
+        
+        .notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Menú contextual personalizado */
+        .custom-context-menu {
+            position: absolute;
+            background-color: rgba(30, 30, 30, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 8px 0;
+            z-index: 1000;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        
+        .context-menu-item {
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+        }
+        
+        .context-menu-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+        
+        /* Resaltado para la sección reemplazada */
+        .highlight-section {
+            background-color: rgba(0, 255, 0, 0.1);
+            border-left: 3px solid #00ff00;
+            padding-left: 5px;
+        }
+        
+        /* Optimización para scroll interno sin barra visible */
+        .scroll-container {
+            overflow-y: auto;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE and Edge */
+        }
+        
+        .scroll-container::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
+        
+        /* Ajustes específicos para móvil */
+        @media (max-width: 768px) {
+            .modal-content-inner {
+                max-height: 85vh;
+                overflow-y: auto;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+            }
+            
+            .modal-content-inner::-webkit-scrollbar {
+                display: none;
+            }
+            
+            .text-area {
+                min-height: 150px;
+            }
+            
+            .result-area {
+                min-height: 150px;
+            }
+            
+            /* Mejoras específicas para Safari en iOS */
+            @supports (-webkit-touch-callout: none) {
+                .text-area, .result-area {
+                    -webkit-appearance: none;
+                    appearance: none;
+                }
+                
+                /* Asegurar que los botones sean más fáciles de tocar en iOS */
+                .action-button {
+                    min-height: 44px;
+                    padding: 12px 24px;
+                }
+            }
+        }
+        
+        /* Indicador de carga para Safari */
+        .loading-indicator {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            border-radius: 8px;
+            padding: 20px;
+            z-index: 2000;
+            text-align: center;
+        }
+        
+        .loading-spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid #00ff00;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center h-screen">
+    <div class="grid-container">
+        <div class="grid-lines" id="gridLines"></div>
+        <div class="grid-spotlight" id="gridSpotlight"></div>
+        <div class="grid-highlight" id="gridHighlight"></div>
+    </div>
+    
+    <!-- Simple Square SVG Container -->
+    <div id="svgContainer" class="svg-container w-24 h-24 flex items-center justify-center">
+        <svg viewBox="0 0 100 100" width="100%" height="100%" class="simple-square">
+            <rect x="10" y="10" width="80" height="80" fill="#ffffff"></rect>
+        </svg>
+    </div>
+    
+    <!-- Password Modal -->
+    <div id="passwordModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-10 hidden modal-overlay">
+        <div class="terminal-window w-80 md:w-96 relative overflow-hidden modal-content p-8">
+            <div class="flex flex-col items-center justify-center">
+                <div class="mb-8 flex justify-center space-x-2">
+                    <input type="password" maxlength="1" class="digit-input" data-index="0" inputmode="numeric" pattern="[0-9]*">
+                    <input type="password" maxlength="1" class="digit-input" data-index="1" inputmode="numeric" pattern="[0-9]*">
+                    <input type="password" maxlength="1" class="digit-input" data-index="2" inputmode="numeric" pattern="[0-9]*">
+                    <input type="password" maxlength="1" class="digit-input" data-index="3" inputmode="numeric" pattern="[0-9]*">
+                    <input type="password" maxlength="1" class="digit-input" data-index="4" inputmode="numeric" pattern="[0-9]*">
+                    <input type="password" maxlength="1" class="digit-input" data-index="5" inputmode="numeric" pattern="[0-9]*">
+                </div>
+                
+                <div class="flex space-x-4 w-full">
+                    <button id="cancelButton" class="cancel-button w-1/2 py-3 rounded-lg text-sm tracking-wider">CANCELAR</button>
+                    <button id="accessButton" class="terminal-button w-1/2 py-3 rounded-lg text-sm tracking-wider">INICIAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Text Area -->
+    <div id="textAreaContainer" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-10 hidden modal-overlay">
+        <div class="terminal-window w-11/12 md:w-4/5 lg:w-3/4 h-5/6 relative overflow-hidden modal-content">
+            <!-- Close button -->
+            <button id="closeTextArea" class="close-button">&times;</button>
+            
+            <div class="p-6 flex flex-col h-full modal-content-inner scroll-container">
+                <!-- Icon button above the title -->
+                <div class="flex items-start mb-4">
+                    <div class="icon-button" id="iconButton">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="4" y="4" width="16" height="16" stroke="white" stroke-width="1.5"/>
+                            <line x1="8" y1="12" x2="16" y2="12" stroke="white" stroke-width="1.5"/>
+                        </svg>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <h1 class="welcome-title text-4xl md:text-5xl lg:text-6xl" id="welcomeTitle" contenteditable="true">Bienvenido al panel generador de STVAER</h1>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+                    <!-- Primer campo de texto - HTML completo -->
+                    <div class="flex flex-col">
+                        <div class="text-field-label">&lt;.html&gt; (Código HTML completo)</div>
+                        <textarea id="htmlTextArea" class="text-area w-full p-4 bg-opacity-50 text-sm" style="min-height: 200px;" placeholder="Ingresa el código HTML completo aquí..."></textarea>
+                    </div>
+                    
+                    <!-- Segundo campo de texto - Sección de blogEntries -->
+                    <div class="flex flex-col">
+                        <div class="text-field-label">&lt;/script&gt; (Sección let blogEntries = [...])</div>
+                        <textarea id="scriptTextArea" class="text-area w-full p-4 bg-opacity-50 text-sm" style="min-height: 200px;" placeholder="Ingresa la sección let blogEntries = [...]; aquí..."></textarea>
+                    </div>
+                </div>
+                
+                <!-- Botones de acción -->
+                <div class="flex justify-center mb-4">
+                    <button id="mergeButton" class="action-button mx-2" disabled>Mezclar</button>
+                    <!-- Botón alternativo para Safari iOS -->
+                    <button id="mergeSafariButton" class="action-button mx-2 hidden">Mezclar (Safari)</button>
+                </div>
+                
+                <!-- Campo de resultado -->
+                <div class="flex flex-col mb-4">
+                    <div class="text-field-label">Resultado (solo lectura)</div>
+                    <div class="relative">
+                        <textarea id="resultTextArea" class="result-area w-full p-4 bg-opacity-50 text-sm" style="min-height: 200px;" readonly placeholder="El resultado aparecerá aquí después de mezclar..."></textarea>
+                        <button id="copyButton" class="action-button absolute bottom-4 right-4 py-2 px-4 text-sm">Copiar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Indicador de carga para Safari -->
+    <div id="loadingIndicator" class="loading-indicator">
+        <div class="loading-spinner"></div>
+        <div class="text-white">Procesando...</div>
+    </div>
+    
+    <!-- Notificación de copiado -->
+    <div id="copyNotification" class="notification">
+        Copiado al portapapeles
+    </div>
+    
+    <!-- Menú contextual personalizado -->
+    <div id="customContextMenu" class="custom-context-menu hidden">
+        <div class="context-menu-item" id="contextCopyBtn">Copiar</div>
+    </div>
 
+    <script>
+        // Código de acceso correcto
+        const correctCode = "192438";
+        
+        // Variables para manejar el código ingresado
+        let currentCode = ["", "", "", "", "", ""];
+        
+        // Elementos DOM
+        const svgContainer = document.getElementById("svgContainer");
+        const passwordModal = document.getElementById("passwordModal");
+        const cancelButton = document.getElementById("cancelButton");
+        const accessButton = document.getElementById("accessButton");
+        const textAreaContainer = document.getElementById("textAreaContainer");
+        const closeTextArea = document.getElementById("closeTextArea");
+        const digitInputs = document.querySelectorAll(".digit-input");
+        const gridLines = document.getElementById("gridLines");
+        const gridSpotlight = document.getElementById("gridSpotlight");
+        const gridHighlight = document.getElementById("gridHighlight");
+        const iconButton = document.getElementById("iconButton");
+        const welcomeTitle = document.getElementById("welcomeTitle");
+        const htmlTextArea = document.getElementById("htmlTextArea");
+        const scriptTextArea = document.getElementById("scriptTextArea");
+        const resultTextArea = document.getElementById("resultTextArea");
+        const mergeButton = document.getElementById("mergeButton");
+        const mergeSafariButton = document.getElementById("mergeSafariButton");
+        const copyButton = document.getElementById("copyButton");
+        const copyNotification = document.getElementById("copyNotification");
+        const customContextMenu = document.getElementById("customContextMenu");
+        const contextCopyBtn = document.getElementById("contextCopyBtn");
+        const loadingIndicator = document.getElementById("loadingIndicator");
+        
+        // Detectar si es Safari en iOS
+        const isSafariIOS = /^((?!chrome|android).)*safari/i.test(navigator.userAgent) && 
+                           /iPad|iPhone|iPod/.test(navigator.userAgent);
+        
+        // Inicializar el efecto de cuadrícula
+        document.addEventListener("DOMContentLoaded", () => {
+            // Hacer visible el spotlight al inicio
+            gridSpotlight.style.opacity = "1";
+            
+            // Posicionar inicialmente en el centro
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            gridSpotlight.style.setProperty('--x', `${centerX}px`);
+            gridSpotlight.style.setProperty('--y', `${centerY}px`);
+            gridHighlight.style.setProperty('--x', `${centerX}px`);
+            gridHighlight.style.setProperty('--y', `${centerY}px`);
+            
+            // Ajustar alturas de textareas en móvil
+            adjustTextAreaHeights();
+            
+            // Configuración específica para Safari en iOS
+            if (isSafariIOS) {
+                console.log("Detectado Safari en iOS - Aplicando ajustes específicos");
+                
+                // Mostrar botón alternativo para Safari si es necesario
+                // mergeButton.classList.add("hidden");
+                // mergeSafariButton.classList.remove("hidden");
+                
+                // Añadir clase específica para Safari
+                document.body.classList.add("safari-ios");
+            }
+        });
+        
+        // Ajustar alturas de textareas según el dispositivo
+        function adjustTextAreaHeights() {
+            if (window.innerWidth <= 768) {
+                // En móvil, ajustar alturas para que quepan en la pantalla
+                const viewportHeight = window.innerHeight;
+                const textAreaHeight = Math.max(150, Math.floor(viewportHeight * 0.2)); // 20% de la altura de la pantalla, mínimo 150px
+                
+                htmlTextArea.style.height = `${textAreaHeight}px`;
+                scriptTextArea.style.height = `${textAreaHeight}px`;
+                resultTextArea.style.height = `${textAreaHeight}px`;
+            } else {
+                // En desktop, usar alturas más generosas
+                htmlTextArea.style.height = '250px';
+                scriptTextArea.style.height = '250px';
+                resultTextArea.style.height = '250px';
+            }
+        }
+        
+        // Ajustar alturas cuando cambia el tamaño de la ventana
+        window.addEventListener('resize', adjustTextAreaHeights);
+        
+        // Efecto de iluminación de cuadrícula al mover el mouse
+        document.addEventListener("mousemove", (e) => {
+            // Solo aplicar el efecto de seguimiento si no hay modal activo
+            if (!document.body.classList.contains('modal-active')) {
+                const mouseX = e.clientX;
+                const mouseY = e.clientY;
+                
+                // Actualizar posición del spotlight y highlight
+                gridSpotlight.style.setProperty('--x', `${mouseX}px`);
+                gridSpotlight.style.setProperty('--y', `${mouseY}px`);
+                gridHighlight.style.setProperty('--x', `${mouseX}px`);
+                gridHighlight.style.setProperty('--y', `${mouseY}px`);
+                
+                // Hacer visible el highlight
+                gridHighlight.style.opacity = "1";
+                
+                // Intensificar las líneas de la cuadrícula cerca del cursor
+                gridLines.style.backgroundImage = `
+                    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px)
+                `;
+            }
+        });
+        
+        // Restaurar la cuadrícula cuando el mouse sale de la ventana
+        document.addEventListener("mouseleave", () => {
+            if (!document.body.classList.contains('modal-active')) {
+                gridHighlight.style.opacity = "0";
+                gridLines.style.backgroundImage = `
+                    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px)
+                `;
+            }
+        });
+        
+        // Mostrar modal de contraseña con animación
+        svgContainer.addEventListener("click", () => {
+            passwordModal.classList.remove("hidden");
+            document.body.classList.add("modal-active");
+            setTimeout(() => {
+                passwordModal.classList.add("modal-visible");
+            }, 10);
+            resetDigitInputs();
+            digitInputs[0].focus();
+        });
+        
+        // Cerrar modal de contraseña
+        cancelButton.addEventListener("click", () => {
+            passwordModal.classList.remove("modal-visible");
+            setTimeout(() => {
+                passwordModal.classList.add("hidden");
+                document.body.classList.remove("modal-active");
+                
+                // Restaurar efecto de spotlight
+                const mouseX = event.clientX || window.innerWidth / 2;
+                const mouseY = event.clientY || window.innerHeight / 2;
+                gridSpotlight.style.opacity = "1";
+                gridSpotlight.style.setProperty('--x', `${mouseX}px`);
+                gridSpotlight.style.setProperty('--y', `${mouseY}px`);
+            }, 300);
+        });
+        
+        // Cerrar área de texto
+        closeTextArea.addEventListener("click", () => {
+            textAreaContainer.classList.remove("modal-visible");
+            setTimeout(() => {
+                textAreaContainer.classList.add("hidden");
+                document.body.classList.remove("modal-active");
+                
+                // Restaurar efecto de spotlight
+                const mouseX = event.clientX || window.innerWidth / 2;
+                const mouseY = event.clientY || window.innerHeight / 2;
+                gridSpotlight.style.opacity = "1";
+                gridSpotlight.style.setProperty('--x', `${mouseX}px`);
+                gridSpotlight.style.setProperty('--y', `${mouseY}px`);
+            }, 300);
+        });
+        
+        // Manejar inputs de dígitos
+        digitInputs.forEach((input, index) => {
+            // Solo permitir números
+            input.addEventListener("input", (e) => {
+                const value = e.target.value;
+                
+                // Filtrar solo dígitos
+                if (!/^\d*$/.test(value)) {
+                    input.value = "";
+                    return;
+                }
+                
+                if (value) {
+                    input.classList.add("filled");
+                    currentCode[index] = value;
+                    
+                    // Mover al siguiente input
+                    if (index < digitInputs.length - 1) {
+                        digitInputs[index + 1].focus();
+                    }
+                    
+                    // Verificar si todos los campos están llenos
+                    checkAutoSubmit();
+                } else {
+                    input.classList.remove("filled");
+                    currentCode[index] = "";
+                }
+            });
+            
+            // Permitir navegación con teclas
+            input.addEventListener("keydown", (e) => {
+                if (e.key === "Backspace" && !input.value && index > 0) {
+                    // Si está vacío y se presiona backspace, ir al anterior
+                    digitInputs[index - 1].focus();
+                    digitInputs[index - 1].value = "";
+                    currentCode[index - 1] = "";
+                    digitInputs[index - 1].classList.remove("filled");
+                } else if (e.key === "ArrowLeft" && index > 0) {
+                    // Flecha izquierda
+                    digitInputs[index - 1].focus();
+                } else if (e.key === "ArrowRight" && index < digitInputs.length - 1) {
+                    // Flecha derecha
+                    digitInputs[index + 1].focus();
+                }
+            });
+        });
+        
+        // Verificar código automáticamente cuando todos los campos estén llenos
+        function checkAutoSubmit() {
+            const allFilled = currentCode.every(digit => digit !== "");
+            if (allFilled) {
+                setTimeout(verifyCode, 300); // Pequeña pausa para mejor UX
+            }
+        }
+        
+        // Resetear inputs de dígitos
+        function resetDigitInputs() {
+            digitInputs.forEach((input, index) => {
+                input.value = "";
+                input.classList.remove("filled");
+                input.classList.remove("error");
+                input.style.backgroundColor = "";
+                input.style.color = "";
+                input.style.borderColor = "";
+                currentCode[index] = "";
+            });
+        }
+        
+        // Verificar código y acceder
+        function verifyCode() {
+            const enteredCode = currentCode.join("");
+            
+            if (enteredCode === correctCode) {
+                // Código correcto - efecto de éxito
+                digitInputs.forEach(input => {
+                    input.style.backgroundColor = "rgba(0, 255, 0, 0.2)";
+                    input.style.color = "#00ff00";
+                    input.style.borderColor = "#00ff00";
+                });
+                
+                // Transición a la siguiente pantalla
+                setTimeout(() => {
+                    passwordModal.classList.remove("modal-visible");
+                    setTimeout(() => {
+                        passwordModal.classList.add("hidden");
+                        textAreaContainer.classList.remove("hidden");
+                        setTimeout(() => {
+                            textAreaContainer.classList.add("modal-visible");
+                        }, 10);
+                    }, 300);
+                }, 500);
+            } else {
+                // Código incorrecto - efecto de error
+                digitInputs.forEach(input => {
+                    input.style.backgroundColor = "rgba(255, 0, 0, 0.2)";
+                    input.style.color = "#ff0000";
+                    input.style.borderColor = "#ff0000";
+                });
+                
+                // Efecto de vibración
+                passwordModal.querySelector(".modal-content").classList.add("shake");
+                
+                // Resetear después de un momento
+                setTimeout(() => {
+                    passwordModal.querySelector(".modal-content").classList.remove("shake");
+                    resetDigitInputs();
+                    digitInputs[0].focus();
+                }, 800);
+            }
+        }
+        
+        // Botón de acceso manual
+        accessButton.addEventListener("click", verifyCode);
+        
+        // Funcionalidad del botón de icono
+        iconButton.addEventListener("click", () => {
+            // Aquí puedes añadir la funcionalidad que desees para el botón de icono
+            alert("Botón de icono presionado");
+        });
+        
+        // Hacer que el título sea editable
+        welcomeTitle.addEventListener("focus", function() {
+            // Opcional: añadir algún efecto visual cuando se edita
+            this.style.outline = "1px solid rgba(255, 255, 255, 0.3)";
+        });
+        
+        welcomeTitle.addEventListener("blur", function() {
+            this.style.outline = "none";
+        });
+        
+        // Verificar si ambos campos tienen contenido para habilitar el botón de mezclar
+        function checkFields() {
+            const htmlContent = htmlTextArea.value.trim();
+            const scriptContent = scriptTextArea.value.trim();
+            
+            if (htmlContent && scriptContent) {
+                mergeButton.disabled = false;
+                if (mergeSafariButton) mergeSafariButton.disabled = false;
+            } else {
+                mergeButton.disabled = true;
+                if (mergeSafariButton) mergeSafariButton.disabled = true;
+            }
+        }
+        
+        // Escuchar cambios en los campos de texto
+        htmlTextArea.addEventListener("input", checkFields);
+        scriptTextArea.addEventListener("input", checkFields);
+        
+        // Función principal de mezcla
+        function mergeContent() {
+            // Mostrar indicador de carga para Safari
+            if (isSafariIOS) {
+                loadingIndicator.style.display = "block";
+            }
+            
+            // Usar setTimeout para dar tiempo a que se muestre el indicador de carga
+            setTimeout(() => {
+                try {
+                    const htmlContent = htmlTextArea.value;
+                    const scriptContent = scriptTextArea.value;
+                    
+                    // Verificar que el contenido del script comienza con "let blogEntries = ["
+                    if (!scriptContent.trim().startsWith("let blogEntries = [")) {
+                        alert("El contenido del segundo campo debe comenzar con 'let blogEntries = [...]'");
+                        if (isSafariIOS) loadingIndicator.style.display = "none";
+                        return;
+                    }
+                    
+                    // Buscar y reemplazar la sección de blogEntries en el HTML
+                    const regex = /let\s+blogEntries\s*=\s*\[[\s\S]*?\];/;
+                    
+                    if (regex.test(htmlContent)) {
+                        // Realizar el reemplazo
+                        const resultContent = htmlContent.replace(regex, scriptContent);
+                        
+                        // Mostrar el resultado en el área de resultado
+                        resultTextArea.value = resultContent;
+                        
+                        // Mostrar mensaje de éxito
+                        showNotification("¡Contenido mezclado con éxito!");
+                        
+                        // Hacer scroll al área de resultado en móvil
+                        if (window.innerWidth <= 768) {
+                            resultTextArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    } else {
+                        alert("No se encontró la sección 'let blogEntries = [...]' en el código HTML");
+                    }
+                } catch (error) {
+                    alert("Error al mezclar el contenido: " + error.message);
+                } finally {
+                    // Ocultar indicador de carga
+                    if (isSafariIOS) {
+                        loadingIndicator.style.display = "none";
+                    }
+                }
+            }, 100); // Pequeño retraso para asegurar que la UI se actualice
+        }
+        
+        // Funcionalidad del botón de mezclar
+        mergeButton.addEventListener("click", mergeContent);
+        
+        // Botón alternativo para Safari
+        if (mergeSafariButton) {
+            mergeSafariButton.addEventListener("click", mergeContent);
+            // También añadir evento touchend para Safari
+            mergeSafariButton.addEventListener("touchend", function(e) {
+                e.preventDefault();
+                mergeContent();
+            });
+        }
+        
+        // Añadir evento touchend para Safari en el botón principal
+        mergeButton.addEventListener("touchend", function(e) {
+            if (isSafariIOS && !mergeButton.disabled) {
+                e.preventDefault();
+                mergeContent();
+            }
+        });
+        
+        // Función mejorada para copiar texto
+        function copyToClipboard(text) {
+            // Método moderno usando Clipboard API
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showNotification("Copiado");
+                }).catch(err => {
+                    console.error('Error al copiar: ', err);
+                    fallbackCopyMethod(text);
+                });
+            } else {
+                // Método alternativo para navegadores que no soportan Clipboard API
+                fallbackCopyMethod(text);
+            }
+        }
+        
+        // Método alternativo de copia
+        function fallbackCopyMethod(text) {
+            // Crear un elemento temporal
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            
+            // Hacer que el textarea no sea visible
+            textArea.style.position = "fixed";
+            textArea.style.left = "-999999px";
+            textArea.style.top = "-999999px";
+            document.body.appendChild(textArea);
+            
+            // Seleccionar y copiar
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showNotification("Copiado");
+                } else {
+                    console.error('Falló la copia');
+                }
+            } catch (err) {
+                console.error('Error al copiar: ', err);
+            }
+            
+            // Limpiar
+            document.body.removeChild(textArea);
+        }
+        
+        // Funcionalidad del botón de copiar
+        copyButton.addEventListener("click", () => {
+            if (!resultTextArea.value) {
+                showNotification("No hay contenido para copiar", "error");
+                return;
+            }
+            
+            copyToClipboard(resultTextArea.value);
+        });
+        
+        // Mostrar notificación de copiado
+        function showNotification(message, type = "success") {
+            copyNotification.textContent = message;
+            
+            if (type === "success") {
+                copyNotification.style.backgroundColor = "rgba(0, 255, 0, 0.2)";
+                copyNotification.style.borderColor = "rgba(0, 255, 0, 0.5)";
+                copyNotification.style.color = "#00ff00";
+            } else if (type === "error") {
+                copyNotification.style.backgroundColor = "rgba(255, 0, 0, 0.2)";
+                copyNotification.style.borderColor = "rgba(255, 0, 0, 0.5)";
+                copyNotification.style.color = "#ff0000";
+            }
+            
+            copyNotification.classList.add("show");
+            
+            setTimeout(() => {
+                copyNotification.classList.remove("show");
+            }, 2000);
+        }
+        
+        // Manejar menú contextual en el área de resultado
+        resultTextArea.addEventListener("contextmenu", function(e) {
+            e.preventDefault();
+            
+            if (resultTextArea.value) {
+                // Posicionar el menú contextual
+                customContextMenu.style.left = `${e.pageX}px`;
+                customContextMenu.style.top = `${e.pageY}px`;
+                customContextMenu.classList.remove("hidden");
+            }
+        });
+        
+        // Ocultar menú contextual al hacer clic en cualquier parte
+        document.addEventListener("click", function() {
+            customContextMenu.classList.add("hidden");
+        });
+        
+        // Funcionalidad del botón de copiar en el menú contextual
+        contextCopyBtn.addEventListener("click", function() {
+            copyToClipboard(resultTextArea.value);
+            customContextMenu.classList.add("hidden");
+        });
+        
+        // Permitir seleccionar y copiar con Ctrl+C en el área de resultado
+        resultTextArea.addEventListener("keydown", function(e) {
+            // Permitir Ctrl+C para copiar
+            if (e.ctrlKey && e.key === 'c') {
+                // El comportamiento predeterminado de copiar funcionará
+            } else {
+                // Prevenir la edición del contenido
+                if (e.key !== 'ArrowUp' && e.key !== 'ArrowDown' && 
+                    e.key !== 'ArrowLeft' && e.key !== 'ArrowRight' && 
+                    e.key !== 'Home' && e.key !== 'End' && 
+                    e.key !== 'PageUp' && e.key !== 'PageDown' &&
+                    !e.ctrlKey && !e.metaKey) {
+                    e.preventDefault();
+                }
+            }
+        });
+        
+        // Añadir efecto de vibración
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+                20%, 40%, 60%, 80% { transform: translateX(5px); }
+            }
+            .shake {
+                animation: shake 0.5s;
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Mejorar la experiencia táctil en dispositivos móviles
+        if ('ontouchstart' in window) {
+            document.addEventListener('touchstart', function(e) {
+                // Cerrar menú contextual al tocar en cualquier parte
+                customContextMenu.classList.add("hidden");
+            });
+            
+            // Solución específica para Safari en iOS
+            if (isSafariIOS) {
+                // Asegurar que los eventos touch funcionen correctamente
+                mergeButton.addEventListener('touchstart', function(e) {
+                    if (!this.disabled) {
+                        // Cambiar visualmente el botón para dar feedback
+                        this.style.backgroundColor = "rgba(255, 0, 0, 0.5)";
+                    }
+                });
+                
+                mergeButton.addEventListener('touchend', function(e) {
+                    // Restaurar estilo
+                    this.style.backgroundColor = "";
+                    
+                    if (!this.disabled) {
+                        e.preventDefault();
+                        // Pequeño retraso para mejor UX
+                        setTimeout(() => {
+                            mergeContent();
+                        }, 50);
+                    }
+                });
+                
+                // Prevenir el comportamiento de zoom en doble toque
+                document.addEventListener('touchend', function(e) {
+                    const now = Date.now();
+                    const DOUBLE_TAP_DELAY = 300;
+                    
+                    if (lastTap && (now - lastTap) < DOUBLE_TAP_DELAY) {
+                        e.preventDefault();
+                    }
+                    
+                    lastTap = now;
+                }, false);
+                
+                // Variable para detectar doble toque
+                let lastTap = 0;
+            }
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93a3afa044a73346',t:'MTc0NjMxNjQ5Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</script>
+</body></html>
