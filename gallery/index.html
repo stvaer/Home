@@ -1,1 +1,1720 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Galería de Arte Moderna</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: #000000;
+            color: #121212;
+	    padding-top: 60px;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .hk-grotesk {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .carousel {
+            scroll-behavior: smooth;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE and Edge */
+        }
+        
+        .carousel::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
+        
+        .carousel-item {
+            transition: all 0.3s ease;
+        }
+        
+        .carousel-item:hover {
+            transform: scale(1.02);
+        }
+        
+        .modal {
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(8px);
+        }
+        
+        .tab-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+            opacity: 0;
+        }
+        
+        .tab-content.active {
+            max-height: 500px;
+            opacity: 1;
+        }
+        
+        .project-card {
+            transition: transform 0.3s ease;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .social-btn {
+            transition: all 0.2s ease;
+        }
+        
+        .social-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .carousel-btn {
+            transition: all 0.3s ease;
+            opacity: 0.7;
+            border-radius: 50%; /* Botones circulares */
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .carousel-btn:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        
+        @media (max-width: 768px) {
+            .two-column {
+                flex-direction: column;
+            }
+        }
+        
+        /* Estilos para el botón de administrador */
+        .admin-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: transparent;
+            color: #ff0000;
+            border: 2px solid #ff0000;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Estilos para el panel de administración - TEMA OSCURO */
+        .admin-panel {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: #121212; /* Cambiado a negro */
+            color: #ffffff; /* Texto blanco */
+            z-index: 1000;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            transform: translateY(-100%);
+            opacity: 0;
+            padding: 60px 20px 1px 20px;
+            overflow-y: auto;
+        }
+        
+        .admin-panel.active {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .admin-tabs {
+            display: flex;
+            border-bottom: 1px solid #333333; /* Borde más oscuro */
+            position: sticky;
+            top: 0;
+            background-color: #121212; /* Fondo negro */
+            z-index: 10;
+        }
+        
+        .admin-tab {
+            padding: 15px 20px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            color: #cccccc; /* Texto gris claro */
+        }
+        
+        .admin-tab.active {
+            border-bottom-color: #ff0000;
+            color: #ff0000;
+            font-weight: 600;
+        }
+        
+        .admin-content {
+            display: none;
+            padding: 20px;
+        }
+        
+        .admin-content.active {
+            display: block;
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none;
+        }
+        
+        .overlay.active {
+            display: block;
+        }
+        
+        .obra-item {
+            border-bottom: 1px solid #333333; /* Borde más oscuro */
+            padding: 15px 0;
+        }
+        
+        .obra-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-action {
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .btn-edit {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .btn-delete {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        .btn-block {
+            background-color: #f39c12;
+            color: white;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #ffffff; /* Texto blanco */
+        }
+        
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #444444; /* Borde más oscuro */
+            border-radius: 4px;
+            background-color: #1e1e1e; /* Fondo oscuro para inputs */
+            color: #ffffff; /* Texto blanco */
+            font-size: 16px; /* Tamaño de fuente para evitar zoom en móviles */
+        }
+        
+        .form-textarea {
+            min-height: 100px;
+            font-size: 16px; /* Asegurar que los textarea tengan 16px */
+        }
+        
+        .btn-submit {
+            background-color: #2ecc71;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .export-option {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #333333; /* Borde más oscuro */
+            border-radius: 4px;
+            background-color: #1e1e1e; /* Fondo ligeramente más claro que el negro */
+        }
+        
+        /* Estilos para el modal de edición */
+        #editModal {
+            z-index: 1100; /* Mayor que el panel de administración */
+        }
+        
+        /* Estilos para el popup de contraseña */
+        .password-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #121212; /* Cambiado a negro */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            z-index: 1200;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            display: none;
+            color: white; /* Texto blanco para el popup negro */
+        }
+        
+        .password-popup.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* Estilos para el modal de obra con fondo negro y blur */
+        .obra-modal-content {
+            background-color: rgba(0, 0, 0, 0.9); /* Cambiado a negro */
+            color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .obra-modal-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .obra-modal-close {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .obra-modal-close:hover {
+            color: white;
+        }
+        
+        .obra-modal-image {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+        
+        .obra-modal-label {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        /* Optimizaciones para móvil */
+        input[type="text"],
+        input[type="number"],
+        input[type="password"],
+        textarea,
+        select {
+            font-size: 16px !important; /* Evitar zoom en iOS */
+        }
+        
+        /* Estilos para el carrusel responsivo */
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+        
+        .carousel-wrapper {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+        
+        /* Mostrar 3 elementos en desktop y 1 en móvil */
+            .carousel-item {
+                width: calc(33.333% - 16px);
+                margin: 0 8px;
+        }
+        
+            .carousel-item {
+                width: calc(100% - 32px);
+                margin: 0 16px;
+            }
+            
+            .obra-actions {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .admin-tabs {
+                overflow-x: auto;
+                white-space: nowrap;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .admin-tab {
+                padding: 12px 15px;
+            }
 
+        .whatsapp-nav-btn {
+            background-color: #ff0000;
+            color: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            transition: transform 0.3s;
+        }
+        
+        .whatsapp-nav-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .section {
+            padding: 80px 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .service-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #ff0000;
+        }
+        
+        .btn-primary {
+            background-color: #ff0000;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: #cc0000;
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline {
+            border: 2px solid #ff0000;
+            color: #ff0000;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline:hover {
+            background-color: #ff0000;
+            color: white;
+        }
+        
+        .feature-box {
+            border-left: 4px solid #ff0000;
+            padding-left: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .testimonial {
+            background: linear-gradient(145deg, #0a0a0a, #1a1a1a);
+            border: 1px solid #333;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .testimonial-author {
+            color: #ff0000;
+            font-weight: bold;
+        }
+        
+        .footer-link {
+            color: #aaa;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-link:hover {
+            color: #ff0000;
+        }
+        
+	/* Contenedor de los íconos sociales */
+	.social-buttons {
+    	    display: flex;
+    	    flex-wrap: wrap;
+    	    justify-content: center;
+    	    gap: 12px;
+    	    margin-top: 20px;
+    	}
+
+	/* Íconos sociales */
+	.social-icon {
+    	    width: 40px;
+    	    height: 40px;
+    	    border-radius: 50%;
+    	    background-color: #000;
+    	    color: #fff;
+     	    display: flex;
+    	    align-items: center;
+     	    justify-content: center;
+    	    margin: 0 8px;
+    	    transition: all 0.3s ease;
+	}
+
+	/* Animación al pasar el cursor */
+	.social-icon:hover {
+    	    background-color: #ff0000;
+    	    transform: translateY(-3px);
+	}
+
+	/* Ajustes para pantallas pequeñas */
+	@media (max-width: 600px) {
+	.social-icon {
+    	    width: 36px;
+    	    height: 36px;
+    	    font-size: 16px;
+    	     margin: 0 4px;
+    	    }
+	}
+
+	/* Tamaño de los íconos dentro */
+	.social-icon i {
+    	    font-size: 18px;
+    	    line-height: 1;
+	}
+	    
+        /* Estilos para la barra de navegación */
+        .nav-item {
+            position: relative;
+            padding: 0.5rem 0;
+            transition: all 0.3s ease;
+	    color: #ffffff
+        }
+        
+        /* Estilo para el enlace activo */
+        .active-link {
+            font-weight: bold;
+            color: #ef4444 !important; /* Rojo */
+        }
+        
+        .active-link::before {
+            content: '¶';
+            margin-right: 4px;
+            color: #ff0000;
+        }
+        
+        /* Estilos para el menú móvil */
+        .nav-menu {
+            display: none;
+            flex-direction: column;
+            padding: 1rem 0;
+        }
+        
+        .nav-menu.active {
+            display: flex;
+	    align-items: center
+        }
+        
+        .nav-menu .nav-item {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            width: 100%;               /* Ocupa todo el ancho */
+    	    text-align: center;        /* Centra el texto */
+	}
+        
+        /* Estilos para el botón hamburguesa */
+        .hamburger {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 24px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        .hamburger span {
+            display: block;
+            height: 2px;
+            width: 100%;
+            background-color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .hamburger.active span:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+        }
+        
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .hamburger.active span:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
+        }
+
+        /* Pie de página */
+        .footer {
+            background-color: #000000;
+            padding: 40px 5%;
+            position: relative;
+            min-height: 200px;
+        }
+        
+        .footer-content {
+            background-color: #f5f5f5;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+        }
+        
+        .transparent-card {
+            background-color: transparent;
+            border: 1px solid #333;
+        }
+        
+        .whatsapp-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #ff0000; /* Cambiado de verde a rojo */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .whatsapp-btn:hover {
+            background-color: #cc0000; /* Tono más oscuro de rojo para hover */
+            transform: scale(1.1);
+        }
+        
+        .logo-btn {
+            transition: transform 0.3s ease;
+            display: inline-block;
+        }
+        
+        .logo-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .social-icons-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .social-icon {
+            margin: 0 5px;
+        }	   
+	    
+        .footer-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .footer-left {
+            flex: 1;
+            min-width: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+        
+        .footer-center {
+            flex: 1;
+            min-width: 200px;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .footer-right {
+            flex: 1;
+            min-width: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        
+        .footer-tagline {
+            font-family: 'Arial Nova', Arial, sans-serif;
+            margin-top: 16px;
+            font-size: 14px;
+            color: #333;
+        }
+        
+        .email-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: all 0.3s ease;
+            margin: 0 8px;
+        }
+        
+        .email-btn:hover {
+            background-color: #ff0000;
+            transform: scale(1.1);
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Barra de navegación -->
+    <header class="fixed w-full top-0 bg-black z-20 shadow-md">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <!-- Logo SVG con color blanco para la barra de navegación -->
+                    <a href="https://stvaer.github.io/IntelHome">
+                        <svg id="uuid-5ef8de22-4461-42d0-a6ce-f47d8b08bc3b" data-name="Capa 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 156.76 59.5" width="80" class="mr-4">
+                          <style>
+                            #uuid-5ef8de22-4461-42d0-a6ce-f47d8b08bc3b .uuid-b812b565-4fda-4a89-a857-b640fdfe6eca {
+                              fill: #ffffff;
+                            }
+                          </style>
+                          <path class="uuid-b812b565-4fda-4a89-a857-b640fdfe6eca" d="M0,0v59.5h156.76V0H0ZM26.81,50.33h0c-1.77,2.13-4.34,3.18-7.7,3.18-3.72,0-6.46-1.3-8.22-3.89-1.76-2.6-2.66-6.58-2.71-11.94h8.21c0,2.17.11,3.86.35,5.07.23,1.21.52,1.99.86,2.36.35.36.78.54,1.31.54,1.36,0,2.04-1.43,2.07-4.29,0-1.86-.36-3.44-1.07-4.73-.71-1.3-2.01-2.85-3.92-4.67-2.71-2.59-4.65-5.05-5.77-7.41-1.13-2.35-1.69-5.14-1.69-8.37,0-3.5.87-6.19,2.62-8.1,1.75-1.9,4.23-2.85,7.44-2.85,6.83,0,10.32,4.76,10.45,14.27h-8.13c-.04-4.27-.78-6.4-2.2-6.37-1.13,0-1.69,.95-1.69,2.86s.35,3.38,1.08,4.7c.72,1.31,2.03,2.89,3.94,4.7,2.71,2.54,4.64,4.99,5.75,7.34,1.12,2.35,1.68,5.15,1.68,8.43,0,3.98-.89,7.04-2.66,9.17ZM53.05,13.8h-6.55v39.05h-8.75V13.8h-6.52v-7.86h21.82v7.86ZM61.31,52.85l-6.5-46.91h8.83l2.66,29.9h.19l2.65-29.9h8.31l-6.55,46.91h-9.59ZM91.95,52.85l-.86-7.6h-5.45l-.89,7.6h-8.2l7-46.91h10.19l6.94,46.91h-8.73ZM122.17,13.8h-10.1v10.23h8.73v7.8h-8.73v13.12h10.1v7.9h-18.87V5.94h18.87v7.86ZM139.49,52.85l-4.01-19.39h-1.74v19.39h-8.76V5.94h9.46c4.12,0,7.25,1.17,9.38,3.51,2.14,2.33,3.2,5.76,3.2,10.3,0,4.94-1.27,8.54-3.82,10.79l5.19,22.31h-8.9Z"></path>
+                          <polygon class="uuid-b812b565-4fda-4a89-a857-b640fdfe6eca" points="90.26 38.24 86.48 38.24 88.23 18.26 88.43 18.26 90.26 38.24"></polygon>
+                          <path class="uuid-b812b565-4fda-4a89-a857-b640fdfe6eca" d="M137.97,19.74c0,3.9-1.15,5.86-3.45,5.86h-.77v-11.79h.77c2.3.02,3.45,2.01,3.45,5.94Z"></path>
+                        </svg>
+                    </a>
+                </div>
+                
+                <!-- Navegación centrada para escritorio -->
+                <nav class="hidden md:flex items-center justify-center flex-1">
+                    <div class="flex space-x-8">
+                        <a href="https://stvaer.github.io/IntelHome" class="nav-item text-white hover:text-gray-300" id="home-link">Home</a>
+                        <a href="https://stvaer.github.io/IntelTrademark" class="nav-item text-white hover:text-gray-300" id="trademark-link">Trademark</a>
+                        <a href="https://stvaer.github.io/IntelSol-and-terms" class="nav-item text-white hover:text-gray-300" id="sol-terms-link">Sol&amp;Terms</a>
+                        <a href="https://stvaer.github.io/arts-and-designs" class="nav-item text-white hover:text-gray-300" id="arts-designs-link">A'&amp;Designs</a>
+                        <a href="https://stvaer.github.io/IntelArtGallery" class="nav-item text-white hover:text-gray-300" id="gallery-link">ArtGallery</a>
+                        <a href="https://stvaer.github.io/IntelBlog/" class="nav-item text-white hover:text-gray-300" id="blog-link">Blog</a>
+                    </div>
+                </nav>
+                
+                <!-- Contenedor para botones móviles -->
+                <div class="flex items-center">
+                    <!-- WhatsApp Button circular en la barra de navegación (ahora en rojo) -->
+                    <a href="https://wa.me/1234567890" class="whatsapp-btn mr-4" target="_blank">
+                        <i class="fab fa-whatsapp text-xl"></i>
+                    </a>
+                    
+                    <!-- Hamburger menu para móvil -->
+                    <div class="md:hidden ml-2">
+                        <div class="hamburger" id="hamburger-menu">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Navegación móvil (oculta por defecto) -->
+            <nav class="nav-menu md:hidden" id="nav-menu">
+                <a href="https://stvaer.github.io/IntelHome" class="nav-item" id="mobile-home-link">Home</a>
+                <a href="https://stvaer.github.io/IntelTrademark" class="nav-item" id="mobile-trademark-link">Trademark</a>
+                <a href="https://stvaer.github.io/IntelSol-and-terms" class="nav-item" id="mobile-sol-terms-link">Sol&amp;Terms</a>
+                <a href="https://stvaer.github.io/arts-and-designs" class="nav-item" id="mobile-arts-designs-link">A'&amp;Designs</a>
+                <a href="https://stvaer.github.io/IntelArtGallery" class="nav-item" id="mobile-gallery-link">ArtGallery</a>
+                <a href="https://stvaer.github.io/IntelBlog/" class="nav-item" id="mobile-blog-link">Blog</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Sección 1: Carrusel de Galería -->
+    <section class="py-16 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold mb-12 text-center">Galería de Arte</h2>
+            
+            <div class="carousel-container">
+                <div class="carousel-wrapper">
+                    <div id="carousel" class="carousel flex overflow-x-auto gap-4 pb-8">
+                        <!-- Las obras se cargarán dinámicamente desde JavaScript -->
+                    </div>
+                </div>
+                
+                <!-- Controles del carrusel mejorados y circulares -->
+                <button id="prevBtn" class="carousel-btn absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-70 text-white shadow-lg hover:bg-opacity-90 focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <button id="nextBtn" class="carousel-btn absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-70 text-white shadow-lg hover:bg-opacity-90 focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contenedor para modales dinámicos -->
+    <div id="modals-container">
+        <!-- Los modales se generarán dinámicamente desde JavaScript -->
+    </div>
+
+    <!-- Sección 2: Proyecto Academia Polaris -->
+    <section class="relative overflow-hidden">
+        <!-- Video de fondo -->
+        <div class="absolute inset-0 w-full h-full z-0">
+            <video class="w-full h-full object-cover" autoplay loop muted playsinline>
+                <source src="https://assets.mixkit.co/videos/preview/mixkit-abstract-technology-network-connection-30371-large.mp4" type="video/mp4">
+                Tu navegador no soporta videos HTML5.
+            </video>
+            <div class="absolute inset-0 bg-black bg-opacity-70"></div>
+        </div>
+        
+        <!-- Contenido -->
+        <div class="container mx-auto px-4 py-24 relative z-10">
+            <div class="flex flex-col md:flex-row items-center">
+                <!-- Botón SVG -->
+                <div class="mb-8 md:mb-0 md:mr-12">
+                    <svg class="w-24 h-24 text-white" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="50" r="45" stroke="white" stroke-width="2"/>
+                        <path d="M65 50L42.5 62.9904L42.5 37.0096L65 50Z" fill="white"/>
+                    </svg>
+                </div>
+                
+                <!-- Texto -->
+                <div class="text-white max-w-2xl">
+                    <h2 class="text-5xl font-bold mb-6 hk-grotesk">Proyecto Academia Polaris</h2>
+                    <p class="text-xl leading-relaxed hk-grotesk">Un espacio donde la tecnología y el arte convergen para crear experiencias inmersivas sin precedentes. La Academia Polaris representa la vanguardia en la exploración de nuevos medios digitales, formando a los artistas del futuro en un entorno que desafía los límites tradicionales del arte.</p>
+                    <button class="mt-8 bg-white text-black px-8 py-3 rounded-full font-medium hover:bg-gray-200 transition duration-300">Descubrir más</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección 3: Fundador y Proyectos -->
+    <section class="py-20 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold mb-16 text-center">Nuestro Equipo y Proyectos</h2>
+            
+            <div class="two-column flex flex-col md:flex-row gap-12">
+                <!-- Columna 1: Fundador -->
+                <div class="w-full md:w-1/2">
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iNDAwIiB2aWV3Qm94PSIwIDAgODAwIDQwMCI+PHJlY3Qgd2lkdGg9IjgwMCIgaGVpZ2h0PSI0MDAiIGZpbGw9IiMzMzMiLz48Y2lyY2xlIGN4PSI0MDAiIGN5PSIxNTAiIHI9IjkwIiBmaWxsPSIjNTU1Ii8+PHJlY3QgeD0iMzAwIiB5PSIyNjAiIHdpZHRoPSIyMDAiIGhlaWdodD0iMTQwIiByeD0iMjAiIGZpbGw9IiM1NTUiLz48L3N2Zz4=" alt="Fundador" class="w-full h-64 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-2xl font-bold mb-2">Alejandro Méndez</h3>
+                            <p class="text-gray-600 mb-4">Fundador y Director Creativo</p>
+                            <p class="mb-6">Visionario en el campo del arte digital con más de 15 años de experiencia combinando tecnología y expresión artística. Graduado del Instituto de Arte Digital de Barcelona y con un doctorado en Medios Interactivos.</p>
+                            
+                            <div class="flex space-x-4">
+                                <a href="#" class="social-btn bg-gray-800 text-white p-3 rounded-full">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                                    </svg>
+                                </a>
+                                <a href="#" class="social-btn bg-gray-800 text-white p-3 rounded-full">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                                    </svg>
+                                </a>
+                                <a href="#" class="social-btn bg-gray-800 text-white p-3 rounded-full">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Columna 2: Proyectos -->
+                <div class="w-full md:w-1/2">
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h3 class="text-2xl font-bold mb-6">Proyectos Destacados</h3>
+                        
+                        <!-- Proyecto 1 -->
+                        <div class="mb-4">
+                            <button class="w-full flex justify-between items-center p-4 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors" onclick="toggleTab('proyecto1')">
+                                <span class="font-semibold">Realidad Aumentada en Museos</span>
+                                <svg class="w-5 h-5 transform transition-transform" id="arrow-proyecto1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                            <div id="proyecto1" class="tab-content p-4 bg-gray-50 rounded-b-lg mt-1">
+                                <p class="mb-4">Colaboración con los principales museos de arte contemporáneo para implementar experiencias de realidad aumentada que transforman la manera en que los visitantes interactúan con las obras de arte.</p>
+                                <p>Este proyecto ha sido implementado en más de 15 museos en todo el mundo, permitiendo a los visitantes descubrir capas ocultas de información y contexto en las obras expuestas.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Proyecto 2 -->
+                        <div class="mb-4">
+                            <button class="w-full flex justify-between items-center p-4 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors" onclick="toggleTab('proyecto2')">
+                                <span class="font-semibold">Arte Generativo Interactivo</span>
+                                <svg class="w-5 h-5 transform transition-transform" id="arrow-proyecto2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                            <div id="proyecto2" class="tab-content p-4 bg-gray-50 rounded-b-lg mt-1">
+                                <p class="mb-4">Desarrollo de sistemas de arte generativo que responden a datos en tiempo real, como el clima, las noticias o los movimientos de los espectadores.</p>
+                                <p>Estas instalaciones han sido presentadas en festivales de arte digital en Tokio, Nueva York y Berlín, recibiendo reconocimiento internacional por su innovación en la intersección entre arte y tecnología.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Proyecto 3 -->
+                        <div>
+                            <button class="w-full flex justify-between items-center p-4 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors" onclick="toggleTab('proyecto3')">
+                                <span class="font-semibold">Plataforma de NFTs Sostenibles</span>
+                                <svg class="w-5 h-5 transform transition-transform" id="arrow-proyecto3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                            <div id="proyecto3" class="tab-content p-4 bg-gray-50 rounded-b-lg mt-1">
+                                <p class="mb-4">Creación de una plataforma de NFTs que utiliza tecnología blockchain de bajo impacto ambiental, permitiendo a los artistas digitales monetizar su trabajo de manera sostenible.</p>
+                                <p>La plataforma ha facilitado la venta de más de 500 obras de arte digital, generando más de 2 millones de euros para artistas emergentes y establecidos, mientras mantiene una huella de carbono mínima.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<!-- Footer -->
+    <footer class="footer">
+        <div class="container mx-auto">
+            <div class="footer-content text-black">
+                <div class="footer-flex">
+                    <!-- Logo a la izquierda como botón -->
+                    <div class="footer-left">
+                        <a href="https://stvaer.github.io/IntelHome" class="logo-btn">
+                            <svg id="uuid-773263fd-9fd3-4809-a72e-a20baa0ddb66" data-name="Capa 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 156.76 59.5" width="120">
+                              <defs>
+                                <style>
+                                  .uuid-ee84bc4a-47fa-4a9c-a805-366b1225ae41 {
+                                    fill: #000;
+                                  }
+                                </style>
+                              </defs>
+                              <path class="uuid-ee84bc4a-47fa-4a9c-a805-366b1225ae41" d="M0,0v59.5h156.76V0H0ZM26.81,50.33h0c-1.77,2.13-4.34,3.18-7.7,3.18-3.72,0-6.46-1.3-8.22-3.89-1.76-2.6-2.66-6.58-2.71-11.94h8.21c0,2.17.11,3.86.35,5.07.23,1.21.52,1.99.86,2.36.35.36.78.54,1.31.54,1.36,0,2.04-1.43,2.07-4.29,0-1.86-.36-3.44-1.07-4.73-.71-1.3-2.01-2.85-3.92-4.67-2.71-2.59-4.65-5.05-5.77-7.41-1.13-2.35-1.69-5.14-1.69-8.37,0-3.5.87-6.19,2.62-8.1,1.75-1.9,4.23-2.85,7.44-2.85,6.83,0,10.32,4.76,10.45,14.27h-8.13c-.04-4.27-.78-6.4-2.2-6.37-1.13,0-1.69,.95-1.69,2.86s.35,3.38,1.08,4.7c.72,1.31,2.03,2.89,3.94,4.7,2.71,2.54,4.64,4.99,5.75,7.34,1.12,2.35,1.68,5.15,1.68,8.43,0,3.98-.89,7.04-2.66,9.17ZM53.05,13.8h-6.55v39.05h-8.75V13.8h-6.52v-7.86h21.82v7.86ZM61.31,52.85l-6.5-46.91h8.83l2.66,29.9h.19l2.65-29.9h8.31l-6.55,46.91h-9.59ZM91.95,52.85l-.86-7.6h-5.45l-.89,7.6h-8.2l7-46.91h10.19l6.94,46.91h-8.73ZM122.17,13.8h-10.1v10.23h8.73v7.8h-8.73v13.12h10.1v7.9h-18.87V5.94h18.87v7.86ZM139.49,52.85l-4.01-19.39h-1.74v19.39h-8.76V5.94h9.46c4.12,0,7.25,1.17,9.38,3.51,2.14,2.33,3.2,5.76,3.2,10.3,0,4.94-1.27,8.54-3.82,10.79l5.19,22.31h-8.9Z"></path>
+                              <polygon class="uuid-ee84bc4a-47fa-4a9c-a805-366b1225ae41" points="90.26 38.24 86.48 38.24 88.23 18.26 88.43 18.26 90.26 38.24"></polygon>
+                              <path class="uuid-ee84bc4a-47fa-4a9c-a805-366b1225ae41" d="M137.97,19.74c0,3.9-1.15,5.86-3.45,5.86h-.77v-11.79h.77c2.3.02,3.45,2.01,3.45,5.94Z"></path>
+                            </svg>
+                        </a>
+                    </div>
+                    
+                    <!-- Iconos sociales en el centro -->
+                    <div class="footer-center">
+                        <div class="social-icons-container">
+                            <a href="#" class="social-icon">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="#" class="social-icon">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#" class="social-icon">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a href="#" class="social-icon">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                            <a href="#" class="social-icon">
+                                <i class="fab fa-youtube"></i>
+                            </a>
+                            <a href="#" class="social-icon">
+                                <i class="fab fa-pinterest"></i>
+                            </a>
+                            <a href="mailto:sol.and.terms@gmail.com" class="email-btn">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Texto de copyright y política de privacidad a la derecha -->
+                    <div class="footer-right">
+                        <p class="text-gray-700 mb-2">© 2023 IntelArts &amp; Designs. Todos los derechos reservados.</p>
+                        <a href="#" class="text-gray-700 hover:text-red-600">Política de Privacidad</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Botón de administrador -->
+    <button class="admin-button" id="adminButton" title="Panel de administración">¶</button>
+
+    <!-- Panel de administración -->
+    <div class="admin-panel" id="adminPanel">
+        <div class="p-4 bg-gray-900 flex justify-between items-center sticky top-0 z-20">
+            <h2 class="text-xl font-bold text-white">Panel de Administración</h2>
+            <button id="closeAdminPanel" class="text-gray-400 hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        
+        <div class="admin-tabs">
+            <div class="admin-tab active" data-tab="obras-publicadas">Obras Publicadas</div>
+            <div class="admin-tab" data-tab="anadir-obra">Añadir Obra</div>
+            <div class="admin-tab" data-tab="exportar">Exportar</div>
+        </div>
+        
+        <!-- Contenido de la pestaña Obras Publicadas -->
+        <div class="admin-content active" id="obras-publicadas">
+            <div class="mb-4">
+                <input type="text" id="searchObras" placeholder="Buscar obras..." class="w-full p-2 border border-gray-700 rounded bg-gray-800 text-white">
+            </div>
+            
+            <div id="obras-list">
+                <!-- Las obras se cargarán dinámicamente desde JavaScript -->
+            </div>
+        </div>
+        
+        <!-- Contenido de la pestaña Añadir Obra -->
+        <div class="admin-content" id="anadir-obra">
+            <form id="addObraForm">
+                <div class="form-group">
+                    <label class="form-label" for="titulo">Título:</label>
+                    <input type="text" id="titulo" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="artista">Artista:</label>
+                    <input type="text" id="artista" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="anio">Año:</label>
+                    <input type="number" id="anio" class="form-input" min="1900" max="2099" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="material">Material:</label>
+                    <input type="text" id="material" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="descripcion">Descripción:</label>
+                    <textarea id="descripcion" class="form-textarea" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="svgCode">Código SVG:</label>
+                    <textarea id="svgCode" class="form-textarea" placeholder="<svg>...</svg>" required></textarea>
+                </div>
+                
+                <button type="submit" class="btn-submit">Añadir Obra</button>
+            </form>
+        </div>
+        
+        <!-- Contenido de la pestaña Exportar -->
+        <div class="admin-content" id="exportar">
+            <div class="export-option">
+                <h3 class="text-lg font-semibold mb-2">Exportar Obras como Array</h3>
+                <p class="mb-4">Exporta todas las obras como un array de JavaScript que puedes usar en tu código.</p>
+                <button id="exportArrayBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Exportar como Array</button>
+            </div>
+            
+            <div class="export-option">
+                <h3 class="text-lg font-semibold mb-2">Exportar Código HTML Completo</h3>
+                <p class="mb-4">Exporta el código HTML completo de la galería con todas las obras incluidas.</p>
+                <button id="exportHtmlBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Exportar HTML</button>
+            </div>
+            
+            <div id="exportOutput" class="mt-6 p-4 bg-gray-800 rounded hidden">
+                <h4 class="font-semibold mb-2 text-white">Código Exportado:</h4>
+                <div class="relative">
+                    <button id="copyExportBtn" class="absolute top-2 right-2 bg-gray-700 p-1 rounded text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                        </svg>
+                    </button>
+                    <pre id="exportCode" class="bg-gray-900 text-white p-4 rounded overflow-x-auto max-h-96"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para editar obra -->
+    <div id="editModal" class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[1100] pointer-events-none opacity-0">
+        <div class="bg-gray-900 text-white p-8 rounded-lg max-w-3xl w-full mx-4">
+            <div class="flex justify-between items-start mb-4">
+                <h3 class="text-2xl font-bold">Editar Obra</h3>
+                <button onclick="closeEditModal()" class="text-gray-400 hover:text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            
+            <form id="editObraForm">
+                <input type="hidden" id="editId">
+                
+                <div class="form-group">
+                    <label class="form-label" for="editTitulo">Título:</label>
+                    <input type="text" id="editTitulo" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="editArtista">Artista:</label>
+                    <input type="text" id="editArtista" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="editAnio">Año:</label>
+                    <input type="number" id="editAnio" class="form-input" min="1900" max="2099" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="editMaterial">Material:</label>
+                    <input type="text" id="editMaterial" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="editDescripcion">Descripción:</label>
+                    <textarea id="editDescripcion" class="form-textarea" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="editSvgCode">Código SVG:</label>
+                    <textarea id="editSvgCode" class="form-textarea" placeholder="<svg>...</svg>" required></textarea>
+                </div>
+                
+                <div class="flex justify-end">
+                    <button type="button" onclick="closeEditModal()" class="bg-gray-700 text-white px-4 py-2 rounded mr-2">Cancelar</button>
+                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Pop-up de contraseña para el panel de administración (sin título) -->
+    <div id="passwordPopup" class="password-popup">
+        <p class="mb-4">Ingresa la contraseña para acceder.</p>
+        <div class="mb-4">
+            <input type="password" id="adminPassword" class="w-full p-2 border border-gray-700 rounded bg-gray-800 text-white" placeholder="Contraseña">
+        </div>
+        <div class="flex justify-between">
+            <button id="cancelPasswordBtn" class="bg-gray-700 text-white px-4 py-2 rounded">Cancelar</button>
+            <button id="submitPasswordBtn" class="bg-blue-600 text-white px-4 py-2 rounded">Acceder</button>
+        </div>
+        <p id="passwordError" class="text-red-500 mt-2 hidden">Contraseña incorrecta. Inténtalo de nuevo.</p>
+    </div>
+ 
+   <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Obtén todos los enlaces de navegación
+        const navLinks = document.querySelectorAll('.nav-item');
+
+        // Función para activar el enlace correspondiente
+        function setActiveLink() {
+            navLinks.forEach(link => {
+                if ( window.location.href.indexOf(link.getAttribute('href')) !== -1 ) {
+                    link.classList.add('active-link');
+                } else {
+                    link.classList.remove('active-link');
+                }
+            });
+        }
+            
+            // Configurar el menú hamburguesa para móvil
+            const hamburger = document.getElementById('hamburger-menu');
+            const navMenu = document.getElementById('nav-menu');
+            
+            if (hamburger && navMenu) {
+                hamburger.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+            }
+            
+            // Activar el enlace correspondiente al cargar la página
+            setActiveLink();
+            
+            // Animación al hacer scroll
+            const animateElements = document.querySelectorAll('.animate-fadeIn');
+            
+            function checkScroll() {
+                animateElements.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const windowHeight = window.innerHeight;
+                    
+                    if (elementTop < windowHeight - 100) {
+                        element.style.opacity = '1';
+                        element.style.transform = 'translateY(0)';
+                    }
+                });
+            }
+            
+            // Inicializar elementos fuera de la vista
+            animateElements.forEach(element => {
+                element.style.opacity = '0';
+                element.style.transform = 'translateY(20px)';
+                element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            });
+            
+            // Comprobar al cargar y al hacer scroll
+            window.addEventListener('load', checkScroll);
+            window.addEventListener('scroll', checkScroll);
+	    });              // ← cierra function() {
+        
+	   // Lógica para hash en la URL:
+        if (window.location.hash) {
+            const targetId = window.location.hash;
+            const targetSection = document.querySelector(targetId);
+            if (targetSection) {
+                setTimeout(() => {
+                    window.scrollTo({
+                        top: targetSection.offsetTop - 60,
+                        behavior: 'smooth'
+                    });
+                }, 100);
+            }
+            navLinks.forEach(link => {
+                link.classList.toggle(
+                    'active-link',
+                    link.getAttribute('href') === targetId
+                );
+            });
+        } else if (window.location.pathname.endsWith('/IntelArtGallery')) {
+            // Si no hay hash y estás en la galería, fuerza gallery-link
+            const galleryLink = document.getElementById('gallery-link');
+            if (galleryLink) galleryLink.classList.add('active-link');
+        }
+        
+	    // Datos de las obras (renombrado a blogEntries como solicitado)
+        let blogEntries = [
+            {
+                id: 1,
+                titulo: "Forma Abstracta",
+                subtitulo: "Obra contemporánea",
+                artista: "Elena Morales",
+                anio: 2023,
+                material: "Arte digital, impresión en lienzo",
+                descripcion: "Esta obra explora la intersección entre lo orgánico y lo digital, creando formas que parecen existir entre dimensiones. La artista utiliza algoritmos generativos para crear estas formas que evocan tanto lo microscópico como lo cósmico.",
+                svgCode: '<path fill="#121212" d="M39.9,-65.7C51.5,-58.4,60.8,-47.8,67.2,-35.4C73.6,-23,77.1,-8.8,75.8,5.1C74.5,19,68.4,32.6,59.1,42.9C49.8,53.2,37.3,60.2,23.9,65.3C10.5,70.4,-3.8,73.6,-17.8,71.3C-31.8,69,-45.5,61.2,-56.1,49.9C-66.7,38.6,-74.2,23.8,-76.3,8C-78.4,-7.8,-75.1,-24.6,-66.6,-37.8C-58.1,-51,-44.5,-60.6,-30.7,-66.7C-16.9,-72.8,-2.9,-75.4,9.9,-72.1C22.7,-68.8,28.3,-73,39.9,-65.7Z" transform="translate(100 100)" />',
+                bloqueado: false
+            },
+            {
+                id: 2,
+                titulo: "Ondas Oscuras",
+                subtitulo: "Arte digital",
+                artista: "Marco Ruiz",
+                anio: 2022,
+                material: "Escultura digital, impresión 3D en resina",
+                descripcion: "Esta pieza representa el flujo constante de información en la era digital. Las ondas oscuras simbolizan los datos que nos rodean constantemente, invisibles pero omnipresentes, moldeando nuestra realidad de formas que apenas comenzamos a comprender.",
+                svgCode: '<path fill="#2D2D2D" d="M47.7,-79.9C62.4,-71.9,75.3,-60.1,83.1,-45.3C90.9,-30.5,93.6,-12.7,90.2,3.4C86.8,19.6,77.3,34.1,66.3,46.5C55.3,58.9,42.8,69.2,28.7,74.9C14.6,80.6,-1.1,81.7,-16.3,78.5C-31.5,75.3,-46.2,67.8,-57.7,56.8C-69.2,45.8,-77.5,31.3,-81.3,15.2C-85.1,-0.9,-84.4,-18.6,-77.9,-33.2C-71.4,-47.8,-59.1,-59.3,-45.1,-67.7C-31.1,-76.1,-15.6,-81.4,0.6,-82.4C16.7,-83.4,33.1,-87.9,47.7,-79.9Z" transform="translate(100 100)" />',
+                bloqueado: false
+            },
+            {
+                id: 3,
+                titulo: "Nebulosa Gris",
+                subtitulo: "Escultura digital",
+                artista: "Sofía Vega",
+                anio: 2021,
+                material: "Proyección digital sobre superficie reflectante",
+                descripcion: "Inspirada en las imágenes captadas por telescopios espaciales, esta obra juega con nuestra percepción del espacio y el tiempo. La nebulosa gris representa la incertidumbre del futuro y cómo la tecnología nos permite visualizar lo que antes era invisible.",
+                svgCode: '<path fill="#444444" d="M42.8,-73.2C55.9,-66.7,67.2,-56.3,75.7,-43.3C84.2,-30.3,89.9,-15.1,89.4,-0.3C88.9,14.6,82.2,29.2,73.2,42C64.2,54.8,52.8,65.8,39.7,72.5C26.5,79.2,11.6,81.6,-2.4,85.3C-16.5,89,-33,94,-47.8,89.9C-62.6,85.8,-75.7,72.7,-83.3,57.2C-90.9,41.7,-93,23.9,-91.7,7.1C-90.4,-9.6,-85.7,-25.3,-77.4,-38.9C-69.1,-52.5,-57.2,-64,-43.5,-70.1C-29.8,-76.2,-14.9,-76.9,0.2,-77.2C15.2,-77.5,29.7,-79.7,42.8,-73.2Z" transform="translate(100 100)" />',
+                bloqueado: false
+            },
+            {
+                id: 4,
+                titulo: "Cosmos Negro",
+                subtitulo: "Arte conceptual",
+                artista: "Daniel Torres",
+                anio: 2023,
+                material: "Realidad virtual, experiencia inmersiva",
+                descripcion: "Esta obra explora los límites entre lo físico y lo virtual. El cosmos negro representa el vacío digital, un espacio infinito de posibilidades donde las leyes físicas no aplican. La pieza invita al espectador a reflexionar sobre nuestra creciente existencia en espacios virtuales.",
+                svgCode: '<path fill="#1a1a1a" d="M54.2,-92.3C71.3,-83.5,86.7,-71.3,95.8,-55.5C104.9,-39.7,107.7,-20.1,107.2,-0.6C106.6,18.9,102.7,37.7,93.1,53.5C83.5,69.3,68.3,82.1,51.1,89.4C33.9,96.7,14.7,98.6,-3.2,103.5C-21.1,108.4,-37.8,116.3,-53.8,113.9C-69.8,111.5,-85.1,98.8,-94.1,82.3C-103.1,65.8,-105.8,45.5,-107.9,26.5C-110,7.5,-111.5,-10.2,-107.2,-26.8C-102.9,-43.4,-92.8,-58.9,-78.6,-69.5C-64.4,-80.1,-46.1,-85.8,-29.5,-93.7C-12.9,-101.6,2,-111.7,18.9,-112.2C35.8,-112.7,54.7,-103.6,54.2,-92.3Z" transform="translate(100 100)" />',
+                bloqueado: false
+            },
+            {
+                id: 5,
+                titulo: "Nebulosa Gris II",
+                subtitulo: "Variación digital",
+                artista: "Sofía Vega",
+                anio: 2022,
+                material: "Proyección digital sobre superficie reflectante",
+                descripcion: "Segunda iteración de la serie Nebulosa. En esta versión, la artista profundiza en la exploración de la incertidumbre y la percepción espacial, utilizando algoritmos más complejos para generar patrones que evocan fenómenos astronómicos distantes.",
+                svgCode: '<path fill="#444444" d="M42.8,-73.2C55.9,-66.7,67.2,-56.3,75.7,-43.3C84.2,-30.3,89.9,-15.1,89.4,-0.3C88.9,14.6,82.2,29.2,73.2,42C64.2,54.8,52.8,65.8,39.7,72.5C26.5,79.2,11.6,81.6,-2.4,85.3C-16.5,89,-33,94,-47.8,89.9C-62.6,85.8,-75.7,72.7,-83.3,57.2C-90.9,41.7,-93,23.9,-91.7,7.1C-90.4,-9.6,-85.7,-25.3,-77.4,-38.9C-69.1,-52.5,-57.2,-64,-43.5,-70.1C-29.8,-76.2,-14.9,-76.9,0.2,-77.2C15.2,-77.5,29.7,-79.7,42.8,-73.2Z" transform="translate(100 100)" />',
+                bloqueado: false
+            }
+        ];
+
+        // Contraseña para el panel de administración
+        const ADMIN_PASSWORD = "192438";
+
+        // Función para cargar las obras en el carrusel
+        function loadCarousel() {
+            const carousel = document.getElementById('carousel');
+            carousel.innerHTML = '';
+            
+            // Filtrar obras no bloqueadas
+            const obrasVisibles = blogEntries.filter(obra => !obra.bloqueado);
+            
+            obrasVisibles.forEach(obra => {
+                const item = document.createElement('div');
+                item.className = 'carousel-item flex-shrink-0 bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer';
+                item.onclick = () => openObraModal(obra.id);
+                
+                item.innerHTML = `
+                    <div class="p-4 bg-white h-64 flex items-center justify-center">
+                        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
+                            ${obra.svgCode}
+                        </svg>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-xl font-bold">${obra.titulo}</h3>
+                        <p class="text-gray-600">${obra.artista}, ${obra.anio}</p>
+                    </div>
+                `;
+                
+                carousel.appendChild(item);
+            });
+        }
+
+        // Función para crear modales de obras con diseño negro y efecto blur
+        function createObraModals() {
+            const container = document.getElementById('modals-container');
+            container.innerHTML = '';
+            
+            blogEntries.forEach(obra => {
+                const modal = document.createElement('div');
+                modal.id = `modal-${obra.id}`;
+                modal.className = 'modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 pointer-events-none opacity-0';
+                
+                modal.innerHTML = `
+                    <div class="obra-modal-content max-w-4xl w-full mx-4">
+                        <div class="obra-modal-header flex justify-between items-start p-8 mb-2">
+                            <div>
+                                <h2 class="text-3xl font-bold">${obra.titulo}</h2>
+                                <p class="text-gray-300">${obra.subtitulo}</p>
+                            </div>
+                            <button onclick="closeModal('modal-${obra.id}')" class="obra-modal-close">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                        
+                        <div class="flex flex-col md:flex-row gap-8 p-8 pt-0">
+                            <div class="w-full md:w-1/2 obra-modal-image p-6 flex items-center justify-center">
+                                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
+                                    ${obra.svgCode}
+                                </svg>
+                            </div>
+                            
+                            <div class="w-full md:w-1/2">
+                                <div class="mb-6">
+                                    <h3 class="text-lg font-semibold obra-modal-label">Artista</h3>
+                                    <p class="text-white">${obra.artista}</p>
+                                </div>
+                                
+                                <div class="mb-6">
+                                    <h3 class="text-lg font-semibold obra-modal-label">Año</h3>
+                                    <p class="text-white">${obra.anio}</p>
+                                </div>
+                                
+                                <div class="mb-6">
+                                    <h3 class="text-lg font-semibold obra-modal-label">Material</h3>
+                                    <p class="text-white">${obra.material}</p>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="text-lg font-semibold obra-modal-label">Descripción</h3>
+                                    <p class="text-white">${obra.descripcion}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(modal);
+            });
+        }
+
+        // Función para abrir modal de obra
+        function openObraModal(id) {
+            const modalId = `modal-${id}`;
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add('opacity-100');
+                modal.classList.add('pointer-events-auto');
+                modal.classList.remove('opacity-0');
+                modal.classList.remove('pointer-events-none');
+            }
+        }
+
+        // Función para cerrar modal
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('opacity-100');
+                modal.classList.remove('pointer-events-auto');
+                modal.classList.add('opacity-0');
+                modal.classList.add('pointer-events-none');
+            }
+        }
+
+        // Función para cargar las obras en el panel de administración
+        function loadObrasAdmin() {
+            const obrasList = document.getElementById('obras-list');
+            obrasList.innerHTML = '';
+            
+            blogEntries.forEach(obra => {
+                const item = document.createElement('div');
+                item.className = 'obra-item';
+                
+                item.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="font-semibold">${obra.titulo}</h3>
+                            <p class="text-sm text-gray-400">${obra.artista}, ${obra.anio}</p>
+                        </div>
+                        <div class="obra-actions">
+                            <button class="btn-action btn-edit" onclick="openEditModal(${obra.id})">Editar</button>
+                            <button class="btn-action btn-delete" onclick="deleteObra(${obra.id})">Eliminar</button>
+                            <button class="btn-action btn-block" onclick="toggleBloqueo(${obra.id})">${obra.bloqueado ? 'Desbloquear' : 'Bloquear'}</button>
+                        </div>
+                    </div>
+                `;
+                
+                obrasList.appendChild(item);
+            });
+        }
+
+        // Función para abrir el modal de edición
+        function openEditModal(id) {
+            const obra = blogEntries.find(o => o.id === id);
+            if (!obra) return;
+            
+            document.getElementById('editId').value = obra.id;
+            document.getElementById('editTitulo').value = obra.titulo;
+            document.getElementById('editArtista').value = obra.artista;
+            document.getElementById('editAnio').value = obra.anio;
+            document.getElementById('editMaterial').value = obra.material;
+            document.getElementById('editDescripcion').value = obra.descripcion;
+            document.getElementById('editSvgCode').value = obra.svgCode;
+            
+            const modal = document.getElementById('editModal');
+            modal.classList.add('opacity-100');
+            modal.classList.add('pointer-events-auto');
+            modal.classList.remove('opacity-0');
+            modal.classList.remove('pointer-events-none');
+        }
+
+        // Función para cerrar el modal de edición
+        function closeEditModal() {
+            const modal = document.getElementById('editModal');
+            modal.classList.remove('opacity-100');
+            modal.classList.remove('pointer-events-auto');
+            modal.classList.add('opacity-0');
+            modal.classList.add('pointer-events-none');
+        }
+
+        // Función para eliminar una obra
+        function deleteObra(id) {
+            if (confirm('¿Estás seguro de que deseas eliminar esta obra?')) {
+                blogEntries = blogEntries.filter(obra => obra.id !== id);
+                loadObrasAdmin();
+                loadCarousel();
+                createObraModals();
+            }
+        }
+
+        // Función para cambiar el estado de bloqueo de una obra
+        function toggleBloqueo(id) {
+            const obra = blogEntries.find(o => o.id === id);
+            if (obra) {
+                obra.bloqueado = !obra.bloqueado;
+                loadObrasAdmin();
+                loadCarousel();
+            }
+        }
+
+        // Función para las pestañas del panel de administración
+        function switchAdminTab(tabName) {
+            // Desactivar todas las pestañas y contenidos
+            document.querySelectorAll('.admin-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.admin-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Activar la pestaña y contenido seleccionados
+            document.querySelector(`.admin-tab[data-tab="${tabName}"]`).classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        // Función para las pestañas de proyectos
+        function toggleTab(id) {
+            const content = document.getElementById(id);
+            const arrow = document.getElementById(`arrow-${id}`);
+            
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                arrow.classList.remove('rotate-180');
+            } else {
+                content.classList.add('active');
+                arrow.classList.add('rotate-180');
+            }
+        }
+
+        // Controles del carrusel
+        function setupCarouselControls() {
+            const carousel = document.getElementById('carousel');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            // Determinar cuánto desplazar basado en el ancho de la pantalla
+            const getScrollAmount = () => {
+                if (window.innerWidth < 768) {
+                    // En móvil, desplazar un elemento completo
+                    return carousel.querySelector('.carousel-item').offsetWidth + 16; // ancho + margen
+                } else {
+                    // En desktop, desplazar tres elementos
+                    return (carousel.querySelector('.carousel-item').offsetWidth + 16) * 3;
+                }
+            };
+            
+            prevBtn.addEventListener('click', () => {
+                carousel.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
+            });
+            
+            nextBtn.addEventListener('click', () => {
+                carousel.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
+            });
+        }
+
+        // Configuración del panel de administración y popup de contraseña
+        function setupAdminPanel() {
+            const adminButton = document.getElementById('adminButton');
+            const adminPanel = document.getElementById('adminPanel');
+            const closeAdminPanel = document.getElementById('closeAdminPanel');
+            const passwordPopup = document.getElementById('passwordPopup');
+            const adminPassword = document.getElementById('adminPassword');
+            const submitPasswordBtn = document.getElementById('submitPasswordBtn');
+            const cancelPasswordBtn = document.getElementById('cancelPasswordBtn');
+            const passwordError = document.getElementById('passwordError');
+            
+            adminButton.addEventListener('click', () => {
+                // Mostrar el popup de contraseña
+                passwordPopup.classList.add('active');
+                adminPassword.focus();
+            });
+            
+            closeAdminPanel.addEventListener('click', () => {
+                adminPanel.classList.remove('active');
+            });
+            
+            // Manejar el envío de la contraseña
+            submitPasswordBtn.addEventListener('click', () => {
+                checkPassword();
+            });
+            
+            // También permitir enviar con Enter
+            adminPassword.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    checkPassword();
+                }
+            });
+            
+            // Función para verificar la contraseña
+            function checkPassword() {
+                if (adminPassword.value === ADMIN_PASSWORD) {
+                    passwordPopup.classList.remove('active');
+                    adminPassword.value = '';
+                    passwordError.classList.add('hidden');
+                    adminPanel.classList.add('active');
+                } else {
+                    passwordError.classList.remove('hidden');
+                    adminPassword.focus();
+                }
+            }
+            
+            // Cancelar el ingreso de contraseña
+            cancelPasswordBtn.addEventListener('click', () => {
+                passwordPopup.classList.remove('active');
+                adminPassword.value = '';
+                passwordError.classList.add('hidden');
+            });
+            
+            // Configurar pestañas del panel
+            document.querySelectorAll('.admin-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    switchAdminTab(tab.getAttribute('data-tab'));
+                });
+            });
+        }
+
+        // Configurar formulario para añadir obra
+        function setupAddObraForm() {
+            const form = document.getElementById('addObraForm');
+            
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const newObra = {
+                    id: blogEntries.length > 0 ? Math.max(...blogEntries.map(o => o.id)) + 1 : 1,
+                    titulo: document.getElementById('titulo').value,
+                    subtitulo: "Nueva obra",
+                    artista: document.getElementById('artista').value,
+                    anio: parseInt(document.getElementById('anio').value),
+                    material: document.getElementById('material').value,
+                    descripcion: document.getElementById('descripcion').value,
+                    svgCode: document.getElementById('svgCode').value,
+                    bloqueado: false
+                };
+                
+                blogEntries.push(newObra);
+                form.reset();
+                
+                loadObrasAdmin();
+                loadCarousel();
+                createObraModals();
+                
+                alert('Obra añadida correctamente');
+            });
+        }
+
+        // Configurar formulario para editar obra
+        function setupEditObraForm() {
+            const form = document.getElementById('editObraForm');
+            
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const id = parseInt(document.getElementById('editId').value);
+                const obraIndex = blogEntries.findIndex(o => o.id === id);
+                
+                if (obraIndex !== -1) {
+                    blogEntries[obraIndex] = {
+                        ...blogEntries[obraIndex],
+                        titulo: document.getElementById('editTitulo').value,
+                        artista: document.getElementById('editArtista').value,
+                        anio: parseInt(document.getElementById('editAnio').value),
+                        material: document.getElementById('editMaterial').value,
+                        descripcion: document.getElementById('editDescripcion').value,
+                        svgCode: document.getElementById('editSvgCode').value
+                    };
+                    
+                    loadObrasAdmin();
+                    loadCarousel();
+                    createObraModals();
+                    closeEditModal();
+                    
+                    alert('Obra actualizada correctamente');
+                }
+            });
+        }
+
+        // Configurar búsqueda de obras
+        function setupSearchObras() {
+            const searchInput = document.getElementById('searchObras');
+            
+            searchInput.addEventListener('input', () => {
+                const searchTerm = searchInput.value.toLowerCase();
+                const obrasList = document.getElementById('obras-list');
+                const items = obrasList.querySelectorAll('.obra-item');
+                
+                items.forEach(item => {
+                    const title = item.querySelector('h3').textContent.toLowerCase();
+                    const artist = item.querySelector('p').textContent.toLowerCase();
+                    
+                    if (title.includes(searchTerm) || artist.includes(searchTerm)) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        }
+
+        // Configurar exportación
+        function setupExport() {
+            const exportArrayBtn = document.getElementById('exportArrayBtn');
+            const exportHtmlBtn = document.getElementById('exportHtmlBtn');
+            const exportOutput = document.getElementById('exportOutput');
+            const exportCode = document.getElementById('exportCode');
+            const copyExportBtn = document.getElementById('copyExportBtn');
+            
+            exportArrayBtn.addEventListener('click', () => {
+                const obrasArray = JSON.stringify(blogEntries, null, 2);
+                exportCode.textContent = `const blogEntries = ${obrasArray};`;
+                exportOutput.classList.remove('hidden');
+            });
+            
+            exportHtmlBtn.addEventListener('click', () => {
+                // Simplificado para este ejemplo
+                exportCode.textContent = `<!DOCTYPE html>\n<html>\n<head>\n  <title>Galería Exportada</title>\n</head>\n<body>\n  <!-- Código HTML completo aquí -->\n</body>\n</html>`;
+                // Extrae dinámicamente todo el HTML renderizado
+		exportCode.textContent = document.documentElement.outerHTML;
+		exportOutput.classList.remove('hidden');
+            });
+            
+            copyExportBtn.addEventListener('click', () => {
+                navigator.clipboard.writeText(exportCode.textContent);
+                alert('Código copiado al portapapeles');
+            });
+        }
+
+        // Función para ajustar el carrusel según el tamaño de la pantalla
+        function adjustCarouselForScreenSize() {
+            const carousel = document.getElementById('carousel');
+            const items = carousel.querySelectorAll('.carousel-item');
+            
+            if (window.innerWidth < 768) {
+                // Móvil: mostrar un elemento a la vez
+                items.forEach(item => {
+                    item.style.width = 'calc(100% - 32px)';
+                });
+            } else {
+                // Desktop: mostrar tres elementos
+                items.forEach(item => {
+                    item.style.width = 'calc(33.333% - 16px)';
+                });
+            }
+        }
+
+        // Inicializar todo cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', () => {
+            loadCarousel();
+            createObraModals();
+            setupCarouselControls();
+            setupAdminPanel();
+            loadObrasAdmin();
+            setupAddObraForm();
+            setupEditObraForm();
+            setupSearchObras();
+            setupExport();
+            adjustCarouselForScreenSize();
+            
+            // Ajustar el carrusel cuando cambia el tamaño de la ventana
+            window.addEventListener('resize', adjustCarouselForScreenSize);
+        });
+ 
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3oYchQ+GgNmmRL7ymz3Gvbd6O4ZwZzAqK8q10rW7Bbb1XjRx2MB5X8aS42uaxKf" crossorigin="anonymous"></script>
+</body></html>
