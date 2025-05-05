@@ -63,13 +63,18 @@
         }
         
         .svg-container {
-            cursor: pointer;
-            transition: all 0.5s;
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 0 0px rgba(255, 255, 255, 0.5));
         }
-        
         .svg-container:hover {
             transform: scale(1.1);
-            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.5));
+            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.8));
+        }
+        .svg-icon {
+            transition: all 0.3s ease;
+        }
+        .svg-container:hover .svg-icon {
+            stroke-width: 2;
         }
         
         .digit-input {
