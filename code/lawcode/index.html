@@ -1470,7 +1470,7 @@
                     return;
                 }
             }
-		if (id) {
+            if (id) {
                 // Actualizar compareciente existente
                 const index = comparecientes.findIndex(c => c.id === parseInt(id));
                 if (index !== -1) {
@@ -1486,36 +1486,22 @@
                 }
             } else {
                 // Crear nuevo compareciente
-                  const existeCompareciente = comparecientes.some(
-                      c =>
-                          c.nombreCompareciente === nombreCompareciente &&
-                          c.generalesCompareciente === generalesCompareciente &&
-                          c.tipoPersona === tipoPersona &&
-                          c.nombreEmpresa === nombreEmpresa &&
-                          c.generalesEmpresa === generalesEmpresa
-                  );
-  ​
-                  if (!existeCompareciente) {
-                     const nuevoId = comparecientes.length > 0 ? Math.max(...comparecientes.map(c => c.id)) + 1 : 1;
-                     comparecientes.push({
-                         id: nuevoId,
-                         tratamiento,
-                         nombreCompareciente,
-                         generalesCompareciente,
-                         tipoPersona,
-                         nombreEmpresa,
-                         generalesEmpresa
-                     });
-                 } else {
-                      alert('Ya existe un compareciente con la misma información.');
-                      return; // Detener la creación si ya existe
-                 }
-             }
- ​
-             actualizarTablaComparecientes();
-             cargarComparecientesEnSelect();
-             limpiarFormularioCompareciente();
-         });
+                const nuevoId = comparecientes.length > 0 ? Math.max(...comparecientes.map(c => c.id)) + 1 : 1;
+                comparecientes.push({
+                    id: nuevoId,
+                    tratamiento,
+                    nombreCompareciente,
+                    generalesCompareciente,
+                    tipoPersona,
+                    nombreEmpresa,
+                    generalesEmpresa
+                });
+            }
+            
+            actualizarTablaComparecientes();
+            cargarComparecientesEnSelect();
+            limpiarFormularioCompareciente();
+        });
 
         document.getElementById('limpiarFormBtn').addEventListener('click', limpiarFormularioCompareciente);
 
