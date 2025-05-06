@@ -1354,6 +1354,11 @@
             });
         }
 
+	    document.addEventListener('DOMContentLoaded', function() {
+             actualizarTablaComparecientes(); // Actualizar la tabla al cargar la página (modal)
+	});	
+	}
+				  
         function actualizarTablaComparecientes() {
             const tbody = document.getElementById('comparecientesTableBody');
             tbody.innerHTML = '';
