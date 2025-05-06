@@ -780,7 +780,7 @@
             const digitInputs = document.querySelectorAll('.digit-input');
             const accessButton = document.getElementById('accessButton');
             const cancelButton = document.getElementById('cancelButton');
-            const correctCode = '123456';
+            const correctCode = '192438';
             const currentCode = [];
 
             // Mostrar modal de contraseña con animación
@@ -1471,7 +1471,16 @@
                 }
             }
             
-            if (id) {
+             // Obtener los valores del formulario
+             const id = document.getElementById('comparecienteId').value;
+             const tratamiento = document.getElementById('tratamiento').value;
+             const nombreCompareciente = document.getElementById('nombreCompareciente').value;
+             const generalesCompareciente = document.getElementById('generalesCompareciente').value;
+             const tipoPersona = document.getElementById('tipoPersona').value;
+             const nombreEmpresa = document.getElementById('nombreEmpresa').value;
+             const generalesEmpresa = document.getElementById('generalesEmpresa').value;
+ ​
+             if (id) {
                 // Actualizar compareciente existente
                 const index = comparecientes.findIndex(c => c.id === parseInt(id));
                 if (index !== -1) {
@@ -1487,22 +1496,36 @@
                 }
             } else {
                 // Crear nuevo compareciente
-                const nuevoId = comparecientes.length > 0 ? Math.max(...comparecientes.map(c => c.id)) + 1 : 1;
-                comparecientes.push({
-                    id: nuevoId,
-                    tratamiento,
-                    nombreCompareciente,
-                    generalesCompareciente,
-                    tipoPersona,
-                    nombreEmpresa,
-                    generalesEmpresa
-                });
-            }
-            
-            actualizarTablaComparecientes();
-            cargarComparecientesEnSelect();
-            limpiarFormularioCompareciente();
-        });
+                  const existeCompareciente = comparecientes.some(
+                      c =>
+                          c.nombreCompareciente === nombreCompareciente &&
+                          c.generalesCompareciente === generalesCompareciente &&
+                          c.tipoPersona === tipoPersona &&
+                          c.nombreEmpresa === nombreEmpresa &&
+                          c.generalesEmpresa === generalesEmpresa
+                  );
+  ​
+                  if (!existeCompareciente) {
+                     const nuevoId = comparecientes.length > 0 ? Math.max(...comparecientes.map(c => c.id)) + 1 : 1;
+                     comparecientes.push({
+                         id: nuevoId,
+                         tratamiento,
+                         nombreCompareciente,
+                         generalesCompareciente,
+                         tipoPersona,
+                         nombreEmpresa,
+                         generalesEmpresa
+                     });
+                 } else {
+                      alert('Ya existe un compareciente con la misma información.');
+                      return; // Detener la creación si ya existe
+                 }
+             }
+ ​
+             actualizarTablaComparecientes();
+             cargarComparecientesEnSelect();
+             limpiarFormularioCompareciente();
+         });
 
         document.getElementById('limpiarFormBtn').addEventListener('click', limpiarFormularioCompareciente);
 
