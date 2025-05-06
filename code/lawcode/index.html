@@ -1470,17 +1470,7 @@
                     return;
                 }
             }
-            
-             // Obtener los valores del formulario
-             const id = document.getElementById('comparecienteId').value;
-             const tratamiento = document.getElementById('tratamiento').value;
-             const nombreCompareciente = document.getElementById('nombreCompareciente').value;
-             const generalesCompareciente = document.getElementById('generalesCompareciente').value;
-             const tipoPersona = document.getElementById('tipoPersona').value;
-             const nombreEmpresa = document.getElementById('nombreEmpresa').value;
-             const generalesEmpresa = document.getElementById('generalesEmpresa').value;
- ​
-             if (id) {
+		if (id) {
                 // Actualizar compareciente existente
                 const index = comparecientes.findIndex(c => c.id === parseInt(id));
                 if (index !== -1) {
