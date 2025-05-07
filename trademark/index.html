@@ -1,1 +1,1569 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STVAER Trademark</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Arial Nova', Arial, sans-serif;
+            scroll-behavior: smooth;
+            background-color: #000;
+            color: #fff;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        
+        .section {
+            min-height: 100vh;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .section-border {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            background-color: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(10px);
+        }
+        
+        .pdf-container {
+            background-color: #0a0a0a;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .pdf-header {
+            background-color: #0a0a0a;
+            padding: 10px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+        }
+        
+        .pdf-content {
+            padding: 20px;
+            background-color: #0a0a0a;
+            min-height: 300px;
+            position: relative;
+        }
+        
+        .pdf-locked {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+        
+        .color-preview {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 auto;
+            transition: background-color 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .logo-placeholder {
+            width: 200px;
+            height: 200px;
+            background-color: #0a0a0a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+        
+        .logo-small {
+            width: 100px;
+            height: 100px;
+            background-color: #0a0a0a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease;
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .font-sample {
+            padding: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+        
+        .tech-line {
+            position: absolute;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(255,0,0,0) 0%, rgba(255,0,0,0.3) 50%, rgba(255,0,0,0) 100%);
+            width: 100%;
+            left: 0;
+        }
+        
+        .tech-dot {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background-color: rgba(255, 0, 0, 0.5);
+            border-radius: 50%;
+        }
+        
+        .terminal-window {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 12px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .terminal-button {
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            transition: all 0.3s;
+            letter-spacing: 1px;
+            border-radius: 8px;
+        }
+        
+        .terminal-button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+        
+        .cancel-button {
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            color: #ff0000;
+        }
+        
+        .cancel-button:hover {
+            background-color: rgba(255, 0, 0, 0.1);
+        }
+        
+        .close-button {
+            color: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s;
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            font-size: 24px;
+            z-index: 10;
+        }
+        
+        .close-button:hover {
+            color: #ff0000;
+        }
+        
+        .svg-container {
+            cursor: pointer;
+            transition: all 0.5s;
+        }
+        
+        .svg-container:hover {
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.5));
+        }
+        
+        .digit-input {
+            width: 40px;
+            height: 50px;
+            text-align: center;
+            font-size: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border-radius: 6px;
+            outline: none;
+        }
+        
+        .digit-input:focus {
+            border-color: rgba(255, 0, 0, 0.5);
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+        }
+        
+        .modal-overlay {
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+        
+        .editor-container {
+            height: 70vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .editor-tabs {
+            display: flex;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .editor-tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+        
+        .editor-tab.active {
+            background-color: rgba(255, 0, 0, 0.1);
+            border-bottom: 2px solid #ff0000;
+        }
+        
+        .editor-content {
+            flex: 1;
+            overflow: auto;
+            padding: 10px;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE and Edge */
+        }
+        
+        .editor-content::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
+        
+        .editor-textarea {
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            border: none;
+            resize: none;
+            font-family: monospace;
+            padding: 10px;
+            outline: none;
+            font-size: 16px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        
+        .editor-textarea::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .editor-footer {
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .admin-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: transparent;
+            color: #ff0000;
+            border: 2px solid #ff0000;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .admin-button:hover {
+            background-color: rgba(255, 0, 0, 0.1);
+            transform: scale(1.1);
+        }
+        
+        input, textarea {
+            font-size: 16px !important;
+        }
+        
+        /* Cuadrícula de puntos para la sección 1 */
+        .dots-grid {
+            background-image: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            background-position: 0 0;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+        
+        /* Estilos para el documento SVG */
+        .document-svg {
+            width: 250px;
+            height: 250px;
+            transition: all 0.5s ease;
+        }
+        
+        .document-svg:hover {
+            filter: drop-shadow(0 0 15px rgba(255, 0, 0, 0.7));
+            transform: scale(1.05);
+        }
+        
+        /* Estilos para las barras de color */
+        .color-bar {
+            height: 60px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+        
+        .color-bar:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Estilos para los caracteres en rectángulos */
+        .char-box {
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 4px;
+            background-color: rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .char-box:hover {
+            transform: scale(1.1);
+            background-color: rgba(255, 0, 0, 0.1);
+            border-color: rgba(255, 0, 0, 0.5);
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+        }
+        
+        .char-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .char-modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        .char-modal-content {
+            font-size: 120px;
+            padding: 40px;
+            background-color: rgba(10, 10, 10, 0.9);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.2);
+            position: relative;
+            min-width: 200px;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .char-modal-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .char-modal-close:hover {
+            color: #ff0000;
+        }
+        
+        .space-grotesk {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .arial-nova {
+            font-family: 'Arial Nova', Arial, sans-serif;
+        }
+        
+        .arial-unicode {
+            font-family: 'Arial Unicode MS', Arial, sans-serif;
+        }
+        
+        @media (max-width: 768px) {
+            .section {
+                padding: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 2.5rem !important;
+            }
+            
+            h2 {
+                font-size: 2rem !important;
+            }
+            
+            .section-border {
+                padding: 1.5rem;
+            }
+            
+            .color-preview {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .logo-placeholder {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .logo-small {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .editor-container {
+                height: 80vh;
+            }
+            
+            .document-svg {
+                width: 180px;
+                height: 180px;
+            }
+            
+            .char-box {
+                width: 30px;
+                height: 30px;
+                margin: 2px;
+                font-size: 14px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .section {
+                padding: 1rem;
+            }
+            
+            h1 {
+                font-size: 2rem !important;
+            }
+            
+            h2 {
+                font-size: 1.75rem !important;
+            }
+            
+            .section-border {
+                padding: 1rem;
+            }
+            
+            .digit-input {
+                width: 35px;
+                height: 45px;
+            }
+            
+            .document-svg {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .char-box {
+                width: 25px;
+                height: 25px;
+                margin: 1px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-black text-white">
+    <!-- Elementos decorativos tecnológicos -->
+    <div class="tech-line" style="top: 20%"></div>
+    <div class="tech-line" style="top: 40%"></div>
+    <div class="tech-line" style="top: 60%"></div>
+    <div class="tech-line" style="top: 80%"></div>
+    
+    <div class="tech-dot" style="top: 15%; left: 10%"></div>
+    <div class="tech-dot" style="top: 25%; left: 30%"></div>
+    <div class="tech-dot" style="top: 45%; left: 70%"></div>
+    <div class="tech-dot" style="top: 65%; left: 20%"></div>
+    <div class="tech-dot" style="top: 85%; left: 90%"></div>
 
+    <!-- Botón de administrador -->
+    <button class="admin-button" id="adminButton">¶</button>
+
+    <!-- Sección 1: Bienvenida con cuadrícula de puntos y SVG -->
+    <section id="welcome" class="section flex items-center justify-center">
+        <div class="dots-grid"></div>
+        <div class="container mx-auto">
+            <div class="flex flex-col md:flex-row items-center justify-center gap-8 reveal active">
+                <div class="flex-1 flex justify-center">
+                    <svg class="document-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V5C21 3.89543 20.1046 3 19 3Z" stroke="#FF0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M7 7H17" stroke="#FF0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M7 11H17" stroke="#FF0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M7 15H13" stroke="#FF0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="flex-1">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-6 tracking-tighter">Bienvenido a Trademark</h1>
+                    <p class="text-xl mb-6 opacity-80">Qué mejor manera de enseñarte cómo trabajamos que mostrándote la construcción de nuestra marca.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección 2: Construcción de Identidad de Marca -->
+    <section id="brand" class="section">
+        <div class="container mx-auto">
+            <h2 class="text-4xl font-bold mb-10 text-center reveal">CONSTRUCCIÓN DE IDENTIDAD</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <!-- Documento PDF simulado -->
+                <div class="pdf-container reveal section-border">
+                    <div class="pdf-header">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-2">
+                            <path d="M12 14.5V16.5M7 21H17C19.2091 21 21 19.2091 21 17V7C21 4.79086 19.2091 3 17 3H7C4.79086 3 3 4.79086 3 7V17C3 19.2091 4.79086 21 7 21Z" stroke="#FF0000" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M7 3V21M17 3V21" stroke="#FF0000" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span>Manual_de_Marca.pdf</span>
+                    </div>
+                    <div class="pdf-content" id="pdfContent">
+                        <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor.</p>
+                        <p class="mb-4">Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus. Mauris iaculis porttitor posuere.</p>
+                        <p>Praesent id metus massa, ut blandit odio. Proin quis tortor orci. Etiam at risus et justo dignissim congue. Donec congue lacinia dui, a porttitor lectus condimentum laoreet.</p>
+                    </div>
+                    <div class="pdf-locked flex" id="pdfLocked">
+                        <div class="text-center">
+                            <svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="mx-auto mb-4">
+                                <path d="M16 11V7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7V11M12 15V17M7 21H17C18.1046 21 19 20.1046 19 19V13C19 11.8954 18.1046 11 17 11H7C5.89543 11 5 11.8954 5 13V19C5 20.1046 5.89543 21 7 21Z" stroke="#FF0000" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Explicación del documento -->
+                <div class="reveal section-border">
+                    <h3 class="text-2xl font-bold mb-4">Manual de Identidad</h3>
+                    <p class="mb-6 opacity-80">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor.</p>
+                    <p class="mb-6 opacity-80">Este documento contiene todas las especificaciones técnicas y guías de uso para la correcta implementación de tu identidad visual.</p>
+                    <div class="bg-black p-4 rounded-lg border border-white/10">
+                        <p class="text-sm opacity-60">Haz clic en el documento para ver su contenido. Este es un ejemplo de cómo se vería tu manual de marca personalizado.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Construcción del Logo -->
+            <div class="mt-20 reveal section-border">
+                <h3 class="text-2xl font-bold mb-6 text-center">CONSTRUCCIÓN DEL LOGO</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+                    <div>
+                        <h4 class="text-xl font-bold mb-4 text-center">Logo</h4>
+                        <div class="logo-placeholder mb-6" id="mainLogo">
+                            <span class="text-gray-500">LOGO SVG</span>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-xl font-bold mb-4 text-center">Isotipo</h4>
+                        <div class="logo-placeholder mb-6" id="isotype">
+                            <span class="text-gray-500">ISOTIPO SVG</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-10">
+                    <h4 class="text-xl font-bold mb-4">Detalles de Construcción</h4>
+                    <p class="mb-4 opacity-80">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula.</p>
+                    <p class="mb-4 opacity-80">Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor.</p>
+                    
+                    <h4 class="text-xl font-bold mb-4 mt-8">Variaciones del Logo</h4>
+                    <div class="flex flex-wrap">
+                        <div class="logo-small">
+                            <span class="text-gray-500 text-xs">LOGO 1</span>
+                        </div>
+                        <div class="logo-small">
+                            <span class="text-gray-500 text-xs">LOGO 2</span>
+                        </div>
+                        <div class="logo-small">
+                            <span class="text-gray-500 text-xs">LOGO 3</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Subsidiarias (antes Ejemplos de Uso) -->
+            <div class="mt-10 reveal section-border">
+                <h3 class="text-2xl font-bold mb-6 text-center">SUBSIDIARIAS</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+                    <div class="border border-white/10 p-4 rounded-lg">
+                        <div class="flex justify-center mb-4">
+                            <svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#FF0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M12 16V12" stroke="#FF0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M12 8H12.01" stroke="#FF0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="text-center">
+                            <h4 class="text-xl font-bold mb-2">Subsidiaria 1</h4>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="border border-white/10 p-4 rounded-lg">
+                        <div class="flex justify-center mb-4">
+                            <svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#FF0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M9.09 9C9.3251 8.33167 9.78915 7.76811 10.4 7.40913C11.0108 7.05016 11.7289 6.91894 12.4272 7.03871C13.1255 7.15849 13.7588 7.52152 14.2151 8.06353C14.6713 8.60553 14.9211 9.29152 14.92 10C14.92 12 11.92 13 11.92 13" stroke="#FF0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M12 17H12.01" stroke="#FF0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="text-center">
+                            <h4 class="text-xl font-bold mb-2">Subsidiaria 2</h4>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="border border-white/10 p-4 rounded-lg">
+                        <div class="flex justify-center mb-4">
+                            <svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#FF0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M8 15H16" stroke="#FF0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M9 9H9.01" stroke="#FF0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M15 9H15.01" stroke="#FF0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="text-center">
+                            <h4 class="text-xl font-bold mb-2">Subsidiaria 3</h4>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Tipografías -->
+    <section id="typography" class="section">
+        <div class="container mx-auto">
+            <h2 class="text-4xl font-bold mb-10 text-center reveal">TIPOGRAFÍAS</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <!-- Tipografía Principal -->
+                <div class="reveal section-border">
+                    <h3 class="text-2xl font-bold mb-4">Tipografía Principal</h3>
+                    <div class="font-sample">
+                        <h4 class="text-xl mb-2">Space Grotesk</h4>
+                        <p class="text-6xl font-bold mb-4 space-grotesk">Aa</p>
+                        
+                        <h5 class="text-lg font-bold mb-2">Mayúsculas</h5>
+                        <div class="flex flex-wrap justify-center">
+                            <div class="char-box space-grotesk" data-char="A">A</div>
+                            <div class="char-box space-grotesk" data-char="B">B</div>
+                            <div class="char-box space-grotesk" data-char="C">C</div>
+                            <div class="char-box space-grotesk" data-char="D">D</div>
+                            <div class="char-box space-grotesk" data-char="E">E</div>
+                            <div class="char-box space-grotesk" data-char="F">F</div>
+                            <div class="char-box space-grotesk" data-char="G">G</div>
+                            <div class="char-box space-grotesk" data-char="H">H</div>
+                            <div class="char-box space-grotesk" data-char="I">I</div>
+                            <div class="char-box space-grotesk" data-char="J">J</div>
+                            <div class="char-box space-grotesk" data-char="K">K</div>
+                            <div class="char-box space-grotesk" data-char="L">L</div>
+                            <div class="char-box space-grotesk" data-char="M">M</div>
+                            <div class="char-box space-grotesk" data-char="N">N</div>
+                            <div class="char-box space-grotesk" data-char="O">O</div>
+                            <div class="char-box space-grotesk" data-char="P">P</div>
+                            <div class="char-box space-grotesk" data-char="Q">Q</div>
+                            <div class="char-box space-grotesk" data-char="R">R</div>
+                            <div class="char-box space-grotesk" data-char="S">S</div>
+                            <div class="char-box space-grotesk" data-char="T">T</div>
+                            <div class="char-box space-grotesk" data-char="U">U</div>
+                            <div class="char-box space-grotesk" data-char="V">V</div>
+                            <div class="char-box space-grotesk" data-char="W">W</div>
+                            <div class="char-box space-grotesk" data-char="X">X</div>
+                            <div class="char-box space-grotesk" data-char="Y">Y</div>
+                            <div class="char-box space-grotesk" data-char="Z">Z</div>
+                        </div>
+                        
+                        <h5 class="text-lg font-bold mb-2 mt-4">Minúsculas</h5>
+                        <div class="flex flex-wrap justify-center">
+                            <div class="char-box space-grotesk" data-char="a">a</div>
+                            <div class="char-box space-grotesk" data-char="b">b</div>
+                            <div class="char-box space-grotesk" data-char="c">c</div>
+                            <div class="char-box space-grotesk" data-char="d">d</div>
+                            <div class="char-box space-grotesk" data-char="e">e</div>
+                            <div class="char-box space-grotesk" data-char="f">f</div>
+                            <div class="char-box space-grotesk" data-char="g">g</div>
+                            <div class="char-box space-grotesk" data-char="h">h</div>
+                            <div class="char-box space-grotesk" data-char="i">i</div>
+                            <div class="char-box space-grotesk" data-char="j">j</div>
+                            <div class="char-box space-grotesk" data-char="k">k</div>
+                            <div class="char-box space-grotesk" data-char="l">l</div>
+                            <div class="char-box space-grotesk" data-char="m">m</div>
+                            <div class="char-box space-grotesk" data-char="n">n</div>
+                            <div class="char-box space-grotesk" data-char="o">o</div>
+                            <div class="char-box space-grotesk" data-char="p">p</div>
+                            <div class="char-box space-grotesk" data-char="q">q</div>
+                            <div class="char-box space-grotesk" data-char="r">r</div>
+                            <div class="char-box space-grotesk" data-char="s">s</div>
+                            <div class="char-box space-grotesk" data-char="t">t</div>
+                            <div class="char-box space-grotesk" data-char="u">u</div>
+                            <div class="char-box space-grotesk" data-char="v">v</div>
+                            <div class="char-box space-grotesk" data-char="w">w</div>
+                            <div class="char-box space-grotesk" data-char="x">x</div>
+                            <div class="char-box space-grotesk" data-char="y">y</div>
+                            <div class="char-box space-grotesk" data-char="z">z</div>
+                        </div>
+                        
+                        <h5 class="text-lg font-bold mb-2 mt-4">Números</h5>
+                        <div class="flex flex-wrap justify-center">
+                            <div class="char-box space-grotesk" data-char="0">0</div>
+                            <div class="char-box space-grotesk" data-char="1">1</div>
+                            <div class="char-box space-grotesk" data-char="2">2</div>
+                            <div class="char-box space-grotesk" data-char="3">3</div>
+                            <div class="char-box space-grotesk" data-char="4">4</div>
+                            <div class="char-box space-grotesk" data-char="5">5</div>
+                            <div class="char-box space-grotesk" data-char="6">6</div>
+                            <div class="char-box space-grotesk" data-char="7">7</div>
+                            <div class="char-box space-grotesk" data-char="8">8</div>
+                            <div class="char-box space-grotesk" data-char="9">9</div>
+                        </div>
+                        
+                        <p class="opacity-60 text-sm mt-4">Utilizada para títulos y elementos destacados. Transmite modernidad, tecnología y precisión.</p>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <h4 class="text-lg font-bold mb-2">Pesos tipográficos</h4>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <p class="font-light space-grotesk">Light 300</p>
+                                <p class="font-normal space-grotesk">Regular 400</p>
+                                <p class="font-medium space-grotesk">Medium 500</p>
+                            </div>
+                            <div>
+                                <p class="font-semibold space-grotesk">SemiBold 600</p>
+                                <p class="font-bold space-grotesk">Bold 700</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tipografía Secundaria -->
+                <div class="reveal section-border">
+                    <h3 class="text-2xl font-bold mb-4">Tipografía Secundaria</h3>
+                    <div class="font-sample">
+                        <h4 class="text-xl mb-2">Arial Nova</h4>
+                        <p class="text-6xl font-bold mb-4 arial-nova">Aa</p>
+                        
+                        <h5 class="text-lg font-bold mb-2">Mayúsculas</h5>
+                        <div class="flex flex-wrap justify-center">
+                            <div class="char-box arial-nova" data-char="A">A</div>
+                            <div class="char-box arial-nova" data-char="B">B</div>
+                            <div class="char-box arial-nova" data-char="C">C</div>
+                            <div class="char-box arial-nova" data-char="D">D</div>
+                            <div class="char-box arial-nova" data-char="E">E</div>
+                            <div class="char-box arial-nova" data-char="F">F</div>
+                            <div class="char-box arial-nova" data-char="G">G</div>
+                            <div class="char-box arial-nova" data-char="H">H</div>
+                            <div class="char-box arial-nova" data-char="I">I</div>
+                            <div class="char-box arial-nova" data-char="J">J</div>
+                            <div class="char-box arial-nova" data-char="K">K</div>
+                            <div class="char-box arial-nova" data-char="L">L</div>
+                            <div class="char-box arial-nova" data-char="M">M</div>
+                            <div class="char-box arial-nova" data-char="N">N</div>
+                            <div class="char-box arial-nova" data-char="O">O</div>
+                            <div class="char-box arial-nova" data-char="P">P</div>
+                            <div class="char-box arial-nova" data-char="Q">Q</div>
+                            <div class="char-box arial-nova" data-char="R">R</div>
+                            <div class="char-box arial-nova" data-char="S">S</div>
+                            <div class="char-box arial-nova" data-char="T">T</div>
+                            <div class="char-box arial-nova" data-char="U">U</div>
+                            <div class="char-box arial-nova" data-char="V">V</div>
+                            <div class="char-box arial-nova" data-char="W">W</div>
+                            <div class="char-box arial-nova" data-char="X">X</div>
+                            <div class="char-box arial-nova" data-char="Y">Y</div>
+                            <div class="char-box arial-nova" data-char="Z">Z</div>
+                        </div>
+                        
+                        <h5 class="text-lg font-bold mb-2 mt-4">Minúsculas</h5>
+                        <div class="flex flex-wrap justify-center">
+                            <div class="char-box arial-nova" data-char="a">a</div>
+                            <div class="char-box arial-nova" data-char="b">b</div>
+                            <div class="char-box arial-nova" data-char="c">c</div>
+                            <div class="char-box arial-nova" data-char="d">d</div>
+                            <div class="char-box arial-nova" data-char="e">e</div>
+                            <div class="char-box arial-nova" data-char="f">f</div>
+                            <div class="char-box arial-nova" data-char="g">g</div>
+                            <div class="char-box arial-nova" data-char="h">h</div>
+                            <div class="char-box arial-nova" data-char="i">i</div>
+                            <div class="char-box arial-nova" data-char="j">j</div>
+                            <div class="char-box arial-nova" data-char="k">k</div>
+                            <div class="char-box arial-nova" data-char="l">l</div>
+                            <div class="char-box arial-nova" data-char="m">m</div>
+                            <div class="char-box arial-nova" data-char="n">n</div>
+                            <div class="char-box arial-nova" data-char="o">o</div>
+                            <div class="char-box arial-nova" data-char="p">p</div>
+                            <div class="char-box arial-nova" data-char="q">q</div>
+                            <div class="char-box arial-nova" data-char="r">r</div>
+                            <div class="char-box arial-nova" data-char="s">s</div>
+                            <div class="char-box arial-nova" data-char="t">t</div>
+                            <div class="char-box arial-nova" data-char="u">u</div>
+                            <div class="char-box arial-nova" data-char="v">v</div>
+                            <div class="char-box arial-nova" data-char="w">w</div>
+                            <div class="char-box arial-nova" data-char="x">x</div>
+                            <div class="char-box arial-nova" data-char="y">y</div>
+                            <div class="char-box arial-nova" data-char="z">z</div>
+                        </div>
+                        
+                        <h5 class="text-lg font-bold mb-2 mt-4">Números</h5>
+                        <div class="flex flex-wrap justify-center">
+                            <div class="char-box arial-nova" data-char="0">0</div>
+                            <div class="char-box arial-nova" data-char="1">1</div>
+                            <div class="char-box arial-nova" data-char="2">2</div>
+                            <div class="char-box arial-nova" data-char="3">3</div>
+                            <div class="char-box arial-nova" data-char="4">4</div>
+                            <div class="char-box arial-nova" data-char="5">5</div>
+                            <div class="char-box arial-nova" data-char="6">6</div>
+                            <div class="char-box arial-nova" data-char="7">7</div>
+                            <div class="char-box arial-nova" data-char="8">8</div>
+                            <div class="char-box arial-nova" data-char="9">9</div>
+                        </div>
+                        
+                        <p class="opacity-60 text-sm mt-4">Utilizada para cuerpos de texto y elementos secundarios. Aporta legibilidad y balance a la composición.</p>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <h4 class="text-lg font-bold mb-2">Aplicación</h4>
+                        <p class="opacity-80">La combinación de ambas tipografías crea una jerarquía visual clara y una estética contemporánea que refuerza la identidad de marca.</p>
+                    </div>
+                </div>
+                
+                <!-- Tipografía Terciaria -->
+                <div class="reveal section-border">
+                    <h3 class="text-2xl font-bold mb-4">Tipografía Terciaria</h3>
+                    <div class="font-sample">
+                        <h4 class="text-xl mb-2">Arial Unicode</h4>
+                        <p class="text-6xl font-bold mb-4 arial-unicode">Aa</p>
+                        
+                        <h5 class="text-lg font-bold mb-2">Mayúsculas</h5>
+                        <div class="flex flex-wrap justify-center">
+                            <div class="char-box arial-unicode" data-char="A">A</div>
+                            <div class="char-box arial-unicode" data-char="B">B</div>
+                            <div class="char-box arial-unicode" data-char="C">C</div>
+                            <div class="char-box arial-unicode" data-char="D">D</div>
+                            <div class="char-box arial-unicode" data-char="E">E</div>
+                            <div class="char-box arial-unicode" data-char="F">F</div>
+                            <div class="char-box arial-unicode" data-char="G">G</div>
+                            <div class="char-box arial-unicode" data-char="H">H</div>
+                            <div class="char-box arial-unicode" data-char="I">I</div>
+                            <div class="char-box arial-unicode" data-char="J">J</div>
+                            <div class="char-box arial-unicode" data-char="K">K</div>
+                            <div class="char-box arial-unicode" data-char="L">L</div>
+                            <div class="char-box arial-unicode" data-char="M">M</div>
+                            <div class="char-box arial-unicode" data-char="N">N</div>
+                            <div class="char-box arial-unicode" data-char="O">O</div>
+                            <div class="char-box arial-unicode" data-char="P">P</div>
+                            <div class="char-box arial-unicode" data-char="Q">Q</div>
+                            <div class="char-box arial-unicode" data-char="R">R</div>
+                            <div class="char-box arial-unicode" data-char="S">S</div>
+                            <div class="char-box arial-unicode" data-char="T">T</div>
+                            <div class="char-box arial-unicode" data-char="U">U</div>
+                            <div class="char-box arial-unicode" data-char="V">V</div>
+                            <div class="char-box arial-unicode" data-char="W">W</div>
+                            <div class="char-box arial-unicode" data-char="X">X</div>
+                            <div class="char-box arial-unicode" data-char="Y">Y</div>
+                            <div class="char-box arial-unicode" data-char="Z">Z</div>
+                        </div>
+                        
+                        <h5 class="text-lg font-bold mb-2 mt-4">Minúsculas</h5>
+                        <div class="flex flex-wrap justify-center">
+                            <div class="char-box arial-unicode" data-char="a">a</div>
+                            <div class="char-box arial-unicode" data-char="b">b</div>
+                            <div class="char-box arial-unicode" data-char="c">c</div>
+                            <div class="char-box arial-unicode" data-char="d">d</div>
+                            <div class="char-box arial-unicode" data-char="e">e</div>
+                            <div class="char-box arial-unicode" data-char="f">f</div>
+                            <div class="char-box arial-unicode" data-char="g">g</div>
+                            <div class="char-box arial-unicode" data-char="h">h</div>
+                            <div class="char-box arial-unicode" data-char="i">i</div>
+                            <div class="char-box arial-unicode" data-char="j">j</div>
+                            <div class="char-box arial-unicode" data-char="k">k</div>
+                            <div class="char-box arial-unicode" data-char="l">l</div>
+                            <div class="char-box arial-unicode" data-char="m">m</div>
+                            <div class="char-box arial-unicode" data-char="n">n</div>
+                            <div class="char-box arial-unicode" data-char="o">o</div>
+                            <div class="char-box arial-unicode" data-char="p">p</div>
+                            <div class="char-box arial-unicode" data-char="q">q</div>
+                            <div class="char-box arial-unicode" data-char="r">r</div>
+                            <div class="char-box arial-unicode" data-char="s">s</div>
+                            <div class="char-box arial-unicode" data-char="t">t</div>
+                            <div class="char-box arial-unicode" data-char="u">u</div>
+                            <div class="char-box arial-unicode" data-char="v">v</div>
+                            <div class="char-box arial-unicode" data-char="w">w</div>
+                            <div class="char-box arial-unicode" data-char="x">x</div>
+                            <div class="char-box arial-unicode" data-char="y">y</div>
+                            <div class="char-box arial-unicode" data-char="z">z</div>
+                        </div>
+                        
+                        <h5 class="text-lg font-bold mb-2 mt-4">Números</h5>
+                        <div class="flex flex-wrap justify-center">
+                            <div class="char-box arial-unicode" data-char="0">0</div>
+                            <div class="char-box arial-unicode" data-char="1">1</div>
+                            <div class="char-box arial-unicode" data-char="2">2</div>
+                            <div class="char-box arial-unicode" data-char="3">3</div>
+                            <div class="char-box arial-unicode" data-char="4">4</div>
+                            <div class="char-box arial-unicode" data-char="5">5</div>
+                            <div class="char-box arial-unicode" data-char="6">6</div>
+                            <div class="char-box arial-unicode" data-char="7">7</div>
+                            <div class="char-box arial-unicode" data-char="8">8</div>
+                            <div class="char-box arial-unicode" data-char="9">9</div>
+                        </div>
+                        
+                        <p class="opacity-60 text-sm mt-4">Utilizada para contenido internacional y soporte multilingüe. Ofrece compatibilidad con múltiples alfabetos y caracteres especiales.</p>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <h4 class="text-lg font-bold mb-2">Aplicación</h4>
+                        <p class="opacity-80">Ideal para comunicaciones globales y documentos que requieren soporte para múltiples idiomas y sistemas de escritura.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección 3: Colores -->
+    <section id="colors" class="section">
+        <div class="container mx-auto">
+            <div class="flex justify-center mb-6">
+                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#FF0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 18C15.3137 18 18 15.3137 18 12C18 8.68629 15.3137 6 12 6C8.68629 6 6 8.68629 6 12C6 15.3137 8.68629 18 12 18Z" stroke="#FF0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 14C13.1046 14 14 13.1046 14 12C14 10.8954 13.1046 10 12 10C10.8954 10 10 10.8954 10 12C10 13.1046 10.8954 14 12 14Z" stroke="#FF0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            
+            <h2 class="text-4xl font-bold mb-10 text-center reveal">STVAER True tone</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+                <div class="reveal section-border">
+                    <div class="color-preview mb-6" id="colorPreview"></div>
+                    
+                    <div class="mb-6">
+                        <label class="block mb-2">Color Principal:</label>
+                        <div class="flex">
+                            <input type="text" id="colorHex" class="bg-black text-white p-2 rounded-l-lg w-full border border-white/10" placeholder="#FF0000" value="#FF0000">
+                            <button id="unlockColor" class="bg-black hover:bg-gray-900 px-4 rounded-r-lg flex items-center border border-white/10 border-l-0">
+                                <svg id="lockIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M16 11V7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7V11M12 15V17M7 21H17C18.1046 21 19 20.1046 19 19V13C19 11.8954 18.1046 11 17 11H7C5.89543 11 5 11.8954 5 13V19C5 20.1046 5.89543 21 7 21Z" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-5 gap-2 mb-6">
+                        <button class="w-full h-10 rounded-lg bg-red-600 hover:bg-red-700 transition" data-color="#FF0000"></button>
+                        <button class="w-full h-10 rounded-lg bg-blue-600 hover:bg-blue-700 transition" data-color="#0000FF"></button>
+                        <button class="w-full h-10 rounded-lg bg-green-600 hover:bg-green-700 transition" data-color="#00FF00"></button>
+                        <button class="w-full h-10 rounded-lg bg-yellow-500 hover:bg-yellow-600 transition" data-color="#FFFF00"></button>
+                        <button class="w-full h-10 rounded-lg bg-purple-600 hover:bg-purple-700 transition" data-color="#800080"></button>
+                    </div>
+                </div>
+                
+                <div class="reveal section-border">
+                    <h3 class="text-2xl font-bold mb-4">Psicología del Color</h3>
+                    <p class="mb-4 opacity-80">Los colores transmiten emociones y mensajes subconscientes a tu audiencia. La elección correcta de colores puede fortalecer significativamente tu identidad de marca.</p>
+                    
+                    <div class="bg-black p-4 rounded-lg border border-white/10 mb-6">
+                        <h4 class="font-bold mb-2">Significado del color seleccionado:</h4>
+                        <p id="colorMeaning" class="opacity-80">El rojo simboliza pasión, energía y urgencia. Es ideal para marcas que quieren transmitir fuerza y dinamismo.</p>
+                    </div>
+                    
+                    <h4 class="font-bold mb-2">Combinaciones recomendadas:</h4>
+                    <div class="flex space-x-2 mb-6" id="colorCombinations">
+                        <div class="w-10 h-10 rounded-lg bg-red-600"></div>
+                        <div class="w-10 h-10 rounded-lg bg-gray-200"></div>
+                        <div class="w-10 h-10 rounded-lg bg-gray-800"></div>
+                        <div class="w-10 h-10 rounded-lg bg-red-300"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Barras de color oficiales -->
+            <div class="mt-10 reveal section-border">
+                <h3 class="text-2xl font-bold mb-6 text-center">Colores Oficiales</h3>
+                
+                <div class="mb-8">
+                    <h4 class="text-xl font-bold mb-4">#000000</h4>
+                    <div class="color-bar bg-black text-white">#000000</div>
+                    <div class="grid grid-cols-5 gap-2">
+                        <div class="color-bar bg-black text-white opacity-20">20%</div>
+                        <div class="color-bar bg-black text-white opacity-40">40%</div>
+                        <div class="color-bar bg-black text-white opacity-60">60%</div>
+                        <div class="color-bar bg-black text-white opacity-80">80%</div>
+                        <div class="color-bar bg-black text-white">100%</div>
+                    </div>
+                </div>
+                
+                <div class="mb-8">
+                    <h4 class="text-xl font-bold mb-4">#FFFFFF</h4>
+                    <div class="color-bar bg-white text-black">#FFFFFF</div>
+                    <div class="grid grid-cols-5 gap-2">
+                        <div class="color-bar bg-white text-black opacity-20">20%</div>
+                        <div class="color-bar bg-white text-black opacity-40">40%</div>
+                        <div class="color-bar bg-white text-black opacity-60">60%</div>
+                        <div class="color-bar bg-white text-black opacity-80">80%</div>
+                        <div class="color-bar bg-white text-black">100%</div>
+                    </div>
+                </div>
+                
+                <div class="mb-8">
+                    <h4 class="text-xl font-bold mb-4">#FF0000</h4>
+                    <div class="color-bar bg-red-600 text-white">#FF0000</div>
+                    <div class="grid grid-cols-5 gap-2">
+                        <div class="color-bar bg-red-600 text-white opacity-20">20%</div>
+                        <div class="color-bar bg-red-600 text-white opacity-40">40%</div>
+                        <div class="color-bar bg-red-600 text-white opacity-60">60%</div>
+                        <div class="color-bar bg-red-600 text-white opacity-80">80%</div>
+                        <div class="color-bar bg-red-600 text-white">100%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección 4: Contacto -->
+    <section id="contact" class="section">
+        <div class="container mx-auto text-center">
+            <h2 class="text-4xl font-bold mb-6 reveal">¿LISTO PARA TRABAJAR CON NOSOTROS?</h2>
+            <p class="text-xl mb-10 max-w-2xl mx-auto reveal opacity-80">Transforma tu marca con nuestra experiencia en diseño y estrategia visual.</p>
+            
+            <div class="reveal">
+                <button id="openModalBtn" class="bg-red-600 hover:bg-red-700 text-white py-3 px-8 rounded-lg text-lg font-bold transition transform hover:scale-105">
+                    COMENZAR PROYECTO
+                </button>
+                
+                <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="section-border">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="mx-auto mb-4">
+                            <path d="M3 8L10.8906 13.2604C11.5624 13.7083 12.4376 13.7083 13.1094 13.2604L21 8M5 19H19C20.1046 19 21 18.1046 21 17V7C21 5.89543 20.1046 5 19 5H5C3.89543 5 3 5.89543 3 7V17C3 18.1046 3.89543 19 5 19Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <h3 class="text-xl font-bold mb-2">Email</h3>
+                        <p class="opacity-80">contacto@empresa.com</p>
+                    </div>
+                    
+                    <div class="section-border">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="mx-auto mb-4">
+                            <path d="M3 5C3 3.89543 3.89543 3 5 3H8.27924C8.70967 3 9.09181 3.27543 9.22792 3.68377L10.7257 8.17721C10.8831 8.64932 10.6694 9.16531 10.2243 9.38787L7.96701 10.5165C9.06925 12.9612 11.0388 14.9308 13.4835 16.033L14.6121 13.7757C14.8347 13.3306 15.3507 13.1169 15.8228 13.2743L20.3162 14.7721C20.7246 14.9082 21 15.2903 21 15.7208V19C21 20.1046 20.1046 21 19 21H18C9.71573 21 3 14.2843 3 6V5Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <h3 class="text-xl font-bold mb-2">Teléfono</h3>
+                        <p class="opacity-80">+1 (555) 123-4567</p>
+                    </div>
+                    
+                    <div class="section-border">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="mx-auto mb-4">
+                            <path d="M17.6569 16.6569C16.7202 17.5935 14.7616 19.5521 13.4138 20.8999C12.6327 21.681 11.3677 21.6814 10.5866 20.9003C9.26234 19.576 7.34159 17.6553 6.34315 16.6569C3.21895 13.5327 3.21895 8.46734 6.34315 5.34315C9.46734 2.21895 14.5327 2.21895 17.6569 5.34315C20.781 8.46734 20.781 13.5327 17.6569 16.6569Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M15 12C15 13.6569 13.6569 15 12 15C10.3431 15 9 13.6569 9 12C9 10.3431 10.3431 9 12 9C13.6569 9 15 10.3431 15 12Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <h3 class="text-xl font-bold mb-2">Ubicación</h3>
+                        <p class="opacity-80">Calle Principal 123, Ciudad</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal para visualizar caracteres -->
+    <div id="charModal" class="char-modal">
+        <div class="char-modal-content">
+            <span class="char-modal-close">&times;</span>
+            <div id="charDisplay"></div>
+        </div>
+    </div>
+
+    <!-- Password Modal -->
+    <div id="passwordModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-10 hidden modal-overlay">
+        <div class="terminal-window w-80 md:w-96 relative overflow-hidden modal-content p-8">
+            <div class="flex flex-col items-center justify-center">
+                <div class="mb-8 flex justify-center space-x-2">
+                    <input type="password" maxlength="1" class="digit-input" data-index="0" inputmode="numeric" pattern="[0-9]*">
+                    <input type="password" maxlength="1" class="digit-input" data-index="1" inputmode="numeric" pattern="[0-9]*">
+                    <input type="password" maxlength="1" class="digit-input" data-index="2" inputmode="numeric" pattern="[0-9]*">
+                    <input type="password" maxlength="1" class="digit-input" data-index="3" inputmode="numeric" pattern="[0-9]*">
+                    <input type="password" maxlength="1" class="digit-input" data-index="4" inputmode="numeric" pattern="[0-9]*">
+                    <input type="password" maxlength="1" class="digit-input" data-index="5" inputmode="numeric" pattern="[0-9]*">
+                </div>
+                
+                <div class="flex space-x-4 w-full">
+                    <button id="cancelButton" class="cancel-button w-1/2 py-3 rounded-lg text-sm tracking-wider">CANCELAR</button>
+                    <button id="accessButton" class="terminal-button w-1/2 py-3 rounded-lg text-sm tracking-wider">INICIAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Editor Modal -->
+    <div id="editorModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-10 hidden modal-overlay">
+        <div class="terminal-window w-11/12 md:w-4/5 lg:w-3/4 relative overflow-hidden modal-content">
+            <button id="closeEditor" class="close-button">&times;</button>
+            <div class="editor-container">
+                <div class="editor-tabs">
+                    <div class="editor-tab active" data-tab="content">Editar Contenido</div>
+                    <div class="editor-tab" data-tab="export">Exportar HTML</div>
+                </div>
+                <div class="editor-content" id="contentTab">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 h-full">
+                        <div class="h-full">
+                            <h4 class="text-lg font-bold mb-2">Título Principal</h4>
+                            <input type="text" id="mainTitle" class="w-full bg-black text-white p-2 rounded-lg border border-white/10 mb-4" value="Bienvenido a Trademark">
+                            
+                            <h4 class="text-lg font-bold mb-2">Subtítulo</h4>
+                            <textarea id="mainSubtitle" class="w-full bg-black text-white p-2 rounded-lg border border-white/10 mb-4" rows="2">Qué mejor manera de enseñarte cómo trabajamos que mostrándote la construcción de nuestra marca.</textarea>
+                            
+                            <h4 class="text-lg font-bold mb-2">Color Principal</h4>
+                            <div class="flex mb-4">
+                                <input type="text" id="editorColorHex" class="bg-black text-white p-2 rounded-l-lg w-full border border-white/10" value="#FF0000">
+                                <div id="editorColorPreview" class="w-10 h-10 rounded-r-lg" style="background-color: #FF0000;"></div>
+                            </div>
+                            
+                            <h4 class="text-lg font-bold mb-2">Texto del Botón</h4>
+                            <input type="text" id="buttonText" class="w-full bg-black text-white p-2 rounded-lg border border-white/10 mb-4" value="COMENZAR PROYECTO">
+                        </div>
+                        
+                        <div class="h-full">
+                            <h4 class="text-lg font-bold mb-2">Contenido del PDF</h4>
+                            <textarea id="pdfText" class="w-full bg-black text-white p-2 rounded-lg border border-white/10 mb-4" rows="8">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor.
+
+Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus. Mauris iaculis porttitor posuere.
+
+Praesent id metus massa, ut blandit odio. Proin quis tortor orci. Etiam at risus et justo dignissim congue. Donec congue lacinia dui, a porttitor lectus condimentum laoreet.</textarea>
+                            
+                            <h4 class="text-lg font-bold mb-2">Información de Contacto</h4>
+                            <div class="grid grid-cols-2 gap-2">
+                                <input type="text" id="contactEmail" class="bg-black text-white p-2 rounded-lg border border-white/10 mb-2" value="contacto@empresa.com" placeholder="Email">
+                                <input type="text" id="contactPhone" class="bg-black text-white p-2 rounded-lg border border-white/10 mb-2" value="+1 (555) 123-4567" placeholder="Teléfono">
+                                <input type="text" id="contactAddress" class="bg-black text-white p-2 rounded-lg border border-white/10 mb-2" value="Calle Principal 123, Ciudad" placeholder="Dirección">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="editor-content hidden" id="exportTab">
+                    <textarea id="exportHtml" class="editor-textarea" readonly></textarea>
+                </div>
+                <div class="editor-footer">
+                    <div>
+                        <span class="text-sm opacity-60">Código de acceso: 123456</span>
+                    </div>
+                    <div>
+                        <button id="applyChanges" class="terminal-button py-2 px-4 rounded-lg text-sm tracking-wider">APLICAR CAMBIOS</button>
+                        <button id="downloadHtml" class="terminal-button py-2 px-4 rounded-lg text-sm tracking-wider ml-2">DESCARGAR HTML</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Manejo del documento PDF simulado
+        const pdfContent = document.getElementById('pdfContent');
+        const pdfLocked = document.getElementById('pdfLocked');
+        let isPdfLocked = false;
+        
+        pdfContent.addEventListener('click', () => {
+            isPdfLocked = !isPdfLocked;
+            if (isPdfLocked) {
+                pdfLocked.style.display = 'flex';
+            } else {
+                pdfLocked.style.display = 'none';
+            }
+        });
+        
+        // Manejo del logo SVG
+        const mainLogo = document.getElementById('mainLogo');
+        
+        // Manejo de colores
+        const colorHex = document.getElementById('colorHex');
+        const colorPreview = document.getElementById('colorPreview');
+        const unlockColorBtn = document.getElementById('unlockColor');
+        const lockIcon = document.getElementById('lockIcon');
+        const colorMeaning = document.getElementById('colorMeaning');
+        const colorCombinations = document.getElementById('colorCombinations');
+        let isColorLocked = true; // Bloqueado por defecto
+        
+        // Inicializar color
+        colorPreview.style.backgroundColor = '#FF0000';
+        
+        unlockColorBtn.addEventListener('click', () => {
+            isColorLocked = !isColorLocked;
+            if (isColorLocked) {
+                lockIcon.innerHTML = '<path d="M16 11V7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7V11M12 15V17M7 21H17C18.1046 21 19 20.1046 19 19V13C19 11.8954 18.1046 11 17 11H7C5.89543 11 5 11.8954 5 13V19C5 20.1046 5.89543 21 7 21Z" stroke="white" stroke-width="2" stroke-linecap="round"/>';
+                colorHex.disabled = true;
+            } else {
+                lockIcon.innerHTML = '<path d="M8 11V7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7V11M12 15V17M7 21H17C18.1046 21 19 20.1046 19 19V13C19 11.8954 18.1046 11 17 11H7C5.89543 11 5 11.8954 5 13V19C5 20.1046 5.89543 21 7 21Z" stroke="white" stroke-width="2" stroke-linecap="round"/>';
+                colorHex.disabled = false;
+            }
+        });
+        
+        colorHex.addEventListener('input', updateColor);
+        
+        function updateColor() {
+            if (!isColorLocked) {
+                const color = colorHex.value;
+                if (/^#([0-9A-F]{3}){1,2}$/i.test(color)) {
+                    colorPreview.style.backgroundColor = color;
+                    updateColorMeaning(color);
+                    updateColorCombinations(color);
+                }
+            }
+        }
+        
+        // Botones de colores predefinidos
+        document.querySelectorAll('[data-color]').forEach(button => {
+            button.addEventListener('click', () => {
+                const color = button.getAttribute('data-color');
+                colorHex.value = color;
+                colorPreview.style.backgroundColor = color;
+                updateColorMeaning(color);
+                updateColorCombinations(color);
+            });
+        });
+        
+        function updateColorMeaning(color) {
+            const meanings = {
+                '#FF0000': 'El rojo simboliza pasión, energía y urgencia. Es ideal para marcas que quieren transmitir fuerza y dinamismo.',
+                '#0000FF': 'El azul representa confianza, seguridad y profesionalismo. Perfecto para empresas que buscan transmitir estabilidad.',
+                '#00FF00': 'El verde evoca naturaleza, crecimiento y salud. Excelente para marcas relacionadas con el bienestar y la sostenibilidad.',
+                '#FFFF00': 'El amarillo transmite optimismo, claridad y calidez. Ideal para marcas que quieren comunicar positividad.',
+                '#800080': 'El púrpura sugiere creatividad, sabiduría y lujo. Perfecto para marcas premium o relacionadas con la creatividad.'
+            };
+            
+            colorMeaning.textContent = meanings[color] || 'Este color transmite una personalidad única a tu marca. Considera cómo se alinea con tus valores.';
+        }
+        
+        function updateColorCombinations(color) {
+            const combinations = {
+                '#FF0000': `
+                    <div class="w-10 h-10 rounded-lg bg-red-600"></div>
+                    <div class="w-10 h-10 rounded-lg bg-gray-200"></div>
+                    <div class="w-10 h-10 rounded-lg bg-gray-800"></div>
+                    <div class="w-10 h-10 rounded-lg bg-red-300"></div>
+                `,
+                '#0000FF': `
+                    <div class="w-10 h-10 rounded-lg bg-blue-600"></div>
+                    <div class="w-10 h-10 rounded-lg bg-gray-100"></div>
+                    <div class="w-10 h-10 rounded-lg bg-yellow-400"></div>
+                    <div class="w-10 h-10 rounded-lg bg-blue-200"></div>
+                `,
+                '#00FF00': `
+                    <div class="w-10 h-10 rounded-lg bg-green-500"></div>
+                    <div class="w-10 h-10 rounded-lg bg-gray-800"></div>
+                    <div class="w-10 h-10 rounded-lg bg-blue-500"></div>
+                    <div class="w-10 h-10 rounded-lg bg-green-200"></div>
+                `,
+                '#FFFF00': `
+                    <div class="w-10 h-10 rounded-lg bg-yellow-400"></div>
+                    <div class="w-10 h-10 rounded-lg bg-gray-900"></div>
+                    <div class="w-10 h-10 rounded-lg bg-purple-600"></div>
+                    <div class="w-10 h-10 rounded-lg bg-yellow-200"></div>
+                `,
+                '#800080': `
+                    <div class="w-10 h-10 rounded-lg bg-purple-700"></div>
+                    <div class="w-10 h-10 rounded-lg bg-gray-100"></div>
+                    <div class="w-10 h-10 rounded-lg bg-green-400"></div>
+                    <div class="w-10 h-10 rounded-lg bg-purple-300"></div>
+                `
+            };
+            
+            colorCombinations.innerHTML = combinations[color] || `
+                <div class="w-10 h-10 rounded-lg" style="background-color: ${color}"></div>
+                <div class="w-10 h-10 rounded-lg bg-gray-100"></div>
+                <div class="w-10 h-10 rounded-lg bg-gray-800"></div>
+                <div class="w-10 h-10 rounded-lg" style="background-color: ${color}; opacity: 0.5"></div>
+            `;
+        }
+        
+        // Inicializar el color como bloqueado
+        colorHex.disabled = true;
+        
+        // Revelar elementos al hacer scroll
+        window.addEventListener('scroll', () => {
+            document.querySelectorAll('.reveal').forEach(reveal => {
+                const revealTop = reveal.getBoundingClientRect().top;
+                const revealPoint = 150;
+                
+                if (revealTop < window.innerHeight - revealPoint) {
+                    reveal.classList.add('active');
+                }
+            });
+        });
+        
+        // Manejo del modal de contraseña
+        const passwordModal = document.getElementById('passwordModal');
+        const adminButton = document.getElementById('adminButton');
+        const cancelButton = document.getElementById('cancelButton');
+        const accessButton = document.getElementById('accessButton');
+        const digitInputs = document.querySelectorAll('.digit-input');
+        
+        // Abrir modal solo cuando se hace clic en el botón de administrador
+        adminButton.addEventListener('click', () => {
+            passwordModal.classList.remove('hidden');
+            digitInputs[0].focus();
+        });
+        
+        cancelButton.addEventListener('click', () => {
+            passwordModal.classList.add('hidden');
+            clearDigitInputs();
+        });
+        
+        // Manejo de inputs de dígitos
+        digitInputs.forEach(input => {
+            input.addEventListener('input', (e) => {
+                const index = parseInt(e.target.getAttribute('data-index'));
+                
+                // Asegurarse de que solo se ingresen números
+                e.target.value = e.target.value.replace(/[^0-9]/g, '');
+                
+                // Mover al siguiente input si hay un valor
+                if (e.target.value && index < 5) {
+                    digitInputs[index + 1].focus();
+                }
+                
+                // Verificar automáticamente si la contraseña es correcta
+                if (index === 5 && e.target.value) {
+                    checkPassword();
+                }
+            });
+            
+            input.addEventListener('keydown', (e) => {
+                const index = parseInt(e.target.getAttribute('data-index'));
+                
+                // Mover al input anterior con backspace
+                if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                    digitInputs[index - 1].focus();
+                }
+                
+                // Permitir enviar con Enter
+                if (e.key === 'Enter') {
+                    checkPassword();
+                }
+            });
+        });
+        
+        accessButton.addEventListener('click', checkPassword);
+        
+        function checkPassword() {
+            let password = '';
+            digitInputs.forEach(input => {
+                password += input.value;
+            });
+            
+            // Contraseña correcta: 123456
+            if (password === '123456') {
+                passwordModal.classList.add('hidden');
+                openEditorModal();
+                clearDigitInputs();
+            } else {
+                // Mostrar error
+                digitInputs.forEach(input => {
+                    input.style.borderColor = 'rgba(255, 0, 0, 0.5)';
+                    input.style.boxShadow = '0 0 10px rgba(255, 0, 0, 0.3)';
+                    setTimeout(() => {
+                        input.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+                        input.style.boxShadow = 'none';
+                    }, 1000);
+                });
+                clearDigitInputs();
+                digitInputs[0].focus();
+            }
+        }
+        
+        function clearDigitInputs() {
+            digitInputs.forEach(input => {
+                input.value = '';
+            });
+        }
+        
+        // Manejo del editor
+        const editorModal = document.getElementById('editorModal');
+        const closeEditor = document.getElementById('closeEditor');
+        const editorTabs = document.querySelectorAll('.editor-tab');
+        const contentTab = document.getElementById('contentTab');
+        const exportTab = document.getElementById('exportTab');
+        const exportHtml = document.getElementById('exportHtml');
+        const applyChanges = document.getElementById('applyChanges');
+        const downloadHtml = document.getElementById('downloadHtml');
+        
+        // Campos del editor
+        const mainTitle = document.getElementById('mainTitle');
+        const mainSubtitle = document.getElementById('mainSubtitle');
+        const editorColorHex = document.getElementById('editorColorHex');
+        const editorColorPreview = document.getElementById('editorColorPreview');
+        const buttonText = document.getElementById('buttonText');
+        const pdfText = document.getElementById('pdfText');
+        const contactEmail = document.getElementById('contactEmail');
+        const contactPhone = document.getElementById('contactPhone');
+        const contactAddress = document.getElementById('contactAddress');
+        
+        function openEditorModal() {
+            editorModal.classList.remove('hidden');
+            updateExportHtml();
+        }
+        
+        closeEditor.addEventListener('click', () => {
+            editorModal.classList.add('hidden');
+        });
+        
+        // Cambio de pestañas
+        editorTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                editorTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                const tabName = tab.getAttribute('data-tab');
+                if (tabName === 'content') {
+                    contentTab.classList.remove('hidden');
+                    exportTab.classList.add('hidden');
+                } else {
+                    contentTab.classList.add('hidden');
+                    exportTab.classList.remove('hidden');
+                    updateExportHtml();
+                }
+            });
+        });
+        
+        // Actualizar color en tiempo real
+        editorColorHex.addEventListener('input', () => {
+            const color = editorColorHex.value;
+            if (/^#([0-9A-F]{3}){1,2}$/i.test(color)) {
+                editorColorPreview.style.backgroundColor = color;
+            }
+        });
+        
+        // Aplicar cambios
+        applyChanges.addEventListener('click', () => {
+            // Actualizar título principal
+            document.querySelector('#welcome h1').textContent = mainTitle.value;
+            
+            // Actualizar subtítulo
+            document.querySelector('#welcome p').textContent = mainSubtitle.value;
+            
+            // Actualizar color principal
+            const color = editorColorHex.value;
+            if (/^#([0-9A-F]{3}){1,2}$/i.test(color)) {
+                colorHex.value = color;
+                colorPreview.style.backgroundColor = color;
+                updateColorMeaning(color);
+                updateColorCombinations(color);
+            }
+            
+            // Actualizar texto del botón
+            document.getElementById('openModalBtn').textContent = buttonText.value;
+            
+            // Actualizar contenido del PDF
+            const paragraphs = pdfText.value.split('\n\n');
+            pdfContent.innerHTML = '';
+            paragraphs.forEach(paragraph => {
+                if (paragraph.trim()) {
+                    const p = document.createElement('p');
+                    p.textContent = paragraph;
+                    p.className = 'mb-4';
+                    pdfContent.appendChild(p);
+                }
+            });
+            
+            // Actualizar información de contacto
+            document.querySelectorAll('#contact .section-border')[0].querySelector('p').textContent = contactEmail.value;
+            document.querySelectorAll('#contact .section-border')[1].querySelector('p').textContent = contactPhone.value;
+            document.querySelectorAll('#contact .section-border')[2].querySelector('p').textContent = contactAddress.value;
+            
+            // Actualizar HTML exportado
+            updateExportHtml();
+            
+            // Mostrar confirmación
+            alert('Cambios aplicados correctamente');
+        });
+        
+        // Actualizar HTML exportado
+        function updateExportHtml() {
+            exportHtml.value = document.documentElement.outerHTML;
+        }
+        
+        // Descargar HTML
+        downloadHtml.addEventListener('click', () => {
+            const blob = new Blob([exportHtml.value], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'identidad_marca.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+        
+        // Inicializar la página
+        document.addEventListener('DOMContentLoaded', () => {
+            // Activar las animaciones iniciales
+            document.querySelectorAll('.reveal').forEach(reveal => {
+                const revealTop = reveal.getBoundingClientRect().top;
+                const revealPoint = 150;
+                
+                if (revealTop < window.innerHeight - revealPoint) {
+                    reveal.classList.add('active');
+                }
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93be6357d03ea51e',t:'MTc0NjU5NjQ4My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body></html>
