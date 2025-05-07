@@ -797,7 +797,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const appModal      = document.getElementById('appModal');
     const closeAppModal = document.getElementById('closeAppModal');
     const digitInputs   = Array.from(document.querySelectorAll('.digit-input'));
-    const correctCode   = '192438';
+    const correctCode   = '192438';                                                                                                                                                           
     let currentCode     = [];
 
     // Abrir modal de contraseña
@@ -842,12 +842,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 delete currentCode[index - 1];
                 digitInputs[index - 1].focus();
             }
+
+            });
+
+            // Permitir navegación con teclas
+            input.addEventListener("keydown", (e) => {
+                if (e.key === "Backspace" && !input.value && index > 0) {
+                    // Si está vacío y se presiona backspace, ir al anterior
+                    digitInputs[index - 1].focus();
+                    digitInputs[index - 1].value = "";
+                    currentCode[index - 1] = "";
+                    digitInputs[index - 1].classList.remove("filled");
+                } else if (e.key === "ArrowLeft" && index > 0) {
+                    // Flecha izquierda
+                    digitInputs[index - 1].focus();
+                } else if (e.key === "ArrowRight" && index < digitInputs.length - 1) {
+                    // Flecha derecha
+                    digitInputs[index + 1].focus();
+                }
+            });
         });
-    });
 
     function checkAutoSubmit() {
         if (digitInputs.every(inp => inp.value)) {
-            setTimeout(verifyCode, 300);
+            setTimeout(verifyCode, 100);
         }
     }
 
@@ -855,6 +873,9 @@ document.addEventListener('DOMContentLoaded', () => {
         digitInputs.forEach((inp, i) => {
             inp.value = '';
             inp.classList.remove('filled', 'error');
+	    inp.style.backgroundColor = "";
+            inp.style.color = "";
+            inp.style.borderColor = "";
             currentCode[i] = '';
         });
     }
