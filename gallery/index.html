@@ -359,13 +359,13 @@ body.modal-open {
         }
         
         /* Estilos para el carrusel responsivo */
-        .carousel-container {
-            position: relative;
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            overflow: hidden;
-        }
+.carousel-container {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    overflow: visible; /* ahora la <div class="carousel"> puede hacer scroll */
+}
         
         .carousel-wrapper {
             display: flex;
@@ -374,15 +374,29 @@ body.modal-open {
         }
         
         /* Mostrar 3 elementos en desktop y 1 en móvil */
-            .carousel-item {
-                width: calc(33.333% - 16px);
-                margin: 0 8px;
-        }
-        
-            .carousel-item {
-                width: calc(100% - 32px);
-                margin: 0 16px;
-            }
+/* Desktop grande: 3 tarjetas visibles */
+@media (min-width: 1025px) {
+  .carousel-item {
+    width: calc(33.333% - 16px);
+    margin: 0 8px;
+  }
+}
+
+/* Tablet / pantallas intermedias (hasta 1024px): 2 tarjetas visibles */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .carousel-item {
+    width: calc(50% - 16px);
+    margin: 0 8px;
+  }
+}
+
+/* Móvil (hasta 767px): 1 tarjeta */
+@media (max-width: 767px) {
+  .carousel-item {
+    width: calc(100% - 32px);
+    margin: 0 16px;
+  }
+}
             
             .obra-actions {
                 flex-direction: column;
