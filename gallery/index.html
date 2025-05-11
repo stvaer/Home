@@ -42,25 +42,28 @@
             transform: scale(1.02);
         }
         
+/* Bloquear el scroll del fondo cuando el modal está abierto */
 @media (max-width: 768px) {
-    body.modal-open {
-        overflow: hidden;
-    }
+  body.modal-open {
+    overflow: hidden;
+  }
 }
-        .moddal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            overflow-y: auto; /* esto permite scroll dentro del modal */
-            -webkit-overflow-scrolling: touch;
-            padding-top: 50px;
-            padding-bottom: 10px;
-            backdrop-filter: blur(8px);
-            transition: opacity 0.3s ease;
-            z-index: 9999;
-        }
+
+/* Estilos para el modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  overflow-y: auto; /* Permite scroll interno si es necesario */
+  -webkit-overflow-scrolling: touch; /* Mejora el scroll en iOS */
+  padding-top: 50px;
+  padding-bottom: 10px;
+  transition: opacity 0.3s ease;
+  backdrop-filter: blur(8px);
+  z-index: 9999;
+}
         
         .tab-content {
             max-height: 0;
@@ -1368,31 +1371,31 @@
             });
         }
 
-        // Función para abrir modal de obra
+// Función para abrir el modal
 function openObraModal(id) {
-    const modalId = `modal-${id}`;
-    const modal = document.getElementById(modalId);
-    if (modal) {
-        modal.classList.add('opacity-100', 'pointer-events-auto');
-        modal.classList.remove('opacity-0', 'pointer-events-none');
+  const modalId = `modal-${id}`;
+  const modal = document.getElementById(modalId);
+  if (modal) {
+    modal.classList.add('opacity-100', 'pointer-events-auto');
+    modal.classList.remove('opacity-0', 'pointer-events-none');
 
-        // Bloquea scroll del body solo en móvil
-        if (window.innerWidth <= 768) {
-            document.body.classList.add('modal-open');
-        }
+    // Bloquear el scroll del fondo en dispositivos móviles
+    if (window.innerWidth <= 768) {
+      document.body.classList.add('modal-open');
     }
+  }
 }
 
-// Función para cerrar modal
+// Función para cerrar el modal
 function closeModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-        modal.classList.remove('opacity-100', 'pointer-events-auto');
-        modal.classList.add('opacity-0', 'pointer-events-none');
+  const modal = document.getElementById(modalId);
+  if (modal) {
+    modal.classList.remove('opacity-100', 'pointer-events-auto');
+    modal.classList.add('opacity-0', 'pointer-events-none');
 
-        // Restaura scroll del body
-        document.body.classList.remove('modal-open');
-    }
+    // Restaurar el scroll del fondo
+    document.body.classList.remove('modal-open');
+  }
 }
 
         // Función para cargar las obras en el panel de administración
