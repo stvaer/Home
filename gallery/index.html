@@ -59,14 +59,15 @@
 
 /* 2) El cajón de la tarjeta del carrusel */
 .modal .carousel-modal {
-  width: 90%;                    /* ancho relativo; ajústalo si lo quieres más estrecho */
-  max-width: 400px;              /* ancho máximo fijo */
-  max-height: 80vh;              /* no pase de 80% de la altura de la ventana */
+  width: 90%;
+  max-width: 400px;
+  max-height: calc(100vh - 120px); /* ajustado para no chocar con nav y fondo */
   background: #111;
-  border-radius: 8px;
+  border-radius: 12px;
   padding: 1rem;
-  overflow-y: auto;              /* scroll interno en la tarjeta */
+  overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  box-sizing: border-box;
 }
 
 /* 3) Opcional: evita que cada item escale o desplace el cajón */
@@ -707,7 +708,10 @@
             background-color: #ff0000;
             transform: scale(1.1);
         }
-
+body.modal-open {
+    overflow: hidden;
+    height: 100vh;
+}
     </style>
 </head>
 <body>
