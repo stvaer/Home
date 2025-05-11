@@ -24,36 +24,52 @@
             font-family: 'Space Grotesk', sans-serif;
         }
         
-.carousel {
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  gap: 16px;         /* espacio entre tarjetas */
-  padding: 0 16px;   /* espacio lateral para centrar snap */
-}
-
+        .carousel {
+            scroll-behavior: smooth;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE and Edge */
+        }
+        
+        .carousel::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
+        
 .carousel-item {
-  scroll-snap-align: start;
-  flex-shrink: 0;
-}
-
-/* DESKTOP: 3 tarjetas completas */
-@media (min-width: 1025px) {
-  .carousel-item {
-    flex: 0 0 calc((100% - 32px) / 3);
-  }
-}
-
-/* MÓVIL: 1 tarjeta completa */
-@media (max-width: 767px) {
-  .carousel-item {
-    flex: 0 0 calc(100% - 32px);
-  }
-}    
+  flex: 0 0 220px;   /* fuerza un ancho de 220px */
+  max-width: 220px;  /* no permite que crezca más */
+  margin: 0 8px;     /* separación lateral */
+  transition: all 0.3s ease;
+        }
+        
         .carousel-item:hover {
             transform: scale(1.02);
         }
+	    
+  .carousel {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    gap: 16px;
+    padding: 0 16px;
+  }
+
+  .carousel-item {
+    scroll-snap-align: start;
+    flex-shrink: 0;
+  }
+
+  @media (min-width: 1025px) {
+    .carousel-item {
+      flex: 0 0 calc((100% - 32px) / 3);
+    }
+  }
+
+  @media (max-width: 767px) {
+    .carousel-item {
+      flex: 0 0 calc(100% - 32px);
+    }
+  }
         
 /* 1) Fíjalo fuera de cualquier media-query */
 html.modal-open,
