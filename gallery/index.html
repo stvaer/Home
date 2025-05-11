@@ -34,8 +34,11 @@
             display: none; /* Chrome, Safari, Opera */
         }
         
-        .carousel-item {
-            transition: all 0.3s ease;
+.carousel-item {
+  flex: 0 0 220px;   /* fuerza un ancho de 220px */
+  max-width: 220px;  /* no permite que crezca más */
+  margin: 0 8px;     /* separación lateral */
+  transition: all 0.3s ease;
         }
         
         .carousel-item:hover {
