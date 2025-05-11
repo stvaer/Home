@@ -52,32 +52,34 @@
 /* Estilos para el modal */
 .modal {
     position: fixed;
-    top: 5px;
+    top: calc(60px + 5px); /* Ajusta 60px si tu navbar mide diferente */
     left: 0;
     right: 0;
-    bottom: 5px;
-    padding: 0;
-    margin: 0;
+    bottom: 0;
     width: 100%;
-    z-index: 9999;
     background: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(8px);
-    overflow: hidden; /* Evita scroll externo */
+    overflow: hidden;
+    z-index: 9999;
+    transition: opacity 0.3s ease;
     display: flex;
     justify-content: center;
-    align-items: center;
-    transition: opacity 0.3s ease;
+    align-items: flex-start; /* importante para que inicie desde arriba */
+    padding-top: 0;
 }
 
+/* Contenedor interno del contenido del modal */
 .modal-content {
-    max-height: 100%;
     width: 90%;
+    max-height: calc(100vh - 60px - 5px - 10px); /* altura del viewport - navbar - margen - margen inferior */
     overflow-y: auto;
-    background: #fff; /* O el fondo que uses en tu galería */
+    background: #fff;
+    padding: 20px;
     border-radius: 8px;
     box-sizing: border-box;
-    padding: 20px;
     -webkit-overflow-scrolling: touch;
+    margin-top: 0;
+    margin-bottom: 10px;
 }
         .tab-content {
             max-height: 0;
