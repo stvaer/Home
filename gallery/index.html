@@ -42,36 +42,35 @@
             transform: scale(1.02);
         }
         
-@media (max-width: 768px) {
-    body.modal-open {
-        overflow: hidden;
-        position: fixed;
-        width: 100%;
-    }
+/* Para todas las pantallas */
+body.modal-open {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
 }
+
 .modal {
-    /* 1) Que el modal sea “pegado” abajo, no centrado */
-    align-items: flex-start;     /* en lugar de center */
-
-    /* 2) Que ocupe toda la pantalla, pero permitiendo scroll interno */
-    top: 0;
-    bottom: 0;                   /* fija el fondo */
-    height: auto;                /* quito el 100vh para que no limite */
-
-    /* 3) Sólo espacio arriba, nada abajo */
-    padding-top: 300px;          /* espacio que quieres encima */
-    padding-bottom: 0;           /* nada debajo */
-
-    /* resto de tus reglas originales */
     display: none;
     position: fixed;
     z-index: 9999;
     left: 0;
+    top: 0;
+    bottom: 0;
     width: 100%;
-    overflow-y: auto;
+    height: auto;
+    overflow-y: auto;       /* el scroll interno del modal sigue funcionando */
     transition: opacity 0.3s ease;
     backdrop-filter: blur(8px);
+    align-items: flex-start; /* pega el contenido arriba */
     justify-content: center;
+    padding-top: 100px;      /* valor para desktop */
+    padding-bottom: 0;
+}
+
+@media (max-width: 768px) {
+    .modal {
+        padding-top: 300px;  /* tu espacio grande en mobile */
+    }
 }
         
         .tab-content {
