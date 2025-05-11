@@ -56,44 +56,26 @@
   right: 0;
   bottom: 0;
   z-index: 9999;
-  background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(8px);
-  overflow: hidden;
+  overflow: auto;
   transition: opacity 0.3s ease;
   display: flex;
   justify-content: center;
   align-items: flex-start;
 }
-
-.modal-content {
-  width: 90%;
-  background: #fff;
-  border-radius: 8px;
-  padding: 20px;
-  box-sizing: border-box;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-}
+/*desktop (pantallas grandes)
 @media (min-width: 768px) {
   .modal {
     top: 50px;
     height: calc(100vh - 100px); /* deja margen arriba y abajo */
     align-items: center;
   }
-
-  .modal-content {
-    max-height: 100%;
-  }
 }
+/*teléfonos (pantallas pequeñas)
 @media (max-width: 767px) {
   .modal {
-    top: calc(var(--navbar-height, 60px) + 5px); /* o ajusta fijo, ej: top: 65px */
+    top: 140px; /* o ajusta fijo, ej: top: 65px */
     height: calc(100vh - 65px);
-  }
-
-  .modal-content {
-    max-height: calc(100vh - 65px - 10px);
-    margin-bottom: 10px;
   }
 }
         .tab-content {
