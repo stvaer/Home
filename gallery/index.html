@@ -42,37 +42,26 @@
             transform: scale(1.02);
         }
         
-/* 1) El “fondo” oscuro que cubre toda la pantalla */
+@media (max-width: 768px) {
+    body.modal-open {
+        overflow: hidden;
+        position: fixed;
+        width: 100%;
+    }
+}
+
 .modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;              /* bloquea scroll del body */
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-/* 2) El cajón de la tarjeta del carrusel */
-.modal .carousel-modal {
-  width: 90%;
-  max-width: 400px;
-  max-height: calc(100vh - 120px); /* ajustado para no chocar con nav y fondo */
-  background: #111;
-  border-radius: 12px;
-  padding: 1rem;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  box-sizing: border-box;
-}
-
-/* 3) Opcional: evita que cada item escale o desplace el cajón */
-.modal .carousel-modal .carousel-item {
-  transform: none !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    overflow-y: auto; /* permite scroll dentro del modal */
+    padding-top: 50px;
+    padding-bottom: 10px;
+    transition: opacity 0.3s ease;
+    backdrop-filter: blur(8px);
+    z-index: 9999;
 }
         .tab-content {
             max-height: 0;
@@ -708,10 +697,7 @@
             background-color: #ff0000;
             transform: scale(1.1);
         }
-body.modal-open {
-    overflow: hidden;
-    height: 100vh;
-}
+        
     </style>
 </head>
 <body>
@@ -1408,8 +1394,7 @@ function closeModal(modalId) {
         // Restaura scroll del body
         document.body.classList.remove('modal-open');
     }
-}
-
+}p
         // Función para cargar las obras en el panel de administración
         function loadObrasAdmin() {
             const obrasList = document.getElementById('obras-list');
