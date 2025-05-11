@@ -51,20 +51,30 @@
 
 /* Estilos para el modal */
 .modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  overflow-y: auto; /* Permite scroll interno si es necesario */
-  -webkit-overflow-scrolling: touch; /* Mejora el scroll en iOS */
-  padding-top: 15px;
-  padding-bottom: 15px;
-  transition: opacity 0.3s ease;
-  backdrop-filter: blur(8px);
-  z-index: 9999;
+    position: fixed;
+    inset: 0; /* top: 0; right: 0; bottom: 0; left: 0 */
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    z-index: 9999;
+    overflow: hidden; /* evita desbordamiento del modal */
+    transition: opacity 0.3s ease;
 }
-        
+
+.modal-content {
+    max-height: 90vh; /* evita que el contenido toque los bordes */
+    overflow-y: auto;
+    padding: 20px;
+    background: #fff; /* o el color que uses */
+    width: 90%;
+    border-radius: 8px;
+    box-sizing: border-box;
+    -webkit-overflow-scrolling: touch;
+}
         .tab-content {
             max-height: 0;
             overflow: hidden;
