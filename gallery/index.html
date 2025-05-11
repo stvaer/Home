@@ -49,22 +49,30 @@
         width: 100%;
     }
 }
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 9999;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100vh;
-	    overflow-y: auto;
-	    padding-top: 350px;
-	    padding-bottom: 300px;
-            transition: opacity 0.3s ease;
-            backdrop-filter: blur(8px);
-            align-items: center;
-            justify-content: center;
-        }
+.modal {
+    /* 1) Que el modal sea “pegado” abajo, no centrado */
+    align-items: flex-start;     /* en lugar de center */
+
+    /* 2) Que ocupe toda la pantalla, pero permitiendo scroll interno */
+    top: 0;
+    bottom: 0;                   /* fija el fondo */
+    height: auto;                /* quito el 100vh para que no limite */
+
+    /* 3) Sólo espacio arriba, nada abajo */
+    padding-top: 300px;          /* espacio que quieres encima */
+    padding-bottom: 0;           /* nada debajo */
+
+    /* resto de tus reglas originales */
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    width: 100%;
+    overflow-y: auto;
+    transition: opacity 0.3s ease;
+    backdrop-filter: blur(8px);
+    justify-content: center;
+}
         
         .tab-content {
             max-height: 0;
