@@ -83,6 +83,24 @@
             align-items: center;
             justify-content: center;
         }
+        
+        .content-modal-container {
+            background-color: #111;
+            padding: 30px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 700px;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+        }
+        
+        .content-modal-header {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
 
         .tab-content {
             max-height: 0;
@@ -1415,7 +1433,7 @@ function closeModal(modalId) {
         // Restaura scroll del body
         document.body.classList.remove('modal-open');
     }
-}p
+}
         // Función para cargar las obras en el panel de administración
         function loadObrasAdmin() {
             const obrasList = document.getElementById('obras-list');
