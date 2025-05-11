@@ -42,37 +42,38 @@
             transform: scale(1.02);
         }
         
-/* Para todas las pantallas */
+/* 1) Fíjalo fuera de cualquier media-query */
+html.modal-open,
 body.modal-open {
-    overflow: hidden;
-    position: fixed;
-    width: 100%;
+  overflow: hidden !important;
+  height: 100%;        /* para que no expanda más allá del viewport */
 }
 
+/* 2) Tu modal sigue igual, con scroll interno */
 .modal {
-    display: none;
-    position: fixed;
-    z-index: 9999;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 100%;
-    height: auto;
-    overflow-y: auto;       /* el scroll interno del modal sigue funcionando */
-    transition: opacity 0.3s ease;
-    backdrop-filter: blur(8px);
-    align-items: flex-start; /* pega el contenido arriba */
-    justify-content: center;
-    padding-top: 100px;      /* valor para desktop */
-    padding-bottom: 0;
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: auto;
+  overflow-y: auto;       /* mantenimiento del scroll interno */
+  transition: opacity 0.3s ease;
+  backdrop-filter: blur(8px);
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 100px;      /* desktop */
+  padding-bottom: 0;
 }
 
 @media (max-width: 768px) {
-    .modal {
-        padding-top: 300px;  /* tu espacio grande en mobile */
-    }
+  .modal {
+    padding-top: 300px;    /* mobile */
+  }
 }
-        
+	    
         .tab-content {
             max-height: 0;
             overflow: hidden;
