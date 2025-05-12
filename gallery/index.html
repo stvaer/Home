@@ -379,6 +379,31 @@ body.modal-open {
         select {
             font-size: 16px !important; /* Evitar zoom en iOS */
         }
+	
+.carousel-wrapper {
+  	position: relative;
+  	width: 100%;
+  	max-width: 100%;
+	}
+
+.carousel-controls button {
+  	position: absolute;
+  	top: 50%;
+  	transform: translateY(-50%);
+  	z-index: 10;
+  	background: rgba(255, 255, 255, 0.3);
+  	border: none;
+  	font-size: 24px;
+  	cursor: pointer;
+  	padding: 8px;
+	}
+
+#prevBtn {
+  	left: 0;
+	}
+#nextBtn {
+  	right: 0;
+}
                    
             .obra-actions {
                 flex-direction: column;
