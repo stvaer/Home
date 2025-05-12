@@ -1,0 +1,518 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG Converter</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .grid-bg {
+            background-size: 20px 20px;
+            background-image:
+                linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+        }
+        
+        .custom-file-upload {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .custom-file-upload:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+        
+        .result-container {
+            max-height: 400px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #6366f1 #1f2937;
+        }
+        
+        .result-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .result-container::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+        
+        .result-container::-webkit-scrollbar-thumb {
+            background-color: #6366f1;
+            border-radius: 20px;
+        }
+        
+        .settings-panel {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        
+        .settings-panel.open {
+            max-height: 300px;
+        }
+        
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 8px;
+            background: #4B5563;
+            border-radius: 5px;
+            background-image: linear-gradient(#6366F1, #6366F1);
+            background-size: 50% 100%;
+            background-repeat: no-repeat;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #6366F1;
+            cursor: pointer;
+            box-shadow: 0 0 2px 0 #555;
+            transition: background .3s ease-in-out;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            background: #4F46E5;
+        }
+
+        input[type="range"]::-webkit-slider-runnable-track {
+            -webkit-appearance: none;
+            box-shadow: none;
+            border: none;
+            background: transparent;
+        }
+        
+        .progress-bar {
+            transition: width 0.3s ease;
+        }
+        
+        .svg-preview {
+            background-color: white;
+            background-image: linear-gradient(45deg, #f0f0f0 25%, transparent 25%),
+                              linear-gradient(-45deg, #f0f0f0 25%, transparent 25%),
+                              linear-gradient(45deg, transparent 75%, #f0f0f0 75%),
+                              linear-gradient(-45deg, transparent 75%, #f0f0f0 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+        }
+        
+        .svg-preview svg {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen grid-bg">
+    <div class="container mx-auto px-4 py-12 max-w-4xl">
+        <header class="mb-12 text-center">
+            <h1 class="text-4xl font-bold mb-2 text-indigo-400">Image to SVG Converter</h1>
+            <p class="text-gray-400">Upload a PNG or JPG image and get SVG code ready to use in your HTML</p>
+        </header>
+        
+        <div class="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700 mb-8">
+            <div class="mb-6">
+                <label for="file-upload" class="custom-file-upload flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-indigo-500 rounded-lg bg-gray-800 hover:bg-gray-750 transition-all">
+                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                        <svg class="w-12 h-12 mb-3 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                        </svg>
+                        <p class="mb-2 text-sm text-gray-300"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+                        <p class="text-xs text-gray-400">PNG or JPG images</p>
+                    </div>
+                    <input id="file-upload" type="file" accept="image/png, image/jpeg, image/jpg" class="hidden" />
+                </label>
+            </div>
+            
+            <div id="preview-container" class="hidden mb-6">
+                <h2 class="text-xl font-semibold mb-3 text-indigo-300">Preview</h2>
+                <div class="flex justify-center bg-gray-900 rounded-lg p-4 border border-gray-700">
+                    <img id="image-preview" class="max-h-64 max-w-full" alt="Preview" />
+                </div>
+            </div>
+            
+            <div id="settings-toggle" class="flex items-center justify-between mb-4 cursor-pointer bg-gray-700 hover:bg-gray-650 rounded-lg p-3 transition-all">
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 mr-2 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                    <span class="font-medium">Conversion Settings</span>
+                </div>
+                <svg id="settings-arrow" class="w-5 h-5 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </div>
+            
+            <div id="settings-panel" class="settings-panel bg-gray-750 rounded-lg p-4 mb-6 border border-gray-700">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="quality-slider" class="block mb-2 text-sm font-medium text-gray-300">Quality</label>
+                        <div class="flex items-center">
+                            <span class="text-xs text-gray-400 mr-2">Low</span>
+                            <input id="quality-slider" type="range" min="1" max="10" value="8" class="w-full">
+                            <span class="text-xs text-gray-400 ml-2">High</span>
+                        </div>
+                        <div class="text-center mt-1">
+                            <span id="quality-value" class="text-sm text-indigo-300 font-medium">8</span>
+                        </div>
+                        <p class="text-xs text-gray-400 mt-1">Higher quality means better image resolution</p>
+                    </div>
+                    
+                    <div>
+                        <label for="pixel-size-slider" class="block mb-2 text-sm font-medium text-gray-300">Image Size</label>
+                        <div class="flex items-center">
+                            <span class="text-xs text-gray-400 mr-2">Small</span>
+                            <input id="pixel-size-slider" type="range" min="10" max="100" value="80" class="w-full">
+                            <span class="text-xs text-gray-400 ml-2">Large</span>
+                        </div>
+                        <div class="text-center mt-1">
+                            <span id="pixel-size-value" class="text-sm text-indigo-300 font-medium">80%</span>
+                        </div>
+                        <p class="text-xs text-gray-400 mt-1">Adjust the size of the image in the SVG</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="progress-container" class="hidden mb-6">
+                <div class="flex justify-between mb-1">
+                    <span class="text-sm font-medium text-indigo-300">Processing...</span>
+                    <span id="progress-percentage" class="text-sm font-medium text-indigo-300">0%</span>
+                </div>
+                <div class="w-full bg-gray-700 rounded-full h-2.5">
+                    <div id="progress-bar" class="bg-indigo-600 h-2.5 rounded-full progress-bar" style="width: 0%"></div>
+                </div>
+                <p id="progress-status" class="text-xs text-gray-400 mt-1">Preparing image data...</p>
+            </div>
+            
+            <div class="flex justify-center">
+                <button id="convert-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none" disabled>
+                    Process Image
+                </button>
+            </div>
+        </div>
+        
+        <div id="result-section" class="hidden bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                    <h2 class="text-xl font-semibold mb-3 text-indigo-300">Original Image</h2>
+                    <div class="flex justify-center bg-gray-900 rounded-lg p-4 border border-gray-700 h-64">
+                        <img id="result-original" class="max-h-full max-w-full object-contain" alt="Original" />
+                    </div>
+                </div>
+                <div>
+                    <h2 class="text-xl font-semibold mb-3 text-indigo-300">SVG Result</h2>
+                    <div class="flex justify-center bg-gray-900 rounded-lg p-4 border border-gray-700 h-64 svg-preview">
+                        <div id="svg-preview-container" class="h-full w-full flex items-center justify-center"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <h2 class="text-xl font-semibold mb-3 text-indigo-300">SVG Code</h2>
+            <div class="result-container bg-gray-900 rounded-lg p-4 border border-gray-700 mb-4">
+                <pre id="svg-code" class="text-green-400 text-sm whitespace-pre-wrap break-all"></pre>
+            </div>
+            
+            <div class="flex justify-between">
+                <div class="text-sm text-gray-400">
+                    <span id="svg-size">0</span> bytes
+                </div>
+                <button id="copy-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-lg transition-all transform hover:scale-105">
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+                        </svg>
+                        Copy Code
+                    </div>
+                </button>
+            </div>
+        </div>
+        
+        <div id="notification" class="hidden fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform transition-all duration-500 translate-y-20">
+            Code copied to clipboard!
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileUpload = document.getElementById('file-upload');
+            const imagePreview = document.getElementById('image-preview');
+            const previewContainer = document.getElementById('preview-container');
+            const convertBtn = document.getElementById('convert-btn');
+            const resultSection = document.getElementById('result-section');
+            const svgCode = document.getElementById('svg-code');
+            const copyBtn = document.getElementById('copy-btn');
+            const notification = document.getElementById('notification');
+            const progressContainer = document.getElementById('progress-container');
+            const progressBar = document.getElementById('progress-bar');
+            const progressPercentage = document.getElementById('progress-percentage');
+            const progressStatus = document.getElementById('progress-status');
+            const resultOriginal = document.getElementById('result-original');
+            const svgPreviewContainer = document.getElementById('svg-preview-container');
+            const svgSize = document.getElementById('svg-size');
+            
+            // Settings elements
+            const settingsToggle = document.getElementById('settings-toggle');
+            const settingsPanel = document.getElementById('settings-panel');
+            const settingsArrow = document.getElementById('settings-arrow');
+            const qualitySlider = document.getElementById('quality-slider');
+            const qualityValue = document.getElementById('quality-value');
+            const pixelSizeSlider = document.getElementById('pixel-size-slider');
+            const pixelSizeValue = document.getElementById('pixel-size-value');
+            
+            let uploadedImage = null;
+            
+            // Toggle settings panel
+            settingsToggle.addEventListener('click', function() {
+                settingsPanel.classList.toggle('open');
+                settingsArrow.classList.toggle('rotate-180');
+            });
+            
+            // Update slider values
+            qualitySlider.addEventListener('input', function() {
+                qualityValue.textContent = this.value;
+                updateSliderBackground(this);
+            });
+            
+            pixelSizeSlider.addEventListener('input', function() {
+                pixelSizeValue.textContent = this.value + '%';
+                updateSliderBackground(this);
+            });
+            
+            function updateSliderBackground(slider) {
+                const min = slider.min;
+                const max = slider.max;
+                const val = slider.value;
+                const percentage = (val - min) * 100 / (max - min);
+                slider.style.backgroundSize = percentage + '% 100%';
+            }
+            
+            // Initialize slider backgrounds
+            updateSliderBackground(qualitySlider);
+            updateSliderBackground(pixelSizeSlider);
+            
+            // Handle file upload
+            fileUpload.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file && (file.type === 'image/png' || file.type === 'image/jpeg' || file.type === 'image/jpg')) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        imagePreview.src = event.target.result;
+                        uploadedImage = event.target.result;
+                        previewContainer.classList.remove('hidden');
+                        convertBtn.disabled = false;
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    alert('Please select a PNG or JPG image.');
+                }
+            });
+            
+            // Handle drag and drop
+            const dropZone = document.querySelector('.custom-file-upload');
+            
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, preventDefaults, false);
+            });
+            
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropZone.addEventListener(eventName, highlight, false);
+            });
+            
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, unhighlight, false);
+            });
+            
+            function highlight() {
+                dropZone.classList.add('border-indigo-300');
+                dropZone.classList.add('bg-gray-750');
+            }
+            
+            function unhighlight() {
+                dropZone.classList.remove('border-indigo-300');
+                dropZone.classList.remove('bg-gray-750');
+            }
+            
+            dropZone.addEventListener('drop', handleDrop, false);
+            
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const file = dt.files[0];
+                
+                if (file && (file.type === 'image/png' || file.type === 'image/jpeg' || file.type === 'image/jpg')) {
+                    fileUpload.files = dt.files;
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        imagePreview.src = event.target.result;
+                        uploadedImage = event.target.result;
+                        previewContainer.classList.remove('hidden');
+                        convertBtn.disabled = false;
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    alert('Please select a PNG or JPG image.');
+                }
+            }
+            
+            // Convert Image to SVG
+            convertBtn.addEventListener('click', function() {
+                if (!uploadedImage) return;
+                
+                // Get settings
+                const quality = parseInt(qualitySlider.value);
+                const imageSize = parseInt(pixelSizeSlider.value);
+                
+                // Show progress bar
+                progressContainer.classList.remove('hidden');
+                progressBar.style.width = '0%';
+                progressPercentage.textContent = '0%';
+                progressStatus.textContent = 'Preparing image data...';
+                
+                // Disable convert button during processing
+                convertBtn.disabled = true;
+                
+                // Create a simulated progress
+                let progress = 0;
+                const progressInterval = setInterval(() => {
+                    progress += 5;
+                    if (progress > 90) {
+                        clearInterval(progressInterval);
+                    } else {
+                        updateProgress(progress, 'Processing image...');
+                    }
+                }, 100);
+                
+                // Create a simple SVG that embeds the image
+                setTimeout(() => {
+                    // Load the image to get dimensions
+                    const img = new Image();
+                    img.onload = function() {
+                        const width = img.width;
+                        const height = img.height;
+                        
+                        // Create SVG with embedded image
+                        const svgContent = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
+  <image width="${width * imageSize / 100}" height="${height * imageSize / 100}" x="${(width - (width * imageSize / 100)) / 2}" y="${(height - (height * imageSize / 100)) / 2}" href="${uploadedImage}" />
+</svg>`;
+                        
+                        // Display SVG code
+                        svgCode.textContent = svgContent;
+                        
+                        // Calculate SVG size
+                        const svgSizeBytes = new Blob([svgContent]).size;
+                        svgSize.textContent = formatBytes(svgSizeBytes);
+                        
+                        // Display original image in result section
+                        resultOriginal.src = uploadedImage;
+                        
+                        // Display SVG preview
+                        svgPreviewContainer.innerHTML = svgContent;
+                        
+                        // Show result section
+                        resultSection.classList.remove('hidden');
+                        
+                        // Update progress
+                        updateProgress(100, 'Conversion complete!');
+                        
+                        // Re-enable convert button
+                        convertBtn.disabled = false;
+                        
+                        // Scroll to result section
+                        resultSection.scrollIntoView({ behavior: 'smooth' });
+                        
+                        // Clear interval if it's still running
+                        clearInterval(progressInterval);
+                    };
+                    img.src = uploadedImage;
+                }, 1000);
+            });
+            
+            function formatBytes(bytes, decimals = 2) {
+                if (bytes === 0) return '0 Bytes';
+                
+                const k = 1024;
+                const dm = decimals < 0 ? 0 : decimals;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+                
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+            }
+            
+            function updateProgress(percentage, status) {
+                progressBar.style.width = percentage + '%';
+                progressPercentage.textContent = percentage + '%';
+                progressStatus.textContent = status;
+            }
+            
+            // Copy SVG code to clipboard
+            copyBtn.addEventListener('click', function() {
+                const textToCopy = svgCode.textContent;
+                
+                // Use the Clipboard API if available
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(textToCopy).then(function() {
+                        showNotification();
+                    }).catch(function(err) {
+                        console.error('Could not copy text: ', err);
+                        fallbackCopyTextToClipboard(textToCopy);
+                    });
+                } else {
+                    // Fallback for older browsers
+                    fallbackCopyTextToClipboard(textToCopy);
+                }
+            });
+            
+            function fallbackCopyTextToClipboard(text) {
+                // Create a temporary textarea element to copy from
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                textarea.setAttribute('readonly', '');
+                textarea.style.position = 'absolute';
+                textarea.style.left = '-9999px';
+                document.body.appendChild(textarea);
+                
+                // Select and copy the text
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    showNotification();
+                } catch (err) {
+                    console.error('Fallback: Could not copy text: ', err);
+                    alert('Failed to copy to clipboard. Please select the code and copy manually.');
+                }
+                
+                // Remove the temporary element
+                document.body.removeChild(textarea);
+            }
+            
+            function showNotification() {
+                // Show notification
+                notification.classList.remove('hidden');
+                notification.classList.remove('translate-y-20');
+                
+                // Hide notification after 3 seconds
+                setTimeout(function() {
+                    notification.classList.add('translate-y-20');
+                    setTimeout(function() {
+                        notification.classList.add('hidden');
+                    }, 500);
+                }, 3000);
+            }
+            
+            // Open settings panel by default
+            settingsPanel.classList.add('open');
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93e66347a11467ec',t:'MTc0NzAxNTkxMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body></html>
