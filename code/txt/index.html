@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convertidor de Texto a TXT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #f0f4f8;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        textarea {
+            resize: none;
+            min-height: 300px;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen flex flex-col">
+        <header class="gradient-bg text-white py-6 shadow-lg">
+            <div class="container mx-auto px-4">
+                <h1 class="text-3xl font-bold text-center">Convertidor de Texto a TXT</h1>
+                <p class="text-center mt-2 opacity-90">Pega tu texto y descárgalo como archivo .txt</p>
+            </div>
+        </header>
+
+        <main class="container mx-auto px-4 py-8 flex-grow">
+            <div class="bg-white rounded-lg shadow-lg p-6 max-w-4xl mx-auto">
+                <div class="mb-6">
+                    <label for="textInput" class="block text-gray-700 text-lg font-medium mb-3">Tu texto:</label>
+                    <textarea 
+                        id="textInput" 
+                        class="w-full border border-gray-300 rounded-lg p-4 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+                        placeholder="Pega aquí tu texto extenso..."></textarea>
+                </div>
+                
+                <div class="flex flex-col sm:flex-row gap-4 justify-between items-center">
+                    <div class="flex gap-3">
+                        <button 
+                            id="clearBtn" 
+                            class="px-5 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg transition font-medium">
+                            Limpiar
+                        </button>
+                        <button 
+                            id="copyBtn" 
+                            class="px-5 py-3 bg-blue-100 hover:bg-blue-200 text-blue-800 rounded-lg transition font-medium">
+                            Copiar
+                        </button>
+                    </div>
+                    
+                    <div class="w-full sm:w-auto">
+                        <div class="flex gap-3">
+                            <input 
+                                type="text" 
+                                id="fileName" 
+                                placeholder="nombre-archivo" 
+                                class="border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                value="mi-texto">
+                            <button 
+                                id="downloadBtn" 
+                                class="px-5 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition font-medium flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                </svg>
+                                Descargar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="notification" class="mt-4 p-3 rounded-lg text-center hidden"></div>
+            </div>
+        </main>
+
+        <footer class="bg-gray-800 text-white py-4 mt-8">
+            <div class="container mx-auto px-4 text-center text-sm">
+                <p>Creado con Canva Code &copy; 2023</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const textInput = document.getElementById('textInput');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            const copyBtn = document.getElementById('copyBtn');
+            const fileName = document.getElementById('fileName');
+            const notification = document.getElementById('notification');
+            
+            // Función para mostrar notificaciones
+            function showNotification(message, type) {
+                notification.textContent = message;
+                notification.classList.remove('hidden', 'bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+                
+                if (type === 'success') {
+                    notification.classList.add('bg-green-100', 'text-green-800');
+                } else {
+                    notification.classList.add('bg-red-100', 'text-red-800');
+                }
+                
+                setTimeout(() => {
+                    notification.classList.add('hidden');
+                }, 3000);
+            }
+            
+            // Descargar texto como archivo .txt
+            downloadBtn.addEventListener('click', function() {
+                const text = textInput.value;
+                if (!text.trim()) {
+                    showNotification('Por favor, ingresa algún texto antes de descargar', 'error');
+                    return;
+                }
+                
+                let fileNameValue = fileName.value.trim() || 'mi-texto';
+                if (!fileNameValue.endsWith('.txt')) {
+                    fileNameValue += '.txt';
+                }
+                
+                const blob = new Blob([text], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = fileNameValue;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                showNotification('¡Archivo descargado correctamente!', 'success');
+            });
+            
+            // Limpiar el área de texto
+            clearBtn.addEventListener('click', function() {
+                textInput.value = '';
+                showNotification('Texto borrado', 'success');
+            });
+            
+            // Copiar texto al portapapeles
+            copyBtn.addEventListener('click', function() {
+                if (!textInput.value.trim()) {
+                    showNotification('No hay texto para copiar', 'error');
+                    return;
+                }
+                
+                textInput.select();
+                document.execCommand('copy');
+                // Alternativa moderna (aunque execCommand aún funciona bien para copiar)
+                // navigator.clipboard.writeText(textInput.value);
+                
+                showNotification('¡Texto copiado al portapapeles!', 'success');
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93e81051c59a7472',t:'MTc0NzAzMzQ4NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body></html>
