@@ -45,36 +45,24 @@
             transform: scale(1.02);
         }
 	    
-  .carousel {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    gap: 16px;
-    padding: 0 16px;
+  .carousel-container {
+    overflow: hidden;
+    margin: 0 auto;
   }
 
-  .carousel-item {
-    scroll-snap-align: start;
-    flex-shrink: 0;
+  /* Móvil: 1 item completo (220px) */
+  @media (max-width: 767px) {
+    .carousel-container {
+      width: 220px;
+    }
   }
-   /* Móvil: ancho justo para 1 item */
-   @media (max-width: 767px) {
-     .carousel-container {
-       width: 220px;
-       overflow: hidden;
-       margin: 0 auto;
-     }
-   }
- 
-   /* Desktop: ancho justo para 3 items + 2 gaps */
-   @media (min-width: 768px) {
-     .carousel-container {
-       width: calc(220px * 3 + 16px * 2);
-       overflow: hidden;
-       margin: 0 auto;
-     }
-   }    
+
+  /* Desktop: 3 items completos (3×220px + 2×16px de gap) */
+  @media (min-width: 768px) {
+    .carousel-container {
+      width: calc(220px * 3 + 16px * 2);
+    }
+  }   
 /* 1) Fíjalo fuera de cualquier media-query */
 html.modal-open,
 body.modal-open {
