@@ -58,26 +58,23 @@
     scroll-snap-align: start;
     flex-shrink: 0;
   }
-
-  @media (min-width: 1025px) {
-    .carousel-item {
-      flex: 0 0 calc((100% - 32px) / 3);
-    }
-  }
-
-  @media (max-width: 767px) {
-    .carousel-item {
-      flex: 0 0 calc(100% - 32px);
-    }
-  }
-     /* ——— AÑADE AQUÍ ——— */
-  @media (min-width: 1025px) {
-    .carousel-container {
-      max-width: calc((220px * 3) + (8px * 6));
-      overflow: hidden;
-      margin: 0 auto;
-    }
-  }     
+   /* Móvil: ancho justo para 1 item */
+   @media (max-width: 767px) {
+     .carousel-container {
+       width: 220px;
+       overflow: hidden;
+       margin: 0 auto;
+     }
+   }
+ 
+   /* Desktop: ancho justo para 3 items + 2 gaps */
+   @media (min-width: 768px) {
+     .carousel-container {
+       width: calc(220px * 3 + 16px * 2);
+       overflow: hidden;
+       margin: 0 auto;
+     }
+   }    
 /* 1) Fíjalo fuera de cualquier media-query */
 html.modal-open,
 body.modal-open {
@@ -1568,16 +1565,12 @@ function closeModal(modalId) {
             const prevBtn = document.getElementById('prevBtn');
             const nextBtn = document.getElementById('nextBtn');
             
-            // Determinar cuánto desplazar basado en el ancho de la pantalla
-            const getScrollAmount = () => {
-                if (window.innerWidth < 768) {
-                    // En móvil, desplazar un elemento completo
-                    return carousel.querySelector('.carousel-item').offsetWidth + 16; // ancho + margen
-                } else {
-                    // En desktop, desplazar tres elementos
-                    return (carousel.querySelector('.carousel-item').offsetWidth + 16) * 3;
-                }
-            };
+  // === getScrollAmount corregido (desplaza 1 siempre) ===
+  const getScrollAmount = () => {
+    const itemWidth = carousel.querySelector('.carousel-item').offsetWidth;
+    const gap       = 16;
+    return itemWidth + gap;  // un ítem por clic
+  };
             
             prevBtn.addEventListener('click', () => {
                 carousel.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
