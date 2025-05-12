@@ -386,25 +386,26 @@ body.modal-open {
   	max-width: 100%;
 	}
 
-.carousel-controls button {
-  	position: fixed;
-  	top: 50%;
-  	transform: translateY(-50%);
-  	z-index: 10;
-  	background: rgba(255, 255, 255, 0.3);
-  	border: none;
-  	font-size: 24px;
-  	cursor: pointer;
-  	padding: 8px;
-	}
+.carousel-controls {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+  gap: 12px;
+}
 
-#prevBtn {
-  	left: 60px;
-	justify-content: center;
-	}
-#nextBtn {
-  	right: 60px;
-	justify-content: center;
+.carousel-controls button {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: none;
+  padding: 10px 16px;
+  font-size: 20px;
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.carousel-controls button:hover {
+  background-color: rgba(255, 255, 255, 0.3);
 }
                    
             .obra-actions {
